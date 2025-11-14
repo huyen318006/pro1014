@@ -218,6 +218,15 @@
       letter-spacing: 0.5px;
     }
 
+    .table tbody td {
+      color: #666 !important;
+      font-weight: 500;
+    }
+    .table thead th,
+    .table .badge,
+    .table .btn-action {
+      color: white !important;
+    }
     .avatar {
       width: 42px;
       height: 42px;
