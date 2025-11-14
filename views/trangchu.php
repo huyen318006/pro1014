@@ -204,29 +204,36 @@
     }
 
     /* Table */
-    .table {
-      margin: 0;
-      font-size: 0.94rem;
-    }
+  .table {
+    margin: 0;
+    font-size: 0.94rem;
+  } 
 
-    th {
-      background-color: transparent !important;
-      color: white !important;
-      font-weight: 600;
-      font-size: 0.89rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+  th {
+    background-color: transparent !important;
+    color: gray !important;    /* TH = xám */
+    font-weight: 600;
+    font-size: 0.89rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-    .table tbody td {
-      color: #666 !important;
-      font-weight: 500;
-    }
-    .table thead th,
-    .table .badge,
-    .table .btn-action {
-      color: white !important;
-    }
+  .table tbody td {
+    color: #666 !important;
+    font-weight: 500;
+  }
+
+  .table .th {
+    color: gray !important;
+  }
+  .table .badge {
+    color: white !important;  
+  }
+
+  /* Giữ màu trắng cho button */
+  .btn-action {
+    color: white !important;
+  }
     .avatar {
       width: 42px;
       height: 42px;
