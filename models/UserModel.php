@@ -51,14 +51,14 @@ class UserModel {
 
     }
     //hàm cập nhật pass cho người dùng thay mật khẩu mới khi quên
-    public function updatePassword($email, $hashedNewPassword){
-        $sql="UPDATE users SET email=:email, password=:password WHERE email=:email";
-        $stmt= $this->conn->prepare($sql);
-        $stmt->bindParam(":email",$email);
-        $stmt->bindParam(":password",$hashedNewPassword);
-        $stmt->execute();
+  public function updatePassword($email, $newPassword){
+    $sql="UPDATE users SET password=:password WHERE email=:email";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(":email",$email);
+    $stmt->bindParam(":password",$newPassword);
+    $stmt->execute();
+}
 
-    }
 }
 
   
