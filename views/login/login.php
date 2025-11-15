@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* assets/css/login.css */
+  <meta charset="UTF-8">
+  <title>Đăng Nhập</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Style -->
+</head>
+
+<style>
 :root {
   --primary: #00CED1;
   --primary-dark: #20B2AA;
@@ -16,187 +27,198 @@
 
 body {
   font-family: 'Poppins', sans-serif !important;
-  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
   margin: 0;
-  height: 100vh;
+  background: #e0f7fa;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
+/* CARD LOGIN */
 .login-card {
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 206, 209, 0.25);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 206, 209, 0.2);
   overflow: hidden;
   width: 100%;
-  max-width: 420px;
-  border: 1px solid #eee;
+  max-width: 400px;
+  border: none;
+  padding: 0 !important;
 }
 
+/* HEADER xanh */
 .login-header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 28px;
-  text-align: center;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    padding: 25px 20px 35px;
+    text-align: center;
+    margin: 0;
 }
 
-.login-header .logo {
-  width: 70px;
-  height: 70px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+/* Logo tròn */
+.login-logo {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-logo i {
+    font-size: 40px;
+    color: #fff;
 }
 
-.login-header .logo i {
-  font-size: 2rem;
-  color: var(--primary-dark);
+/* Chữ tiêu đề */
+.login-title-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff !important;
+    margin-top: 10px;
 }
 
-.login-header h3 {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.5px;
-}
-
-.login-header p {
-  margin: 8px 0 0;
-  font-size: 0.95rem;
-  opacity: 0.9;
-}
-
-.login-body {
-  padding: 32px;
-}
-
+/* FORM */
 .form-label {
   font-weight: 600;
-  color: #444;
+  color: #333;
   font-size: 0.95rem;
+  margin-bottom: 8px;
 }
 
 .form-control {
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 12px 16px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   border: 1.5px solid #ddd;
   transition: all 0.3s ease;
 }
 
 .form-control:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 0.2rem rgba(0, 206, 209, 0.25);
+  box-shadow: 0 0 0 0.22rem rgba(0, 206, 209, 0.25);
 }
 
 .input-group-text {
   background: transparent;
-  border-radius: 12px 0 0 12px;
+  border-radius: 14px 0 0 14px;
   border: 1.5px solid #ddd;
   border-right: none;
   color: #666;
+  font-size: 1.1rem;
 }
 
 .btn-login {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 13px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.05rem;
   transition: all 0.3s ease;
   width: 100%;
 }
 
 .btn-login:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 206, 209, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 206, 209, 0.35);
 }
 
 .text-link {
   color: var(--primary);
   font-weight: 500;
   text-decoration: none;
+  font-size: 0.95rem;
 }
 
 .text-link:hover {
   text-decoration: underline;
 }
 
-.divider {
-  text-align: center;
-  margin: 20px 0;
-  position: relative;
-  color: #888;
+.alert {
+  border-radius: 12px;
   font-size: 0.9rem;
 }
+</style>
 
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #ddd;
-  z-index: 0;
-}
-
-.divider span {
-  background: white;
-  padding: 0 12px;
-  z-index: 1;
-  position: relative;
-}
-
-@media (max-width: 576px) {
-  .login-card { margin: 15px; }
-  .login-body { padding: 24px; }
-}
-    </style>
-</head>
 <body>
+  
+  <div class="card shadow-lg login-card">
 
-    <div class="card p-4 shadow-lg login-card">
-        <h3 class="text-center mb-4 login-title">Đăng nhập tài khoản</h3>
-
-        <!-- Thông báo lỗi -->
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show">
-                <?= $_SESSION['error'] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <?php unset($_SESSION['error']); ?>
-        <?php endif; ?>
-
-        <!-- SỬA CHỖ NÀY: bỏ ?act=formlogin -->
-        <form action="<?= BASE_URL ?>" method="post">
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="text" name="email" class="form-control" placeholder="Nhập email" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Mật khẩu</label>
-                <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
-            </div>
-
-            <button type="submit" name="login" class="btn btn-primary w-100 mb-2">Đăng nhập</button>
-
-            <div class="d-flex justify-content-between mt-2">
-                <a href="<?= BASE_URL ?>?act=forgotpassword">Quên mật khẩu?</a>
-                <a href="<?= BASE_URL ?>?act=register">Đăng ký</a>
-            </div>
-        </form>
+    <!-- HEADER -->
+    <div class="login-header">
+        <div class="login-logo">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <h3 class="login-title-header">Đăng nhập tài khoản</h3>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="p-4">
+
+      <!-- Lỗi -->
+      <?php if(isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+          <?= $_SESSION['error'] ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+      <?php endif; ?>
+
+      <!-- FORM -->
+      <form action="<?= BASE_URL ?>" method="post">
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" name="email" class="form-control" placeholder="Nhập email" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mật khẩu</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" name="login" class="btn btn-login w-100 mb-2">
+          Đăng nhập
+        </button>
+
+        <div class="d-flex justify-content-between mt-2">
+          <a href="<?= BASE_URL ?>?act=forgotpassword" class="text-link">Quên mật khẩu?</a>
+          <a href="<?= BASE_URL ?>?act=register" class="text-link">Đăng ký</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const p = document.getElementById('password');
+      const i = document.getElementById('eyeIcon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        i.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        p.type = 'password';
+        i.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
