@@ -21,7 +21,7 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Trang chủ
-    '/' => (new UsersController())->Login(),
+    '/' => $_SERVER['REQUEST_METHOD']=='POST' ? (new UsersController())->formlogin() : (new UsersController())->Login(),
 
     // Xử lý đăng nhập
     'formlogin' => (new UsersController())->formlogin(),

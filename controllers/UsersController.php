@@ -25,30 +25,30 @@ class UsersController
 
 public function formlogin() {
     if(isset($_POST['login'])) {
-        $emailUser= $_POST['email'];
-        $passWord= $_POST['password'];
+        $emailUser = $_POST['email'];
+        $passWord  = $_POST['password'];
 
-        // Lấy user trong DB
-        $user= $this->modelUser->getUser($emailUser, $passWord);
+        $user = $this->modelUser->getUser($emailUser, $passWord);
 
         if($user) {
-            // kiểm tra quyền admin hoặc guide
-            if($user['role']=='admin') {
+            if($user['role'] == 'admin') {
                 $_SESSION['admin'] = $user;
-                header('Location: '.BASE_URL.'?act=admin'); 
+                header('Location: ' . BASE_URL . '?act=admin');
                 exit();
-
-            } else if($user['role']=='guide') {
+            } elseif($user['role'] == 'guide') {
                 $_SESSION['guide'] = $user;
-                header('Location: '.BASE_URL.'?act=guide');
+                header('Location: ' . BASE_URL . '?act=guide');
+                exit();
+            } else {
+                // user thường cũng cho đăng nhập (nếu cần)
+                $_SESSION['user'] = $user;
+                header('Location: ' . BASE_URL);
                 exit();
             }
-        } 
-        else {
-            // ---------------------------
-            // THÔNG BÁO LỖI ĐĂNG NHẬP SAI
-            // ---------------------------
-            echo "<script>alert('Sai email hoặc mật khẩu!'); window.location='".BASE_URL."?act=login';</script>";
+        } else {
+            // ĐĂNG NHẬP SAI → DÙNG HEADER + SESSION (không dùng JS nữa)
+            $_SESSION['error'] = 'Sai email hoặc mật khẩu!';
+            header('Location: ' . BASE_URL);   // về trang login chính (/)
             exit();
         }
     }
@@ -60,83 +60,78 @@ public function register(){
     require_once BASE_URL_VIEWS.'login/register.php';
 }
 
+// Sửa formregister()
 public function formregister(){
     if(isset($_POST['register'])){
-        $fullname=$_POST['fullname'];
-        $email=$_POST['email'];
-        $phone=$_POST['phone'];
-        $address=$_POST['address'];
-        $password=$_POST['password'];
-        $confirm_password=$_POST['confirm_password'];
-        $existingUser = $this->modelUser->checkMail($email);
-        if($password!==$confirm_password){
-            echo "<script>alert('Mật khẩu không khớp, vui lòng nhập lại!'); window.location='".BASE_URL."?act=register';</script>";
-            exit();
-        }
-        //kiểm tra email đã tồn tại chưa
-        
-        if($existingUser){
-            echo "<script>alert('Email đã tồn tại, vui lòng sử dụng email khác!'); window.location='".BASE_URL."?act=register';</script>";
+        $fullname = $_POST['fullname'];
+        $email    = $_POST['email'];
+        $phone    = $_POST['phone'];
+        $address  = $_POST['address'];
+        $password = $_POST['password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        if($password !== $confirm_password){
+            $_SESSION['error'] = 'Mật khẩu không khớp!';
+            header('Location: ' . BASE_URL . '?act=register');
             exit();
         }
 
-        // Nếu không có lỗi, tiến hành đăng ký
-          //vì là bảo mật 
-           //dùng password_hash() là hàm của PHP dùng để mã hoá mật khẩu trước khi lưu vào cơ sở dữ liệu
-           //PASSWORD_DEFAULT là thuật toán mã hoá mặc định của PHP (hiện tại là bcrypt)
-       
+        if($this->modelUser->checkMail($email)){
+            $_SESSION['error'] = 'Email đã tồn tại!';
+            header('Location: ' . BASE_URL . '?act=register');
+            exit();
+        }
+
+        // Lưu mật khẩu dạng plaintext (theo yêu cầu của bạn)
         $this->modelUser->register($fullname, $email, $password, $phone, $address);
-        echo "<script>alert('Đăng ký thành công! Vui lòng đăng nhập.'); window.location='".BASE_URL."?act=login';</script>";
+
+        $_SESSION['success'] = 'Đăng ký thành công! Vui lòng đăng nhập.';
+        header('Location: ' . BASE_URL);   // về trang login chính
         exit();
     }
-
 }
-
 
 /////////////////////////////////////////        phần quên mật khẩu      /////////////////////////////////////////
 public function forgotpass(){
     require_once BASE_URL_VIEWS.'login/forgotpass.php';
 }
-function formforgotpassword() {
+public function formforgotpassword() {
     if(isset($_POST['submit'])){
         $fullname = $_POST['fullname'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
+        $email    = $_POST['email'];
+        $phone    = $_POST['phone'];
         $newpassword = $_POST['newpassword'];
         $confirmpassword = $_POST['confirmpassword'];
 
-        // Kiểm tra mật khẩu mới và xác nhận mật khẩu có khớp không
         if ($newpassword !== $confirmpassword) {
-            echo "<script>alert('Mật khẩu mới và xác nhận mật khẩu không khớp!'); window.location='".BASE_URL."?act=forgotpassword';</script>";
+            $_SESSION['error'] = 'Mật khẩu xác nhận không khớp!';
+            header('Location: ' . BASE_URL . '?act=forgotpassword');
             exit();
         }
 
-        // Kiểm tra thông tin người dùng trong cơ sở dữ liệu
         $user = $this->modelUser->checkUserForPasswordReset($fullname, $email, $phone);
         if (!$user) {
-            echo "<script>alert('Thông tin không hợp lệ hoặc tài khoản không tồn tại!'); window.location='".BASE_URL."?act=forgotpassword';</script>";
+            $_SESSION['error'] = 'Thông tin không đúng!';
+            header('Location: ' . BASE_URL . '?act=forgotpassword');
             exit();
         }
 
-        // Cập nhật mật khẩu mới (mã hóa trước khi lưu)
-        $hashedNewPassword = password_hash($newpassword, PASSWORD_DEFAULT);
-        $this->modelUser->updatePassword($email, $hashedNewPassword);
+        // Cập nhật mật khẩu mới (plaintext)
+        $this->modelUser->updatePassword($email, $newpassword);
 
-        echo "<script>alert('Mật khẩu đã được đặt lại thành công! Vui lòng đăng nhập với mật khẩu mới.'); window.location='".BASE_URL."?act=login';</script>";
+        $_SESSION['success'] = 'Đặt lại mật khẩu thành công!';
+        header('Location: ' . BASE_URL);
         exit();
     }
-
 }
 
 
 //////////////////////////////////////////        phần đăng xuất      /////////////////////////////////////////
 public function logout(){
-    session_start();
     session_destroy();
-    header("Location: " . BASE_URL . "?act=login");
+    header("Location: " . BASE_URL); // về trang login chính, không cần ?act=login
     exit();
 }
-
 
 
 //////////////////////////////////////////        phần đăng qua trang admin     /////////////////////////////////////////
