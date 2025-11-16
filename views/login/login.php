@@ -13,7 +13,21 @@
 
   <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/trangchu.css"> 
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/auth.css">
+
+  <style>
+    .sidebar, .header { display: none !important; }
+    .content { 
+      margin-left: 0 !important; 
+      padding: 0 !important;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 
   <!-- Style -->
 </head>
