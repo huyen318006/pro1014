@@ -9,8 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/trangchu.css">
-  
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
 </head>
 <body>
 
@@ -26,7 +25,7 @@
     <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
     <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
     <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-    <a href="<?= BASE_URL ?>?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 
   <!-- Header -->
