@@ -8,36 +8,31 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/trangchu.css"> <!-- Dùng :root, hiệu ứng -->
-  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/auth.css">
 
-  <!-- Style -->
+  <!-- CSS TỰ VIẾT - DÙNG BASE_URL -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>asset/css/login.css">
 </head>
-
 <body>
-  
-  <div class="card shadow-lg login-card">
+
+  <div class="login-card">
 
     <!-- HEADER -->
     <div class="login-header">
-        <div class="login-logo">
-            <i class="fa-solid fa-user"></i>
-        </div>
-        <h3 class="login-title-header">Đăng nhập tài khoản</h3>
+      <div class="login-logo">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <h3 class="login-title-header">Đăng nhập tài khoản</h3>
     </div>
 
     <div class="p-4">
 
-      <!-- Lỗi -->
+      <!-- Lỗi (tự tắt sau 3s) -->
       <?php if(isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger">
           <?= $_SESSION['error'] ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
         </div>
         <?php unset($_SESSION['error']); ?>
       <?php endif; ?>
@@ -78,6 +73,7 @@
     </div>
   </div>
 
+  <!-- JS: Toggle mật khẩu + Tự tắt alert -->
   <script>
     function togglePassword() {
       const p = document.getElementById('password');
@@ -90,9 +86,19 @@
         i.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
-  </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    // Tự động ẩn alert sau 3 giây
+    document.addEventListener('DOMContentLoaded', () => {
+      const alert = document.querySelector('.alert');
+      if (alert) {
+        setTimeout(() => {
+          alert.style.transition = 'opacity 0.5s ease';
+          alert.style.opacity = '0';
+          setTimeout(() => alert.remove(), 500);
+        }, 3000);
+      }
+    });
+  </script>
 
 </body>
 </html>

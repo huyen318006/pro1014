@@ -4,94 +4,167 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng ký tài khoản</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #7B5FFF, #4BA3FF);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: "Poppins", sans-serif;
-    }
-    .register-container {
-      background: #fff;
-      padding: 40px 50px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      width: 450px;
-      animation: fadeIn 0.8s ease-in-out;
-    }
-    .register-container h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #5e4eff;
-      font-weight: 600;
-    }
-    .form-control:focus {
-      border-color: #7B5FFF;
-      box-shadow: 0 0 0 0.2rem rgba(123,95,255,0.25);
-    }
-    .btn-primary {
-      background-color: #7B5FFF;
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: #5e4eff;
-    }
-    .text-center a {
-      color: #7B5FFF;
-      text-decoration: none;
-    }
-    .text-center a:hover {
-      text-decoration: underline;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- CSS ĐĂNG KÝ - ĐỒNG BỘ VỚI LOGIN -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>asset/css/register.css">
 </head>
 <body>
-  <div class="register-container">
-    <h2>Đăng ký tài khoản</h2>
-    <form action="<?= BASE_URL.'?act=formregister' ?>" method="post">
-      <div class="mb-3">
-        <label for="fullname" class="form-label">Họ và tên</label>
-        <input type="text" class="form-control" id="fullname" name="fullname" required>
-      </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" required>
-      </div>
+  <div class="register-card">
 
-      <div class="mb-3">
-        <label for="phone" class="form-label">Số điện thoại</label>
-        <input type="text" class="form-control" id="phone" name="phone" required pattern="[0-9]{10,11}" title="Nhập số điện thoại hợp lệ (10-11 số)">
+    <!-- HEADER -->
+    <div class="register-header">
+      <div class="register-logo">
+        <i class="fa-solid fa-user-plus"></i>
       </div>
+      <h3 class="register-title-header">Tạo tài khoản mới</h3>
+    </div>
 
-      <div class="mb-3">
-        <label for="address" class="form-label">Địa chỉ</label>
-        <input type="text" class="form-control" id="address" name="address" required>
-      </div>
+    <div class="p-4">
 
-      <div class="mb-3">
-        <label for="password" class="form-label">Mật khẩu</label>
-        <input type="password" class="form-control" id="password" name="password" required minlength="6">
-      </div>
+      <!-- THÔNG BÁO LỖI -->
+      <?php if(isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger">
+          <?= $_SESSION['error'] ?>
+          <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+      <?php endif; ?>
 
-      <div class="mb-3">
-        <label for="confirm_password" class="form-label">Nhập lại mật khẩu</label>
-        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
-      </div>
+      <!-- THÀNH CÔNG -->
+      <?php if(isset($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+          <?= $_SESSION['success'] ?>
+          <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+      <?php endif; ?>
 
-      <button type="submit" name="register" class="btn btn-primary w-100">Đăng ký</button>
+      <!-- FORM ĐĂNG KÝ -->
+      <form action="<?= BASE_URL ?>?act=formregister" method="post">
 
-      <div class="text-center mt-3">
-        <p>Đã có tài khoản? <a href="<?= BASE_URL ?>">Đăng nhập</a></p>
-      </div>
-    </form>
+        <!-- Họ tên -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-user"></i> Họ và tên
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" name="fullname" class="form-control" placeholder="Nguyễn Văn A" required>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-envelope"></i> Email
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-phone"></i> Số điện thoại
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            <input type="text" name="phone" class="form-control" placeholder="0901234567" 
+                   pattern="[0-9]{10,11}" title="Số điện thoại 10-11 chữ số" required>
+          </div>
+        </div>
+
+        <!-- Địa chỉ -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-map-marker-alt"></i> Địa chỉ
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            <input type="text" name="address" class="form-control" placeholder="123 Đường ABC, Quận 1" required>
+          </div>
+        </div>
+
+        <!-- Mật khẩu -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-lock"></i> Mật khẩu
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password" id="password" class="form-control" 
+                   placeholder="Ít nhất 6 ký tự" minlength="6" required>
+            <button type="button" class="btn btn-eye" onclick="togglePassword('password', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Nhập lại mật khẩu -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-lock"></i> Nhập lại mật khẩu
+          </label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-redo"></i></span>
+            <input type="password" name="confirm_password" id="confirm_password" class="form-control" 
+                   placeholder="Nhập lại mật khẩu" minlength="6" required>
+            <button type="button" class="btn btn-eye" onclick="togglePassword('confirm_password', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Nút đăng ký -->
+        <button type="submit" name="register" class="btn btn-register w-100">
+          Đăng ký ngay
+        </button>
+
+        <!-- Đăng nhập -->
+        <div class="text-center mt-3">
+          <p class="mb-0">Đã có tài khoản? 
+            <a href="<?= BASE_URL ?>" class="text-link">Đăng nhập</a>
+          </p>
+        </div>
+
+      </form>
+    </div>
   </div>
+
+  <!-- JS: Toggle mật khẩu + Tự tắt alert -->
+  <script>
+    function togglePassword(id, btn) {
+      const input = document.getElementById(id);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    // Tự động ẩn alert
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        setTimeout(() => {
+          alert.style.transition = 'opacity 0.5s ease';
+          alert.style.opacity = '0';
+          setTimeout(() => alert.remove(), 500);
+        }, 4000);
+      });
+    });
+  </script>
+
 </body>
 </html>
