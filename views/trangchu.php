@@ -9,12 +9,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/trangchu.css">
-  
 </head>
 <body>
 
-  <!-- Sidebar -->
+  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="logo">
       <i class="fas fa-user-shield"></i>
@@ -29,43 +29,35 @@
     <a href="<?= BASE_URL ?>?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <div class="header">
     <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
-    <div class="user- info">
+    <div class="user-info">
       <i class="fas fa-user-circle"></i>
       <span>Admin Chủ</span>
     </div>
   </div>
 
-  <!-- Content -->
+  <!-- CONTENT -->
   <div class="content">
 
     <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng người dùng</h6>
-          <h3>1,248</h3>
-        </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h6>Tổng người dùng</h6>
+        <h3>1,248</h3>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng Tour</h6>
-          <h3>68</h3>
-        </div>
+      <div class="stat-card">
+        <h6>Tổng Tour</h6>
+        <h3>68</h3>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Đơn đặt hôm nay</h6>
-          <h3>42</h3>
-        </div>
+      <div class="stat-card">
+        <h6>Đơn đặt hôm nay</h6>
+        <h3>42</h3>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Doanh thu tháng</h6>
-          <h3>875tr</h3>
-        </div>
+      <div class="stat-card">
+        <h6>Doanh thu tháng</h6>
+        <h3>875tr</h3>
       </div>
     </div>
 
@@ -98,8 +90,8 @@
                 <td><span class="badge bg-danger">Admin</span></td>
                 <td><span class="badge bg-success">Hoạt động</span></td>
                 <td>
-                  <button class="btn btn-primary btn-action" title="Sửa"><i class="fas fa-edit"></i></button>
-                  <button class="btn btn-warning btn-action" title="Phân quyền"><i class="fas fa-user-shield"></i></button>
+                  <button class="btn btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-warning btn-action"><i class="fas fa-user-shield"></i></button>
                 </td>
               </tr>
               <tr>
@@ -143,7 +135,7 @@
             <tbody>
               <tr>
                 <td>1</td>
-                <td><img src="https://via.placeholder.com/58/00CED1/white?text=DL" alt="" class="tour-img"></td>
+                <td><img src="https://via.placeholder.com/60/00CED1/white?text=DL" alt="" class="tour-img"></td>
                 <td><strong>Đà Lạt 3N2Đ</strong></td>
                 <td><strong style="color: var(--primary);">2.890.000đ</strong></td>
                 <td>Đà Lạt</td>
