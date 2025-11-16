@@ -13,7 +13,6 @@
 
   <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/trangchu.css"> <!-- Dùng :root, hiệu ứng -->
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/auth.css">
 
   <!-- Style -->
