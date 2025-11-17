@@ -32,6 +32,7 @@ class TourModel
         $stmt->execute($data);
         
         return $stmt->rowCount();
+        
     }
 
     public function updateTour($data)

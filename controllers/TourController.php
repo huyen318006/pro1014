@@ -70,16 +70,8 @@ class TourController
                 ];
 
                 if ($this->modelTour->addTour($data)) {
-                    $success = true;
-                    $formData = [
-                        'code' => '',
-                        'name' => '',
-                        'destination' => '',
-                        'type' => '',
-                        'status' => 'published',
-                        'price' => '',
-                        'duration_days' => ''
-                    ];
+                    header('Location: ' . BASE_URL . '?act=listTours');
+                    exit();
                 } else {
                     $errors[] = "Không thể thêm tour. Vui lòng thử lại!";
                 }
@@ -153,7 +145,8 @@ class TourController
                 ];
 
                 if ($this->modelTour->updateTour($data)) {
-                    $success = true;
+                    header('Location: ' . BASE_URL . '?act=listTours');
+                    exit();
                 } else {
                     $errors[] = "Không thể cập nhật tour. Vui lòng thử lại!";
                 }
