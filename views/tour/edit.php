@@ -73,15 +73,6 @@
                         <div class="form-row">
                             <!-- Cột trái -->
                             <div>
-                                <!-- ID -->
-                                <div class="form-group mb-3">
-                                    <label for="id" class="form-label">ID <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="id" name="id" 
-                                           value="<?= htmlspecialchars($id ?? '') ?>" 
-                                           placeholder="Nhập ID tour" required>
-                                    <small class="form-text text-muted">VD: 1, 2, 3...</small>
-                                </div>
-
                                 <!-- Mã Tour -->
                                 <div class="form-group mb-3">
                                     <label for="code" class="form-label">Mã Tour <span class="text-danger">*</span></label>
@@ -127,9 +118,10 @@
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
                                     <select class="form-select" id="status" name="status" required>
-                                        <option value="active" <?= ($status ?? 'active') === 'active' ? 'selected' : '' ?>>Hoạt động</option>
-                                        <option value="inactive" <?= ($status ?? 'active') === 'inactive' ? 'selected' : '' ?>>Không hoạt động</option>
-                                        <option value="draft" <?= ($status ?? 'active') === 'draft' ? 'selected' : '' ?>>Bản nháp</option>
+                                        <?php $currentStatus = $status ?? 'published'; ?>
+                                        <option value="published" <?= $currentStatus === 'published' ? 'selected' : '' ?>>Hoạt động</option>
+                                        <option value="draft" <?= $currentStatus === 'draft' ? 'selected' : '' ?>>Bản nháp</option>
+                                        <option value="archived" <?= $currentStatus === 'archived' ? 'selected' : '' ?>>Ngừng kinh doanh</option>
                                     </select>
                                 </div>
 

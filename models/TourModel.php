@@ -26,8 +26,8 @@ class TourModel
     }
     public function addTour($data)
     {
-        $sql = 'INSERT INTO `tours` (id, code, name, destination, type, status, price, duration_days) 
-                VALUES (:id, :code, :name, :destination, :type, :status, :price, :duration_days)';
+        $sql = 'INSERT INTO `tours` (code, name, destination, type, status, price, duration_days) 
+                VALUES (:code, :name, :destination, :type, :status, :price, :duration_days)';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($data);
         
@@ -37,15 +37,14 @@ class TourModel
     public function updateTour($data)
     {
         $sql = "UPDATE `tours` 
-                SET id = :id,
-                    code = :code,
+                SET code = :code,
                     name = :name, 
                     destination = :destination,
                     type = :type,
                     status = :status,
                     price = :price, 
                     duration_days = :duration_days
-                WHERE id = :original_id";
+                WHERE id = :id";
         
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute($data);

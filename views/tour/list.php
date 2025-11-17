@@ -69,7 +69,21 @@
                     <td><strong><?= $item["name"] ?></strong></td>
                     <td><?= $item["destination"] ?></td>
                     <td><?= $item["type"] ?></td>
-                    <td><?= $item["status"] ?></td>
+                    <td>
+                        <?php
+                        $statusMap = [
+                            'published' => ['label' => 'Hoạt động', 'class' => 'bg-success'],
+                            'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
+                            'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
+                        ];
+                        $statusValue = $item["status"] ?? 'draft';
+                        $statusMeta = $statusMap[$statusValue] ?? [
+                            'label' => ucfirst($statusValue),
+                            'class' => 'bg-secondary'
+                        ];
+                        ?>
+                        <span class="badge <?= $statusMeta['class'] ?>"><?= $statusMeta['label'] ?></span>
+                    </td>
                     <td><?= number_format($item["price"], 0, ',', '.') ?>đ</td>
                     <td><?= $item["duration_days"] ?></td>
                     <td><?= date('d/m/Y', strtotime($item["created_at"])) ?></td>

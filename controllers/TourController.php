@@ -3,6 +3,7 @@
 class TourController
 {
     public $modelTour;
+    private $allowedStatuses = ['draft', 'published', 'archived'];
 
 
     public function __construct()
@@ -29,28 +30,27 @@ class TourController
         $errors = [];
         $success = false;
         $formData = [
-            'id' => '',
             'code' => '',
             'name' => '',
             'destination' => '',
             'type' => '',
-            'status' => 'active',
+            'status' => 'published',
             'price' => '',
             'duration_days' => ''
         ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formData = [
-                'id' => trim($_POST['id'] ?? ''),
                 'code' => trim($_POST['code'] ?? ''),
                 'name' => trim($_POST['name'] ?? ''),
                 'destination' => trim($_POST['destination'] ?? ''),
                 'type' => trim($_POST['type'] ?? ''),
-                'status' => $_POST['status'] ?? 'active',
+                'status' => $_POST['status'] ?? 'published',
                 'price' => trim($_POST['price'] ?? ''),
                 'duration_days' => trim($_POST['duration_days'] ?? '')
             ];
 
+            if (!in_array($formData['status'], $this->allowedStatuses, true)) $errors[] = "Trạng thái không hợp lệ";
             if ($formData['name'] === '') $errors[] = "Tên tour không được để trống";
             if ($formData['code'] === '') $errors[] = "Mã tour không được để trống";
             if ($formData['destination'] === '') $errors[] = "Địa điểm không được để trống";
@@ -60,7 +60,6 @@ class TourController
 
             if (empty($errors)) {
                 $data = [
-                    ':id' => $formData['id'],
                     ':code' => $formData['code'],
                     ':name' => $formData['name'],
                     ':destination' => $formData['destination'],
@@ -73,12 +72,11 @@ class TourController
                 if ($this->modelTour->addTour($data)) {
                     $success = true;
                     $formData = [
-                        'id' => '',
                         'code' => '',
                         'name' => '',
                         'destination' => '',
                         'type' => '',
-                        'status' => 'active',
+                        'status' => 'published',
                         'price' => '',
                         'duration_days' => ''
                     ];
@@ -124,16 +122,17 @@ class TourController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $originalId = $_POST['original_id'] ?? $tour['id'];
             $formData = [
-                'id' => trim($_POST['id'] ?? ''),
+                'id' => $originalId,
                 'code' => trim($_POST['code'] ?? ''),
                 'name' => trim($_POST['name'] ?? ''),
                 'destination' => trim($_POST['destination'] ?? ''),
                 'type' => trim($_POST['type'] ?? ''),
-                'status' => $_POST['status'] ?? 'active',
+                'status' => $_POST['status'] ?? 'published',
                 'price' => trim($_POST['price'] ?? ''),
                 'duration_days' => trim($_POST['duration_days'] ?? '')
             ];
 
+            if (!in_array($formData['status'], $this->allowedStatuses, true)) $errors[] = "Trạng thái không hợp lệ";
             if ($formData['name'] === '') $errors[] = "Tên tour không được để trống";
             if ($formData['code'] === '') $errors[] = "Mã tour không được để trống";
             if ($formData['destination'] === '') $errors[] = "Địa điểm không được để trống";
@@ -143,7 +142,6 @@ class TourController
 
             if (empty($errors)) {
                 $data = [
-                    ':id' => $formData['id'],
                     ':code' => $formData['code'],
                     ':name' => $formData['name'],
                     ':destination' => $formData['destination'],
@@ -151,12 +149,11 @@ class TourController
                     ':status' => $formData['status'],
                     ':price' => $formData['price'],
                     ':duration_days' => $formData['duration_days'],
-                    ':original_id' => $originalId
+                    ':id' => $originalId
                 ];
 
                 if ($this->modelTour->updateTour($data)) {
                     $success = true;
-                    $originalId = $formData['id'];
                 } else {
                     $errors[] = "Không thể cập nhật tour. Vui lòng thử lại!";
                 }
