@@ -14,7 +14,7 @@ class TourController
     public function Home()
     {
         $tours = $this->modelTour->getAllTours();
-        require_once './views/trangchu.php';
+        require_once './views/admin/trangchu.php';
     }
 
 
@@ -22,7 +22,7 @@ class TourController
     public function listTours()
     {
         $tours = $this->modelTour->getAllTours();
-        require_once BASE_URL_VIEWS . 'tour/list.php';  
+        require_once BASE_URL_VIEWS . 'admin/tour/list.php';  
     }
 
     /////////////////////////////////////////        phần thêm danh sách tour      /////////////////////////////////////////
@@ -80,7 +80,7 @@ class TourController
         }
 
         extract($formData);
-        require_once BASE_URL_VIEWS . 'tour/add.php';
+        require_once BASE_URL_VIEWS . 'admin/tour/add.php';
     }
 
     /////////////////////////////////////////        phần sửa tour      /////////////////////////////////////////
@@ -155,7 +155,7 @@ class TourController
         }
 
         extract($formData);
-        require_once BASE_URL_VIEWS . 'tour/edit.php';
+        require_once BASE_URL_VIEWS . 'admin/tour/edit.php';
     }
     /////////////////////////////////////////        phần xoá tour      /////////////////////////////////////////
     public function deleteTour($id)

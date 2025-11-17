@@ -8,7 +8,6 @@ class UsersController
     public $modelUser;
 
     public function __construct() {
-        $this->modelProduct = new ProductModel();
         //kết nối model user
         $this->modelUser = new UserModel();
 

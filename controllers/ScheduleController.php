@@ -12,6 +12,6 @@ class ScheduleController
     public function listSchedule()
     {
         $schedules = $this->modelSchedule->getAllSchedules();
-        require_once BASE_URL_VIEWS . 'schedule/list.php';
+        require_once BASE_URL_VIEWS . 'admin/schedule/list.php';
     }
 }
