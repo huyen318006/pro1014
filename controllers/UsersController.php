@@ -136,9 +136,8 @@ public function logout(){
 
 //////////////////////////////////////////        phần đăng qua trang admin     /////////////////////////////////////////
 public function admin(){
-    require_once BASE_URL_VIEWS.'trangchu.php';
-
-
+    $tourController = new TourController(); // gọi class TourController
+    $tourController->Home();
 }
 
 public function guide(){

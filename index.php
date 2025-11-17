@@ -40,6 +40,9 @@ match ($act) {
     'admin' => (new UsersController())->admin(),
     'guide' => (new UsersController())->guide(),
     
+    // Dashboard hiển thị tour
+    'home' => (new TourController())->Home(),
+
     // Quản lý tour
     'listTours' => (new TourController())->listTours(),
 

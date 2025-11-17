@@ -123,35 +123,72 @@
     <div class="table-card">
       <div class="card-header">
         <h5>Quản lý Tour</h5>
-        <button class="btn-add"><i class="fas fa-plus"></i> Thêm Tour</button>
+        <a href="index.php?act=addTourForm" class="btn btn-add"><i class="fas fa-plus"></i> Thêm Tour</a>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Ảnh</th>
-                <th>Tên Tour</th>
-                <th>Giá</th>
-                <th>Địa điểm</th>
-                <th>Lượt đặt</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
+          <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Mã Tour</th>
+                    <th>Tên Tour</th>
+                    <th>Điểm Đến</th>
+                    <th>Loại</th>
+                    <th>Trạng Thái</th>
+                    <th>Giá</th>
+                    <th>Số Ngày</th>
+                    <th>Ngày Tạo</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td><img src="https://via.placeholder.com/58/00CED1/white?text=DL" alt="" class="tour-img"></td>
-                <td><strong>Đà Lạt 3N2Đ</strong></td>
-                <td><strong style="color: var(--primary);">2.890.000đ</strong></td>
-                <td>Đà Lạt</td>
-                <td>142</td>
-                <td>
-                  <button class="btn btn-primary btn-action"><i class="fas fa-edit"></i></button>
-                  <button class="btn btn-danger btn-action"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>
+            <tbody>
+                <?php if (!empty($tours) && is_array($tours)) { ?>
+                    <?php foreach ($tours as $item) { ?>
+                    <tr>
+                        <td><?= $item["id"] ?></td>
+                        <td><?= $item["code"] ?></td>
+                        <td><strong><?= $item["name"] ?></strong></td>
+                        <td><?= $item["destination"] ?></td>
+                        <?php
+                        $typeMap = [
+                            'in_country' => 'Trong nước',
+                            'abroad' => 'Nước ngoài',
+                            'adventure' => 'Phiêu lưu',
+                            'luxury' => 'Sang trọng',
+                            'family' => 'Gia đình',
+                        ];
+                        $typeValue = $item["type"] ?? '';
+                        $typeLabel = $typeMap[$typeValue] ?? ucwords(str_replace('_', ' ', $typeValue));
+                        ?>
+                        <td><?= $typeLabel ?></td>
+                        <td>
+                            <?php
+                            $statusMap = [
+                                'published' => ['label' => 'Hoạt động', 'class' => 'bg-success'],
+                                'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
+                                'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
+                            ];
+                            $statusValue = $item["status"] ?? 'draft';
+                            $statusMeta = $statusMap[$statusValue] ?? [
+                                'label' => ucfirst($statusValue),
+                                'class' => 'bg-secondary'
+                            ];
+                            ?>
+                            <span class="badge <?= $statusMeta['class'] ?>"><?= $statusMeta['label'] ?></span>
+                        </td>
+                        <td><?= number_format($item["price"], 0, ',', '.') ?>đ</td>
+                        <td><?= $item["duration_days"] ?></td>
+                        <td><?= date('d/m/Y', strtotime($item["created_at"])) ?></td>
+                        <td>
+                        <a href="index.php?act=editTourForm&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
+                        <a href="index.php?act=deleteTour&id=<?= $item["id"] ?>" class="btn btn-danger btn-action" onclick="return confirm('Bạn có chắc muốn xoá tour này?');"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                <?php } ?>
+                </tbody>
             </tbody>
           </table>
         </div>

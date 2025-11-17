@@ -68,7 +68,18 @@
                     <td><?= $item["code"] ?></td>
                     <td><strong><?= $item["name"] ?></strong></td>
                     <td><?= $item["destination"] ?></td>
-                    <td><?= $item["type"] ?></td>
+                    <?php
+                    $typeMap = [
+                        'in_country' => 'Trong nước',
+                        'abroad' => 'Nước ngoài',
+                        'adventure' => 'Phiêu lưu',
+                        'luxury' => 'Sang trọng',
+                        'family' => 'Gia đình',
+                    ];
+                    $typeValue = $item["type"] ?? '';
+                    $typeLabel = $typeMap[$typeValue] ?? ucwords(str_replace('_', ' ', $typeValue));
+                    ?>
+                    <td><?= $typeLabel ?></td>
                     <td>
                         <?php
                         $statusMap = [

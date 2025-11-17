@@ -13,6 +13,7 @@ class TourController
 
     public function Home()
     {
+        $tours = $this->modelTour->getAllTours();
         require_once './views/trangchu.php';
     }
 
