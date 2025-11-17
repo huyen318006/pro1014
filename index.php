@@ -8,11 +8,12 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 
 // Require toàn bộ file Controllers
 require_once './controllers/UsersController.php';
-
+require_once './controllers/TourController.php';
+require_once './controllers/ScheduleController.php';
 // Require toàn bộ file Models
-require_once './models/ProductModel.php';
 require_once './models/UserModel.php';
-
+require_once './models/TourModel.php';
+require_once './models/ScheduleModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -39,6 +40,21 @@ match ($act) {
     // Redirects from controller can point here; map to Login for now
     'admin' => (new UsersController())->admin(),
     'guide' => (new UsersController())->guide(),
+    
+    // Dashboard hiển thị tour
+    'home' => (new TourController())->Home(),
+
+    // Quản lý tour
+    'listTours' => (new TourController())->listTours(),
+
+    'addTourForm' => (new TourController())->addTourForm(),
+
+    'editTourForm' => (new TourController())->editTourForm($_GET['id'] ?? 0),
+
+    'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
+
+    // Quản lý lịch trình
+    'listSchedule' => (new ScheduleController())->listSchedule(),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),
