@@ -6,8 +6,7 @@ class ProductController
 
     public function __construct()
     {
-        $this->modelProduct = new ProductModel();
-    }
+     }
 
     public function edit()
     {
