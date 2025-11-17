@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | LOFT CITY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap 5 + FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-user-shield"></i>
+    </div>
+    <h4>ADMIN</h4>
+    <a href="index.php?act=admin"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="#"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
+    <a href="index.php?act=listTours" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
+    <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
+    <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
+    <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+    <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h5><i class="fas fa-cogs"></i> Bảng điều khiển tour</h5>
+    <div class="user- info">
+      <i class="fas fa-user-circle"></i>
+      <span>Admin Chủ</span>
+    </div>
+  </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="form-container">
+                    <h1 class="form-title">
+                        <i class="bi bi-pencil-square"></i> Cập nhật Tour
+                    </h1>
+
+                    <!-- Hiển thị thông báo thành công -->
+                    <?php if (!empty($success)): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle"></i> <strong>Thành công!</strong> Thông tin tour đã được cập nhật.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Hiển thị lỗi validation -->
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> <strong>Lỗi!</strong>
+                            <ul class="mb-0 mt-2">
+                                <?php foreach ($errors as $error): ?>
+                                    <li><?= htmlspecialchars($error) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Form cập nhật tour -->
+                    <form method="POST" action="">
+                        <input type="hidden" name="original_id" value="<?= htmlspecialchars($originalId ?? $id) ?>">
+                        <div class="form-row">
+                            <!-- Cột trái -->
+                            <div>
+                                <!-- ID -->
+                                <div class="form-group mb-3">
+                                    <label for="id" class="form-label">ID <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="id" name="id" 
+                                           value="<?= htmlspecialchars($id ?? '') ?>" 
+                                           placeholder="Nhập ID tour" required>
+                                    <small class="form-text text-muted">VD: 1, 2, 3...</small>
+                                </div>
+
+                                <!-- Mã Tour -->
+                                <div class="form-group mb-3">
+                                    <label for="code" class="form-label">Mã Tour <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="code" name="code" 
+                                           value="<?= htmlspecialchars($code ?? '') ?>" 
+                                           placeholder="VD: TOUR001" required>
+                                    <small class="form-text text-muted">Mã tour duy nhất trong hệ thống</small>
+                                </div>
+
+                                <!-- Tên Tour -->
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label">Tên Tour <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" 
+                                           value="<?= htmlspecialchars($name ?? '') ?>" 
+                                           placeholder="VD: Đà Nẵng - Hội An 3 ngày" required>
+                                </div>
+
+                                <!-- Địa điểm -->
+                                <div class="form-group mb-3">
+                                    <label for="destination" class="form-label">Địa điểm <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="destination" name="destination" 
+                                           value="<?= htmlspecialchars($destination ?? '') ?>" 
+                                           placeholder="VD: Đà Nẵng" required>
+                                </div>
+                            </div>
+
+                            <!-- Cột phải -->
+                            <div>
+                                <!-- Loại Tour -->
+                                <div class="form-group mb-3">
+                                    <label for="type" class="form-label">Loại Tour <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="type" name="type" required>
+                                        <option value="">-- Chọn loại tour --</option>
+                                        <option value="in_country" <?= ($type ?? '') === 'in_country' ? 'selected' : '' ?>>Trong nước</option>
+                                        <option value="abroad" <?= ($type ?? '') === 'abroad' ? 'selected' : '' ?>>Nước ngoài</option>
+                                        <option value="adventure" <?= ($type ?? '') === 'adventure' ? 'selected' : '' ?>>Phiêu lưu</option>
+                                        <option value="luxury" <?= ($type ?? '') === 'luxury' ? 'selected' : '' ?>>Sang trọng</option>
+                                        <option value="family" <?= ($type ?? '') === 'family' ? 'selected' : '' ?>>Gia đình</option>
+                                    </select>
+                                </div>
+
+                                <!-- Trạng thái -->
+                                <div class="form-group mb-3">
+                                    <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="status" name="status" required>
+                                        <option value="active" <?= ($status ?? 'active') === 'active' ? 'selected' : '' ?>>Hoạt động</option>
+                                        <option value="inactive" <?= ($status ?? 'active') === 'inactive' ? 'selected' : '' ?>>Không hoạt động</option>
+                                        <option value="draft" <?= ($status ?? 'active') === 'draft' ? 'selected' : '' ?>>Bản nháp</option>
+                                    </select>
+                                </div>
+
+                                <!-- Giá -->
+                                <div class="form-group mb-3">
+                                    <label for="price" class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="price" name="price" 
+                                           value="<?= htmlspecialchars($price ?? '') ?>" 
+                                           placeholder="VD: 5000000" min="0" required>
+                                </div>
+
+                                <!-- Số ngày -->
+                                <div class="form-group mb-3">
+                                    <label for="duration_days" class="form-label">Số ngày <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="duration_days" name="duration_days" 
+                                           value="<?= htmlspecialchars($duration_days ?? '') ?>" 
+                                           placeholder="VD: 3" min="1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút submit -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <i class="bi bi-check-circle"></i> Cập nhật
+                            </button>
+                            <a href="<?= BASE_URL ?>?act=listTours" class="btn btn-secondary btn-back">
+                                <i class="bi bi-x-circle"></i> Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
