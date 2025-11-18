@@ -26,5 +26,4 @@
     </div>
 
 </div>
-
 <?php include "layout_guide_end.php"; ?>
