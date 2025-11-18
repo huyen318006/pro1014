@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -54,88 +54,40 @@
     </div>
   </div>
 
+
+
   <!-- CONTENT -->
   <div class="content">
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
+   <div class="departure-container">
+    <h2 class="title">📅 Lịch Khởi Hành</h2>
 
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tour Tháng Này</h6>
-          <h3>12</h3>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tour Đã Hoàn Thành</h6>
-          <h3>48</h3>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Đánh Giá TB</h6>
-          <h3>4.8 ⭐</h3>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Khách Hài Lòng</h6>
-          <h3>96%</h3>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- TOUR SẮP KHỞI HÀNH -->
-    <div class="table-card">
-
-      <div class="card-header">
-        <h5>Tour Sắp Khởi Hành</h5>
-        <button class="btn-add"><i class="fas fa-plus"></i> Ghi chú nhanh</button>
-      </div>
-
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Ảnh</th>
+    <table class="departure-table">
+        <thead>
+            <tr>
                 <th>Tên Tour</th>
-                <th>Ngày đi</th>
-                <th>Số khách</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
+                <th>Ngày Khởi Hành</th>
+                <th>Ngày Kết Thúc</th>
+                <th>Số Chỗ</th>
+                <th>Giá Tour</th>
+                <th>Hướng Dẫn Viên</th>
+            </tr>
+        </thead>
 
-            <tbody>
-
-              <tr>
-                <td><img src="https://via.placeholder.com/58" class="tour-img"></td>
-                <td><strong>Đà Lạt 3N2Đ</strong></td>
-                <td>20/11/2025</td>
-                <td>24</td>
-                <td><span class="badge bg-warning">Chuẩn bị</span></td>
-              </tr>
-
-              <tr>
-                <td><img src="https://via.placeholder.com/58" class="tour-img"></td>
-                <td><strong>Nha Trang 4N3Đ</strong></td>
-                <td>28/11/2025</td>
-                <td>32</td>
-                <td><span class="badge bg-success">Sẵn sàng</span></td>
-              </tr>
-
-            </tbody>
-
-          </table>
-        </div>
-      </div>
-
-    </div>
+        <tbody>
+            <?php foreach ($departures as $departure): ?>
+            <tr>
+                <td><?= htmlspecialchars($departure['tour_name'] ?? '') ?></td>
+                <td><?= htmlspecialchars($departure['departure_date'] ?? '') ?></td>
+                <td><?= htmlspecialchars(date('Y-m-d', strtotime($departure['departure_date'] . ' + ' . ($departure['duration_days'] - 1) . ' days')) ?? '') ?></td>
+                <td><?= htmlspecialchars($departure['max_participants'] ?? '') ?></td>
+                <td><?= htmlspecialchars(number_format($departure['tour_price'] ?? 0, 0, ',', '.') . ' VND') ?></td>
+                <td><?= htmlspecialchars($departure['guide_name'] ?? 'Chưa phân công') ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
   </div>
 
@@ -144,3 +96,49 @@
 
 </body>
 </html>
+<style>
+    .departure-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #2c3e50;
+}
+
+.departure-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.departure-table thead {
+    background: #3498db;
+    color: white;
+}
+
+.departure-table th, 
+.departure-table td {
+    padding: 14px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.departure-table tr:nth-child(even) {
+    background: #f7f9fa;
+}
+
+.departure-table tr:hover {
+    background: #dfeffc;
+    transition: 0.3s;
+}
+
+</style>
