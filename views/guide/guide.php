@@ -10,7 +10,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
   <!-- CSS chung với admin -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/guide.css"> <!-- màu mới -->
+
 </head>
 
 <body>
