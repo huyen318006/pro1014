@@ -10,6 +10,7 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/UsersController.php';
 require_once './controllers/TourController.php';
 require_once './controllers/ScheduleController.php';
+require_once './controllers/AssignmentController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
@@ -57,6 +58,13 @@ match ($act) {
 
     // Quản lý lịch trình
     'listSchedule' => (new ScheduleController())->listSchedule(),
+    // Quản lý phân công hướng dẫn viên
+    'listAssignments' => (new AssignmentController())->index(),
+    'createAssignment' => (new AssignmentController())->create(),
+    'storeAssignment' => (new AssignmentController())->store(),
+    'editAssignment' => (new AssignmentController())->edit(),
+    'updateAssignment' => (new AssignmentController())->update(),
+    'deleteAssignment' => (new AssignmentController())->delete(),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),
