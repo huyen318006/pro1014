@@ -9,43 +9,66 @@ class ScheduleController
         $this->modelSchedule = new ScheduleModel();
     }
 
+    /////////////////////////////////////////        phần hiển thị danh sách lịch trình      /////////////////////////////////////////
     public function listSchedule()
     {
         $schedules = $this->modelSchedule->getAllSchedules();
         require_once BASE_URL_VIEWS . 'admin/schedule/list.php';
     }
-    public function addScheduleForm()
+    /////////////////////////////////////////        phần thêm lịch trình      /////////////////////////////////////////
+    public function addSchedule()
     {
         require_once BASE_URL_VIEWS . 'admin/schedule/add.php';
     }
-    public function store()
+    /////////////////////////////////////////        phần sửa lịch trình      /////////////////////////////////////////
+    public function editSchedule()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = $_POST;
-            
-            // Xử lý upload ảnh
-            if (isset($_FILES['urlSP']) && $_FILES['urlSP']['size'] > 0) {
-                $data['urlSP'] = upload_file('product', $_FILES['urlSP']);
-            } else {
-                $data['urlSP'] = 'product/default.jpg';
+        require_once BASE_URL_VIEWS . 'admin/schedule/edit.php';
+        if(isset($_POST['submit'])){
+            $tour_id = $_POST['tour_id'];
+            $day_number = $_POST['day_number'];
+            $title = $_POST['title'];
+            $activities = $_POST['activities'];
+            $notes = $_POST['notes'];
+            $data = [
+                ':tour_id' => $tour_id,
+                ':day_number' => $day_number,
+                ':title' => $title,
+                ':activities' => $activities,
+                ':notes' => $notes,
+                ':id' => $id,
+            ];
+            $result = $this->modelSchedule->editSchedule($data);
+            if($result){
+                $_SESSION['success'] = 'Sửa lịch trình thành công';
+            }else{
+                $_SESSION['error'] = 'Sửa lịch trình thất bại';
             }
-            
-            $this->product->insert($data);
+            header('Location: ' . BASE_URL . '?act=listSchedule');
+            exit();
         }
-        header("Location:" . BASE_URL);
+        require_once BASE_URL_VIEWS . 'admin/schedule/edit.php';
     }
-    public function editScheduleForm()
+    /////////////////////////////////////////        phần xoá lịch trình      /////////////////////////////////////////
+    public function deleteSchedule()
     {
-        if (isset($_GET['id'])) {
-            $schedule = $this->modelSchedule->getScheduleById($_GET['id']);
-            require_once BASE_URL_VIEWS . 'admin/schedule/edit.php';
+        require_once BASE_URL_VIEWS . 'admin/schedule/delete.php';
+        if(isset($_POST['submit'])){
+            $id = $_POST['id'];
+            $tour_id = $_POST['tour_id'];
+            $data = [
+                ':id' => $id,
+                ':tour_id' => $tour_id,
+            ];
+            $result = $this->modelSchedule->deleteSchedule($data);
+            if($result){
+                $_SESSION['success'] = 'Xoá lịch trình thành công';
+            }else{
+                $_SESSION['error'] = 'Xoá lịch trình thất bại';
+            }
+            header('Location: ' . BASE_URL . '?act=listSchedule');
+            exit();
         }
-    }
-    function delete()
-    {
-        if (isset($_GET['id'])) {
-            $this->modelSchedule->deleteSchedule($_GET['id']);
-        }
-        header("Location:" . BASE_URL . "?act=listSchedule");
+        require_once BASE_URL_VIEWS . 'admin/schedule/delete.php';
     }
 }

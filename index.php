@@ -57,6 +57,9 @@ match ($act) {
 
     // Quản lý lịch trình
     'listSchedule' => (new ScheduleController())->listSchedule(),
+    'addScheduleForm' => (new ScheduleController())->addSchedule(),
+    'editScheduleForm' => (new ScheduleController())->editSchedule(),
+    'deleteSchedule' => (new ScheduleController())->deleteSchedule(),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),

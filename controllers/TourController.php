@@ -28,19 +28,8 @@ class TourController
     /////////////////////////////////////////        phần thêm danh sách tour      /////////////////////////////////////////
     public function addTourForm()
     {
-        $errors = [];
-        $success = false;
-        $formData = [
-            'code' => '',
-            'name' => '',
-            'destination' => '',
-            'type' => '',
-            'status' => 'published',
-            'price' => '',
-            'duration_days' => ''
-        ];
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $errors = [];
             $formData = [
                 'code' => trim($_POST['code'] ?? ''),
                 'name' => trim($_POST['name'] ?? ''),
@@ -79,7 +68,9 @@ class TourController
             }
         }
 
-        extract($formData);
+        if (isset($formData)) {
+            extract($formData);
+        }
         require_once BASE_URL_VIEWS . 'admin/tour/add.php';
     }
 

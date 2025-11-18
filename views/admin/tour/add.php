@@ -47,14 +47,6 @@
                         <i class="bi bi-plus-circle"></i> Thêm Tour Mới
                     </h1>
 
-                    <!-- Hiển thị thông báo thành công -->
-                    <?php if ($success): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="bi bi-check-circle"></i> <strong>Thành công!</strong> Tour đã được thêm vào hệ thống.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php endif; ?>
-
                     <!-- Hiển thị lỗi validation -->
                     <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
