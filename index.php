@@ -10,10 +10,12 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/UsersController.php';
 require_once './controllers/TourController.php';
 require_once './controllers/ScheduleController.php';
+require_once './controllers/GuideController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ScheduleModel.php';
+require_once './models/departuresModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -57,6 +59,15 @@ match ($act) {
 
     // Quản lý lịch trình
     'listSchedule' => (new ScheduleController())->listSchedule(),
+
+
+    //bắt đầu routr của guide
+      //TRANG DASHBOARD CỦA GUIDE
+      'guideDashboard' => (new GuideController())->guideDashboard(),
+      //trang lịch khởi hành của guide
+      'guideDepartures' => (new GuideController())->guideDepartures(),
+      //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
+      'MyTour' => (new GuideController())->MyTour(),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),
