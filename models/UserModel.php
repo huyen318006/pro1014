@@ -59,8 +59,88 @@ class UserModel {
     $stmt->execute();
 }
 
+ // Lấy tất cả phân công (JOIN để lấy tên HDV và tour)
+    public function getAllAssignments()
+    {
+        $sql = "SELECT a.*, u.fullname AS guide_name, d.tour_id, d.departure_date
+                FROM assignments a
+                JOIN users u ON a.guide_id = u.id
+                JOIN departures d ON a.departure_id = d.id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    // Lấy chi tiết 1 phân công
+    public function getAssignmentById($id)
+    {
+        $sql = "SELECT * FROM assignments WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch();
+    }
+
+    // Xóa phân công
+    public function deleteAssignment($id)
+    {
+        $sql = "DELETE FROM assignments WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->rowCount();
+    }
+
+    // Thêm phân công
+    public function storeAssignment($data)
+    {
+        $sql = "INSERT INTO assignments (departure_id, guide_id, assigned_at)
+                VALUES (:departure_id, :guide_id, :assigned_at)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->rowCount();
+    }
+
+    // Cập nhật phân công
+    public function updateAssignment($data)
+    {
+        $sql = "UPDATE assignments
+                SET departure_id = :departure_id,
+                    guide_id = :guide_id,
+                    assigned_at = :assigned_at
+                WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->rowCount();
+    }
+
+    // Kiểm tra trùng phân công
+    public function checkDuplicate($guide_id, $departure_id)
+    {
+        $sql = "SELECT * FROM assignments
+                WHERE guide_id = :guide_id AND departure_id = :departure_id
+                LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            ':guide_id' => $guide_id,
+            ':departure_id' => $departure_id
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Lấy danh sách hướng dẫn viên
+    public function getAllGuides()
+    {
+        $sql = "SELECT * FROM users WHERE role = 'guide'";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    // Lấy danh sách departures
+    public function getAllDepartures()
+    {
+        $sql = "SELECT * FROM departures";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
-
-  
-
-?>
