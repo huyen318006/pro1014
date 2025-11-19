@@ -35,9 +35,11 @@ public function formlogin() {
             
             // Chuyển hướng dựa vào role
             if($user['role'] == 'admin') {
+                $_SESSION['user'] = $user;
                 header('Location: ' . BASE_URL . '?act=admin');
                 exit();
             } elseif($user['role'] == 'guide') {
+                $_SESSION['user'] = $user;
                 header('Location: ' . BASE_URL . '?act=guide');
                 exit();
             } else {
