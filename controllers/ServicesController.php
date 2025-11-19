@@ -1,6 +1,4 @@
 <?php
-require_once './models/Services.php';
-
 class ServicesController
 {
     private $serviceModel;
