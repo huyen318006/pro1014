@@ -2,10 +2,12 @@
 class AssignmentController
 {
     public $assignment;
+    public $departures;
 
     public function __construct()
     {
         $this->assignment = new UserModel();
+        $this->departures = new Departures();
     }
 
     // Hiển thị danh sách phân công
@@ -91,5 +93,16 @@ class AssignmentController
         header('Location: ?act=listAssignments');
         exit();
     }
+
+     public function DepartureAdmin(){
+        $departures=$this->departures->getAllDepartures();
+    require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
+ }
+
 }
+
+
+
+//lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
+
 ?>
