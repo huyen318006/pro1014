@@ -15,7 +15,6 @@ class ServicesController
     {
         $services = $this->serviceModel->getAll();
         require __DIR__ . '/../views/admin/services/list.php';
-
     }
 
     // ============================
@@ -24,7 +23,6 @@ class ServicesController
     public function create()
     {
         require __DIR__ . '/../views/admin/services/add.php';
-
     }
 
     // ============================
