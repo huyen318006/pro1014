@@ -22,159 +22,116 @@ class TourController
     public function listTours()
     {
         $tours = $this->modelTour->getAllTours();
-        require_once BASE_URL_VIEWS . 'admin/tour/list.php';  
+        require_once BASE_URL_VIEWS . 'admin/tour/list.php';
+    }
+
+    /////////////////////////////////////////        phần hiển thị chi tiết tour      /////////////////////////////////////////
+    public function detailTour($id)
+    {
+        $tour = $this->modelTour->getTourById($id);
+        require_once BASE_URL_VIEWS . 'admin/tour/detail.php';
     }
 
     /////////////////////////////////////////        phần thêm danh sách tour      /////////////////////////////////////////
     public function addTourForm()
     {
-        $errors = [];
-        $success = false;
-        $formData = [
-            'code' => '',
-            'name' => '',
-            'destination' => '',
-            'type' => '',
-            'status' => 'published',
-            'price' => '',
-            'duration_days' => ''
-        ];
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $formData = [
-                'code' => trim($_POST['code'] ?? ''),
-                'name' => trim($_POST['name'] ?? ''),
-                'destination' => trim($_POST['destination'] ?? ''),
-                'type' => trim($_POST['type'] ?? ''),
-                'status' => $_POST['status'] ?? 'published',
-                'price' => trim($_POST['price'] ?? ''),
-                'duration_days' => trim($_POST['duration_days'] ?? '')
+
+            $code = $_POST['code'] ?? '';
+            $name = $_POST['name'] ?? '';
+            $destination = $_POST['destination'] ?? '';
+            $type = $_POST['type'] ?? '';
+            $status = $_POST['status'] ?? 'published';
+            $price = $_POST['price'] ?? '';
+            $duration_days = $_POST['duration_days'] ?? '';
+            $data = [
+                ':code' => $code,
+                ':name' => $name,
+                ':destination' => $destination,
+                ':type' => $type,
+                ':status' => $status,
+                ':price' => $price,
+                ':duration_days' => $duration_days
             ];
-
-            if (!in_array($formData['status'], $this->allowedStatuses, true)) $errors[] = "Trạng thái không hợp lệ";
-            if ($formData['name'] === '') $errors[] = "Tên tour không được để trống";
-            if ($formData['code'] === '') $errors[] = "Mã tour không được để trống";
-            if ($formData['destination'] === '') $errors[] = "Địa điểm không được để trống";
-            if ($formData['type'] === '') $errors[] = "Loại tour không được để trống";
-            if ($formData['price'] === '' || !is_numeric($formData['price'])) $errors[] = "Giá tour phải là số";
-            if ($formData['duration_days'] === '' || !is_numeric($formData['duration_days'])) $errors[] = "Số ngày phải là số";
-
-            if (empty($errors)) {
-                $data = [
-                    ':code' => $formData['code'],
-                    ':name' => $formData['name'],
-                    ':destination' => $formData['destination'],
-                    ':type' => $formData['type'],
-                    ':status' => $formData['status'],
-                    ':price' => $formData['price'],
-                    ':duration_days' => $formData['duration_days']
-                ];
-
-                if ($this->modelTour->addTour($data)) {
-                    header('Location: ' . BASE_URL . '?act=listTours');
-                    exit();
-                } else {
-                    $errors[] = "Không thể thêm tour. Vui lòng thử lại!";
-                }
+            $result = $this->modelTour->addTour($data);
+            if ($result) {
+                $_SESSION['success'] = 'Thêm tour thành công';
+            } else {
+                $_SESSION['error'] = 'Thêm tour thất bại';
             }
+            header('Location: ' . BASE_URL . '?act=listTours');
+            exit();
         }
-
-        extract($formData);
         require_once BASE_URL_VIEWS . 'admin/tour/add.php';
     }
 
     /////////////////////////////////////////        phần sửa tour      /////////////////////////////////////////
     public function editTourForm($id)
     {
-        if (!$id) {
-            header('Location: ' . BASE_URL . '?act=listTours');
-            exit();
-        }
-
         $tour = $this->modelTour->getTourById($id);
 
         if (!$tour) {
+            $_SESSION['error'] = 'Tour không tồn tại';
             header('Location: ' . BASE_URL . '?act=listTours');
             exit();
         }
 
-        $errors = [];
-        $success = false;
-        $formData = [
-            'id' => $tour['id'],
-            'code' => $tour['code'],
-            'name' => $tour['name'],
-            'destination' => $tour['destination'],
-            'type' => $tour['type'],
-            'status' => $tour['status'],
-            'price' => $tour['price'],
-            'duration_days' => $tour['duration_days']
-        ];
-        $originalId = $tour['id'];
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $originalId = $_POST['original_id'] ?? $tour['id'];
-            $formData = [
-                'id' => $originalId,
-                'code' => trim($_POST['code'] ?? ''),
-                'name' => trim($_POST['name'] ?? ''),
-                'destination' => trim($_POST['destination'] ?? ''),
-                'type' => trim($_POST['type'] ?? ''),
-                'status' => $_POST['status'] ?? 'published',
-                'price' => trim($_POST['price'] ?? ''),
-                'duration_days' => trim($_POST['duration_days'] ?? '')
+            // Lấy dữ liệu từ form
+            $code = $_POST['code'] ?? '';
+            $name = $_POST['name'] ?? '';
+            $destination = $_POST['destination'] ?? '';
+            $type = $_POST['type'] ?? '';
+            $status = $_POST['status'] ?? 'published';
+            $price = $_POST['price'] ?? '';
+            $duration_days = $_POST['duration_days'] ?? '';
+
+            // Cập nhật tour
+            $data = [
+                ':code' => $code,
+                ':name' => $name,
+                ':destination' => $destination,
+                ':type' => $type,
+                ':status' => $status,
+                ':price' => $price,
+                ':duration_days' => $duration_days,
+                ':id' => $id
             ];
 
-            if (!in_array($formData['status'], $this->allowedStatuses, true)) $errors[] = "Trạng thái không hợp lệ";
-            if ($formData['name'] === '') $errors[] = "Tên tour không được để trống";
-            if ($formData['code'] === '') $errors[] = "Mã tour không được để trống";
-            if ($formData['destination'] === '') $errors[] = "Địa điểm không được để trống";
-            if ($formData['type'] === '') $errors[] = "Loại tour không được để trống";
-            if ($formData['price'] === '' || !is_numeric($formData['price'])) $errors[] = "Giá tour phải là số";
-            if ($formData['duration_days'] === '' || !is_numeric($formData['duration_days'])) $errors[] = "Số ngày phải là số";
+            $result = $this->modelTour->updateTour($data);
 
-            if (empty($errors)) {
-                $data = [
-                    ':code' => $formData['code'],
-                    ':name' => $formData['name'],
-                    ':destination' => $formData['destination'],
-                    ':type' => $formData['type'],
-                    ':status' => $formData['status'],
-                    ':price' => $formData['price'],
-                    ':duration_days' => $formData['duration_days'],
-                    ':id' => $originalId
-                ];
-
-                if ($this->modelTour->updateTour($data)) {
-                    header('Location: ' . BASE_URL . '?act=listTours');
-                    exit();
-                } else {
-                    $errors[] = "Không thể cập nhật tour. Vui lòng thử lại!";
-                }
+            if ($result) {
+                $_SESSION['success'] = 'Cập nhật tour thành công';
+            } else {
+                $_SESSION['error'] = 'Cập nhật tour thất bại';
             }
+
+            header('Location: ' . BASE_URL . '?act=listTours');
+            exit();
         }
 
-        extract($formData);
+        // Nếu là GET request, gán dữ liệu tour hiện tại vào các biến để hiển thị trong form
+        $id = $tour['id'];
+        $code = $tour['code'];
+        $name = $tour['name'];
+        $destination = $tour['destination'];
+        $type = $tour['type'];
+        $status = $tour['status'];
+        $price = $tour['price'];
+        $duration_days = $tour['duration_days'];
+
         require_once BASE_URL_VIEWS . 'admin/tour/edit.php';
     }
     /////////////////////////////////////////        phần xoá tour      /////////////////////////////////////////
     public function deleteTour($id)
     {
-        if (!$id) {
-            header('Location: ' . BASE_URL . '?act=listTours');
-            exit();
+        $result = $this->modelTour->deleteTour($id);
+        if ($result) {
+            $_SESSION['success'] = 'Xoá tour thành công';
+        } else {
+            $_SESSION['error'] = 'Xoá tour thất bại';
         }
-
-        $tour = $this->modelTour->getTourById($id);
-
-        if (!$tour) {
-            header('Location: ' . BASE_URL . '?act=listTours');
-            exit();
-        }
-
-        $this->modelTour->deleteTour($id);
         header('Location: ' . BASE_URL . '?act=listTours');
         exit();
     }
-
 }
