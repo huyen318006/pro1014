@@ -10,10 +10,13 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/UsersController.php';
 require_once './controllers/TourController.php';
 require_once './controllers/ItineraryController.php';
+require_once './controllers/GuideController.php';
+require_once './controllers/AssignmentController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ItineraryModel.php';
+require_once './models/departuresModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -66,6 +69,24 @@ match ($act) {
 
     'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
+    // Quản lý phân công hướng dẫn viên
+    'listAssignments' => (new AssignmentController())->index(),
+    'createAssignment' => (new AssignmentController())->create(),
+    'storeAssignment' => (new AssignmentController())->store(),
+    'editAssignment' => (new AssignmentController())->edit(),
+    'updateAssignment' => (new AssignmentController())->update(),
+    'deleteAssignment' => (new AssignmentController())->delete(),
+
+
+    //bắt đầu routr của guide
+      //TRANG DASHBOARD CỦA GUIDE
+      'guideDashboard' => (new GuideController())->guideDashboard(),
+      //trang lịch khởi hành của guide
+      'guideDepartures' => (new GuideController())->guideDepartures(),
+      //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
+      'MyTour' => (new GuideController())->MyTour(),
+      //Về phần status 
+      'updateStatus' => (new AssignmentController())->updateStatus(),
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),
 };
