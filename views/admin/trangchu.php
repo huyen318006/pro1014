@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard | LOFT CITY</title>
@@ -11,6 +12,7 @@
 
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
 </head>
+
 <body>
 
   <!-- Sidebar -->
@@ -26,7 +28,7 @@
     <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
     <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
     <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-    <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="index.php?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 
   <!-- Header -->
@@ -129,67 +131,68 @@
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
-          <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Mã Tour</th>
-                    <th>Tên Tour</th>
-                    <th>Điểm Đến</th>
-                    <th>Loại</th>
-                    <th>Trạng Thái</th>
-                    <th>Giá</th>
-                    <th>Số Ngày</th>
-                    <th>Ngày Tạo</th>
-                    <th>Hành động</th>
-                </tr>
-                </thead>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Mã Tour</th>
+                <th>Tên Tour</th>
+                <th>Điểm Đến</th>
+                <th>Loại</th>
+                <th>Trạng Thái</th>
+                <th>Giá</th>
+                <th>Số Ngày</th>
+                <th>Ngày Tạo</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
             <tbody>
             <tbody>
-                <?php if (!empty($tours) && is_array($tours)) { ?>
-                    <?php foreach ($tours as $item) { ?>
-                    <tr>
-                        <td><?= $item["id"] ?></td>
-                        <td><?= $item["code"] ?></td>
-                        <td><strong><?= $item["name"] ?></strong></td>
-                        <td><?= $item["destination"] ?></td>
-                        <?php
-                        $typeMap = [
-                            'in_country' => 'Trong nước',
-                            'abroad' => 'Nước ngoài',
-                            'adventure' => 'Phiêu lưu',
-                            'luxury' => 'Sang trọng',
-                            'family' => 'Gia đình',
-                        ];
-                        $typeValue = $item["type"] ?? '';
-                        $typeLabel = $typeMap[$typeValue] ?? ucwords(str_replace('_', ' ', $typeValue));
-                        ?>
-                        <td><?= $typeLabel ?></td>
-                        <td>
-                            <?php
-                            $statusMap = [
-                                'published' => ['label' => 'Hoạt động', 'class' => 'bg-success'],
-                                'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
-                                'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
-                            ];
-                            $statusValue = $item["status"] ?? 'draft';
-                            $statusMeta = $statusMap[$statusValue] ?? [
-                                'label' => ucfirst($statusValue),
-                                'class' => 'bg-secondary'
-                            ];
-                            ?>
-                            <span class="badge <?= $statusMeta['class'] ?>"><?= $statusMeta['label'] ?></span>
-                        </td>
-                        <td><?= number_format($item["price"], 0, ',', '.') ?>đ</td>
-                        <td><?= $item["duration_days"] ?></td>
-                        <td><?= date('d/m/Y', strtotime($item["created_at"])) ?></td>
-                        <td>
-                        <a href="index.php?act=editTourForm&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                        <a href="index.php?act=deleteTour&id=<?= $item["id"] ?>" class="btn btn-danger btn-action" onclick="return confirm('Bạn có chắc muốn xoá tour này?');"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <?php } ?>
+              <?php if (!empty($tours) && is_array($tours)) { ?>
+                <?php foreach ($tours as $item) { ?>
+                  <tr>
+                    <td><?= $item["id"] ?></td>
+                    <td><?= $item["code"] ?></td>
+                    <td><strong><?= $item["name"] ?></strong></td>
+                    <td><?= $item["destination"] ?></td>
+                    <?php
+                    $typeMap = [
+                      'in_country' => 'Trong nước',
+                      'abroad' => 'Nước ngoài',
+                      'adventure' => 'Phiêu lưu',
+                      'luxury' => 'Sang trọng',
+                      'family' => 'Gia đình',
+                    ];
+                    $typeValue = $item["type"] ?? '';
+                    $typeLabel = $typeMap[$typeValue] ?? ucwords(str_replace('_', ' ', $typeValue));
+                    ?>
+                    <td><?= $typeLabel ?></td>
+                    <td>
+                      <?php
+                      $statusMap = [
+                        'published' => ['label' => 'Hoạt động', 'class' => 'bg-success'],
+                        'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
+                        'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
+                      ];
+                      $statusValue = $item["status"] ?? 'draft';
+                      $statusMeta = $statusMap[$statusValue] ?? [
+                        'label' => ucfirst($statusValue),
+                        'class' => 'bg-secondary'
+                      ];
+                      ?>
+                      <span class="badge <?= $statusMeta['class'] ?>"><?= $statusMeta['label'] ?></span>
+                    </td>
+                    <td><?= number_format($item["price"], 0, ',', '.') ?>đ</td>
+                    <td><?= $item["duration_days"] ?></td>
+                    <td><?= date('d/m/Y', strtotime($item["created_at"])) ?></td>
+                    <td>
+                      <a href="index.php?act=detailTour&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-eye"></i></a>
+                      <a href="index.php?act=editTourForm&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
+                      <a href="index.php?act=deleteTour&id=<?= $item["id"] ?>" class="btn btn-danger btn-action" onclick="return confirm('Bạn có chắc muốn xoá tour này?');"><i class="fas fa-trash"></i></a>
+                    </td>
+                  </tr>
                 <?php } ?>
-                </tbody>
+              <?php } ?>
+            </tbody>
             </tbody>
           </table>
         </div>
@@ -255,4 +258,5 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
