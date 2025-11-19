@@ -30,17 +30,18 @@ public function formlogin() {
         $user = $this->modelUser->getUser($emailUser, $passWord);
 
         if($user) {
+            // Lưu TẤT CẢ user vào $_SESSION['user']
+            $_SESSION['user'] = $user;
+            
+            // Chuyển hướng dựa vào role
             if($user['role'] == 'admin') {
-                $_SESSION['admin'] = $user;
                 header('Location: ' . BASE_URL . '?act=admin');
                 exit();
             } elseif($user['role'] == 'guide') {
-                $_SESSION['guide'] = $user;
                 header('Location: ' . BASE_URL . '?act=guide');
                 exit();
             } else {
-                // user thường cũng cho đăng nhập (nếu cần)
-                $_SESSION['user'] = $user;
+                // user thường
                 header('Location: ' . BASE_URL);
                 exit();
             }
