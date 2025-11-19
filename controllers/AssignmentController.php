@@ -8,89 +8,86 @@ class AssignmentController
     {
         $this->assignment = new UserModel();
         $this->departures = new Departures();
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new UserModel();
     }
 
     // Hiển thị danh sách phân công
     public function index()
     {
-        $assignList = $this->assignment->getAllAssignments();
-        require_once BASE_URL_VIEWS . 'admin/assignments/main.php';
+        $assignList = $this->model->getAllAssignments();
+        require_once 'views/admin/assignments/main.php';
     }
 
-    // Hiển thị form tạo phân công
+    // Hiển thị form thêm
     public function create()
     {
-        $guides = $this->assignment->getAllGuides();
-        $departures = $this->assignment->getAllDepartures();
-        require_once BASE_URL_VIEWS . 'admin/assignments/create.php';
+        $guides = $this->model->getAllGuides();
+        $departures = $this->model->getAllDepartures();
+        require_once 'views/admin/assignments/create.php';
     }
 
-    // Lưu phân công
+    // Xử lý lưu phân công mới
     public function store()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD']==='POST') {
             $guide_id = $_POST['guide_id'];
             $departure_id = $_POST['departure_id'];
 
-            // 1. Kiểm tra trùng tour
-            if ($this->assignment->checkDuplicate($guide_id, $departure_id)) {
-                $_SESSION['error'] = "Hướng dẫn viên đã được phân công vào tour này!";
+            // Kiểm tra trùng lịch
+            if ($this->model->checkDuplicate($guide_id, $departure_id)) {
+                $_SESSION['error'] = "Hướng dẫn viên đã được phân công cho tour này!";
                 header("Location: ?act=createAssignment");
                 exit();
             }
 
-            // 2. Lưu phân công
             $data = [
-                ':departure_id' => $departure_id,
-                ':guide_id' => $guide_id,
-                ':assigned_at' => date('Y-m-d H:i:s')
+                ':guide_id'=>$guide_id,
+                ':departure_id'=>$departure_id,
+                ':assigned_at'=>date('Y-m-d H:i:s')
             ];
-            $this->assignment->storeAssignment($data);
-        }
 
-        header('Location: ?act=listAssignments');
-        exit();
-    }
-
-    // Hiển thị form sửa phân công
-    public function edit()
-    {
-        if (isset($_GET['id'])) {
-            $assign = $this->assignment->getAssignmentById($_GET['id']);
-            $guides = $this->assignment->getAllGuides();
-            $departures = $this->assignment->getAllDepartures();
-            require_once BASE_URL_VIEWS . 'admin/assignments/edit.php';
-        } else {
-            header('Location: ?act=listAssignments');
+            $this->model->storeAssignment($data);
+            header("Location: ?act=listAssignments");
             exit();
         }
+    }
+
+    // Hiển thị form sửa
+    public function edit()
+    {
+        $id = $_GET['id'];
+        $assign = $this->model->getAssignmentById($id);
+        $guides = $this->model->getAllGuides();
+        $departures = $this->model->getAllDepartures();
+        require_once 'views/admin/assignments/edit.php';
     }
 
     // Cập nhật phân công
     public function update()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD']==='POST') {
             $data = [
-                ':id' => $_POST['id'],
-                ':departure_id' => $_POST['departure_id'],
-                ':guide_id' => $_POST['guide_id'],
-                ':assigned_at' => $_POST['assigned_at']
+                ':id'=>$_POST['id'],
+                ':guide_id'=>$_POST['guide_id'],
+                ':departure_id'=>$_POST['departure_id'],
+                ':assigned_at'=>$_POST['assigned_at']
             ];
-            $this->assignment->updateAssignment($data);
+            $this->model->updateAssignment($data);
+            header("Location: ?act=listAssignments");
+            exit();
         }
-
-        header('Location: ?act=listAssignments');
-        exit();
     }
 
     // Xóa phân công
     public function delete()
     {
-        if (isset($_GET['id'])) {
-            $this->assignment->deleteAssignment($_GET['id']);
-        }
-
-        header('Location: ?act=listAssignments');
+        $id = $_GET['id'];
+        $this->model->deleteAssignment($id);
+        header("Location: ?act=listAssignments");
         exit();
     }
 
@@ -105,4 +102,17 @@ class AssignmentController
 
 //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
 
+?>
+    // Cập nhật trạng thái tour
+    public function updateStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD']==='POST') {
+            $departure_id = $_POST['departure_id'];
+            $status = $_POST['status'];
+            $this->model->updateDepartureStatus($departure_id, $status);
+            header("Location: ?act=listAssignments");
+            exit();
+        }
+    }
+}
 ?>

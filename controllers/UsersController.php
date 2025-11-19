@@ -31,11 +31,11 @@ public function formlogin() {
 
         if($user) {
             if($user['role'] == 'admin') {
-                $_SESSION['user'] = $user;
+                $_SESSION['admin'] = $user;
                 header('Location: ' . BASE_URL . '?act=admin');
                 exit();
             } elseif($user['role'] == 'guide') {
-                $_SESSION['user'] = $user;
+                $_SESSION['guide'] = $user;
                 header('Location: ' . BASE_URL . '?act=guide');
                 exit();
             } else {
