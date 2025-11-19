@@ -1,19 +1,19 @@
 <?php
 class AssignmentController
 {
-    public $assignment;
+
     public $departures;
+     private $model;
 
     public function __construct()
     {
-        $this->assignment = new UserModel();
         $this->departures = new Departures();
-    private $model;
-
-    public function __construct()
-    {
         $this->model = new UserModel();
     }
+    
+ 
+    
+
 
     // Hiển thị danh sách phân công
     public function index()
@@ -91,19 +91,7 @@ class AssignmentController
         exit();
     }
 
-     public function DepartureAdmin(){
-        $departures=$this->departures->getAllDepartures();
-    require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
- }
-
-}
-
-
-
-//lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
-
-?>
-    // Cập nhật trạng thái tour
+  // Cập nhật trạng thái tour
     public function updateStatus()
     {
         if ($_SERVER['REQUEST_METHOD']==='POST') {
@@ -114,5 +102,17 @@ class AssignmentController
             exit();
         }
     }
+    //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
+     public function DepartureAdmin(){
+        $departures=$this->departures->getAllDepartures();
+    require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
+ }
+
 }
+
+
 ?>
+   
+
+
+
