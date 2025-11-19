@@ -14,7 +14,8 @@ class ServicesController
     public function index()
     {
         $services = $this->serviceModel->getAll();
-        require __DIR__ . '/../views/admin/services/list.php';
+        require_once BASE_URL_VIEWS . 'admin/services/list.php';
+
     }
 
     // ============================
@@ -22,7 +23,7 @@ class ServicesController
     // ============================
     public function create()
     {
-        require __DIR__ . '/../views/admin/services/add.php';
+        require_once BASE_URL_VIEWS . 'admin/services/add.php';
     }
 
     // ============================
@@ -64,7 +65,7 @@ class ServicesController
             exit;
         }
 
-        require __DIR__ . '/../views/admin/services/edit.php';
+        require_once BASE_URL_VIEWS . 'admin/services/edit.php';
     }
 
     // ============================
