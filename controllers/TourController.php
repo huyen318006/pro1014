@@ -105,18 +105,16 @@ class TourController
             require_once BASE_URL_VIEWS . 'admin/tour/edit.php';
     }
     /////////////////////////////////////////        phần xoá tour      /////////////////////////////////////////
-    public function deleteTourForm($id)
+    public function deleteTour($id)
     {
-        if(isset($_POST['submit'])){
-            $result = $this->modelTour->deleteTour($id);
-            if($result){
-                $_SESSION['success'] = 'Xoá tour thành công';
-            }else{
-                $_SESSION['error'] = 'Xoá tour thất bại';
-            }
-            header('Location: ' . BASE_URL . '?act=listTours');
-            exit();
+        $result = $this->modelTour->deleteTour($id);
+        if ($result) {
+            $_SESSION['success'] = 'Xoá tour thành công';
+        } else {
+            $_SESSION['error'] = 'Xoá tour thất bại';
         }
+        header('Location: ' . BASE_URL . '?act=listTours');
+        exit();
     }
 
 }
