@@ -144,7 +144,7 @@ class UserModel {
         return $stmt->fetchAll();
     }
 
-    // Lấy danh sách phân công theo guide_id
+    // Lấy danh sách phân công theo guide_id VANH fix
     public function getAssignmentsByGuide($guide_id)
     {
         $sql = "SELECT a.*, d.tour_id, d.departure_date, t.name AS tour_name
