@@ -5,7 +5,7 @@ require_once './views/layouts/header.php';
 <div class="container mt-4">
     <h2 class="fw-bold mb-3">Thêm Dịch vụ Mới</h2>
 
-    <form action="index.php?controller=services&action=store" method="POST">
+    <form action="index.php?act=servicesStore" method="POST">
         <div class="mb-3">
             <label class="form-label">Tên dịch vụ</label>
             <input type="text" name="name" class="form-control" required>
@@ -32,6 +32,7 @@ require_once './views/layouts/header.php';
         </div>
 
         <button type="submit" class="btn btn-primary">Lưu</button>
-        <a href="index.php?controller=services&action=index" class="btn btn-secondary">Hủy</a>
+        <a href="index.php?act=services" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
+
