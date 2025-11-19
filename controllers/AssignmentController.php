@@ -102,6 +102,8 @@ class AssignmentController
             exit();
         }
     }
+
+    
     //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
      public function DepartureAdmin(){
         $departures=$this->departures->getAllDepartures();
