@@ -9,13 +9,11 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 // Require toàn bộ file Controllers
 require_once './controllers/UsersController.php';
 require_once './controllers/TourController.php';
-require_once './controllers/ScheduleController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
-require_once './models/ScheduleModel.php';
 require_once './models/departuresModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
@@ -59,7 +57,6 @@ match ($act) {
     'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
 
     // Quản lý lịch trình
-    'listSchedule' => (new ScheduleController())->listSchedule(),
     // Quản lý phân công hướng dẫn viên
     'listAssignments' => (new AssignmentController())->index(),
     'createAssignment' => (new AssignmentController())->create(),
