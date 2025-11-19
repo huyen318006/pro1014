@@ -3,9 +3,11 @@
 class GuideController {
 
     public $departureModel;
+    public $userModel;
     function __construct() {
   
         $this->departureModel = new Departures();
+        $this->userModel = new UserModel();
     }
 
     public function guideDashboard() {
@@ -42,6 +44,14 @@ class GuideController {
         include './views/guide/Mytour.php';
     }
 
-
+    public function main() {
+        if (!isset($_SESSION['user']['id'])) {
+            header('Location: /login.php'); 
+            exit(); // nên dùng exit() sau header để dừng script
+        }
+        $guide_id = $_SESSION['user']['id']; // Lấy ID hướng dẫn viên từ session
+        $assignList = $this->userModel->getAssignmentsByGuide($guide_id);
+        include './views/guide/assignments/main.php';
+    }
 }
 ?>

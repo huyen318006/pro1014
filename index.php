@@ -76,6 +76,8 @@ match ($act) {
       'guideDepartures' => (new GuideController())->guideDepartures(),
       //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
       'MyTour' => (new GuideController())->MyTour(),
+      //TRANG PHÂN CÔNG CỦA GUIDE
+      'main' => (new GuideController())->main(),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),

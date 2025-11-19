@@ -143,4 +143,18 @@ class UserModel {
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    // Lấy danh sách phân công theo guide_id
+    public function getAssignmentsByGuide($guide_id)
+    {
+        $sql = "SELECT a.*, d.tour_id, d.departure_date, t.name AS tour_name
+                FROM assignments a
+                JOIN departures d ON a.departure_id = d.id
+                JOIN tours t ON d.tour_id = t.id
+                WHERE a.guide_id = :guide_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':guide_id', $guide_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

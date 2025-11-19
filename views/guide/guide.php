@@ -29,7 +29,7 @@
 
     <a href="<?= BASE_URL.'?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
 
-    <a href="<?= BASE_URL.'?act=MyTour' ?>"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
+    <a href="<?= BASE_URL.'?act=main' ?>"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
 
     <a href="guideChecklist.php"><i class="fas fa-clipboard-check"></i> <span>Checklist</span></a>
 
