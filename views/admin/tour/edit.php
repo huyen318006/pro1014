@@ -15,21 +15,21 @@
 
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-user-shield"></i>
-        </div>
-        <h4>ADMIN</h4>
-        <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-        <a href="#"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
-        <a href="index.php?act=listTours" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
-        <a href="index.php?act=listItinerary"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
-        <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
-        <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
-        <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-        <a href="index.php?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <i class="fas fa-user-shield"></i>
     </div>
+    <h4>ADMIN</h4>
+    <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="#"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
+    <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
+    <a href="index.php?act=listSchedule"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
+    <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
+    <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
+    <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+    <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+  </div>
 
     <!-- Header -->
     <div class="header">
