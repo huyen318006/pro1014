@@ -9,11 +9,11 @@ require_once './commons/function.php'; // Hàm hỗ trợ
 // Require toàn bộ file Controllers
 require_once './controllers/UsersController.php';
 require_once './controllers/TourController.php';
-require_once './controllers/ScheduleController.php';
+require_once './controllers/ItineraryController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
-require_once './models/ScheduleModel.php';
+require_once './models/ItineraryModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -56,10 +56,10 @@ match ($act) {
     'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
 
     // Quản lý lịch trình
-    'listSchedule' => (new ScheduleController())->listSchedule(),
-    'addScheduleForm' => (new ScheduleController())->addSchedule(),
-    'editScheduleForm' => (new ScheduleController())->editSchedule(),
-    'deleteSchedule' => (new ScheduleController())->deleteSchedule(),
+    'listItinerary' => (new ItineraryController())->listItinerary(),
+    'addItineraryForm' => (new ItineraryController())->addItinerary(),
+    'editItinerary' => (new ItineraryController())->editItinerary($_GET['id'] ?? 0),
+    'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),

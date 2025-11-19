@@ -22,7 +22,7 @@
     <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="#"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
-    <a href="index.php?act=listSchedule" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
+    <a href="index.php?act=listItinerary" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
     <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
     <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
     <a href="#"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
@@ -43,7 +43,7 @@
     <div class="table-card">
         <div class="card-header">
             <h5>Quản lý Lịch Trình</h5>
-            <a href="index.php?act=addScheduleForm" class="btn btn-add"><i class="fas fa-plus"></i> Thêm Lịch Trình</a>
+            <a href="index.php?act=addItineraryForm" class="btn btn-add"><i class="fas fa-plus"></i> Thêm Lịch Trình</a>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -59,7 +59,7 @@
               </tr>
             </thead>
                 <tbody>
-                <?php foreach ($schedules as $item) { ?>
+                <?php foreach ($itineraries as $item) { ?>
                 <tr>
                     <td><?= $item["tour_id"] ?></td>
                     <td><?= $item["day_number"] ?></td>
@@ -67,8 +67,8 @@
                     <td><?= $item["activities"] ?></td>
                     <td><?= $item["notes"] ?></td>
                     <td>
-                        <a href="index.php?act=editScheduleForm&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                        <a href="index.php?act=deleteSchedule&id=<?= $item["id"] ?>" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></a>
+                        <a href="index.php?act=editItinerary&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
+                        <a href="index.php?act=deleteItinerary&id=<?= $item["id"] ?>" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
                 <?php } ?>
