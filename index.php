@@ -17,6 +17,7 @@ require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ScheduleModel.php';
 require_once './models/departuresModel.php';
+require_once "models/services.php";
 // Route
 $act = $_GET['act'] ?? '/';
 
