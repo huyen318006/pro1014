@@ -76,6 +76,12 @@ match ($act) {
     'editAssignment' => (new AssignmentController())->edit(),
     'updateAssignment' => (new AssignmentController())->update(),
     'deleteAssignment' => (new AssignmentController())->delete(),
+    //phần quản lí lịch trình tour của admin dành cho nhân viên
+    'DepartureAdmin' => (new AssignmentController())->DepartureAdmin(),
+
+
+
+
 
 
     //bắt đầu routr của guide
