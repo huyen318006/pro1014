@@ -12,11 +12,13 @@ require_once './controllers/TourController.php';
 require_once './controllers/ItineraryController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
+require_once './controllers/ServicesController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ItineraryModel.php';
 require_once './models/departuresModel.php';
+require_once "models/services.php";
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -83,6 +85,13 @@ match ($act) {
 
 
 
+    //Quản lí dịch vụ
+    'services' => (new ServicesController())->index(),
+    'servicesCreate' => (new ServicesController())->create(),
+    'servicesStore' => (new ServicesController())->store(),
+    'servicesEdit' => (new ServicesController())->edit(),
+    'servicesUpdate' => (new ServicesController())->update(),
+    'servicesDelete' => (new ServicesController())->delete(),
 
     //bắt đầu routr của guide
       //TRANG DASHBOARD CỦA GUIDE

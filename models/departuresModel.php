@@ -35,6 +35,22 @@ class Departures {
         
     }
   
+    // Trong models/Departures.php
+    // Thay toàn bộ hàm getAllWithTourInfo() bằng đoạn này
+    public function getAllWithTourInfo()
+    {
+        $sql = "SELECT 
+                    d.*,
+                    COALESCE(t.name, CONCAT('Tour ID: ', d.tour_id)) AS tour_name,
+                    DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted,
+                    COALESCE(d.meeting_point, 'Chưa có điểm đón') AS meeting_point
+                FROM departures d
+                LEFT JOIN tours t ON d.tour_id = t.id
+                ORDER BY d.departure_date DESC";
 
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
