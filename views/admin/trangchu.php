@@ -29,7 +29,7 @@
     <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
     <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
     <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
-    <a href="<?= BASE_URL.'?act=DepartureAdmin'  ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+    <a href="<?= BASE_URL.'?act=DepartureAdmin'?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
     <a href="<?= BASE_URL.'?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 

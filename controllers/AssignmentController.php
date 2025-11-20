@@ -2,13 +2,13 @@
 class AssignmentController
 {
 
-    public $departures;
-     private $model;
 
+    private $model;
+    public $assign;
     public function __construct()
     {
-        $this->departures = new Departures();
         $this->model = new UserModel();
+ 
     }
     
  
@@ -102,11 +102,8 @@ class AssignmentController
             exit();
         }
     }
-    //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
-     public function DepartureAdmin(){
-        $departures=$this->departures->getAllDepartures();
-    require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
- }
+
+           
 }
 
 
