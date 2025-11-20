@@ -11,15 +11,22 @@ class Services {
     // ================================
     // 1. Lấy tất cả dịch vụ
     // ================================
-    public function getAll()
-    {
-        $sql = "SELECT * FROM services ORDER BY id DESC";
+    // models/Services.php → HÀM getAll() – ĐÃ FIX HOÀN TOÀN (copy đè nguyên hàm này)
+    public function getAll() {
+        $sql = "SELECT 
+                    s.*,
+                    COALESCE(t.name, CONCAT('Tour ID: ', d.tour_id)) AS tour_name,
+                    DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted,
+                    COALESCE(d.meeting_point, 'Chưa có điểm đón') AS meeting_point
+                FROM services s
+                LEFT JOIN departures d ON s.departure_id = d.id
+                LEFT JOIN tours t ON d.tour_id = t.id
+                ORDER BY s.id DESC";
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     // ================================
     // 2. Lấy dịch vụ theo ID
     // ================================
@@ -35,26 +42,37 @@ class Services {
     // ================================
     // 3. Thêm dịch vụ
     // ================================
-    public function insert($name, $type, $price, $description)
+    public function create($departure_id, $service_name, $partner_name, $status, $note = null)
     {
-        $sql = "INSERT INTO services (name, type, price, description)
-                VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO services 
+                (departure_id, service_name, partner_name, status, note) 
+                VALUES (?, ?, ?, ?, ?)";
 
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$name, $type, $price, $description]);
+        return $stmt->execute([
+            $departure_id,
+            $service_name,
+            $partner_name,
+            $status,
+            $note
+        ]);
     }
 
     // ================================
     // 4. Cập nhật dịch vụ
     // ================================
-    public function update($id, $name, $type, $price, $description)
+    public function update($id, $departure_id, $service_name, $partner_name, $status, $note = null)
     {
         $sql = "UPDATE services 
-                SET name = ?, type = ?, price = ?, description = ?
+                SET departure_id = ?, 
+                    service_name = ?, 
+                    partner_name = ?, 
+                    status = ?, 
+                    note = ?
                 WHERE id = ?";
 
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$name, $type, $price, $description, $id]);
+        return $stmt->execute([$departure_id, $service_name, $partner_name, $status, $note, $id]);
     }
 
     // ================================
