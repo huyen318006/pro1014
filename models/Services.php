@@ -95,12 +95,6 @@ class Services {
     // ================================
     public function delete($id)
     {
-        // Xóa service trong bảng trung gian trước
-        $sql = "DELETE FROM departure_services WHERE service_id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$id]);
-
-        // Xóa dịch vụ chính
         $sql = "DELETE FROM services WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$id]);
