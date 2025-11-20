@@ -5,6 +5,18 @@ class UserModel {
         $this->conn= connectDB();
     }
 
+    function getallUser(){
+        $sql="SELECT * FROM users ";
+        $stmt = $this->conn->prepare($sql);
+         $stmt->execute();
+         $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+       return $user;
+         
+
+
+    }
+
+    //ham kiemr tra dang nhap
     function getUser($emailUser, $passWord) {
         $sql = "SELECT * FROM users WHERE email=:emailUser and password=:passWord";
         // gọi hàm connectDB để kết nối CSDL
