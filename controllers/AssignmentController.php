@@ -10,11 +10,6 @@ class AssignmentController
         $this->model = new UserModel();
  
     }
-    
- 
-    
-
-
     // Hiển thị danh sách phân công
     public function index()
     {
@@ -101,12 +96,8 @@ class AssignmentController
             header("Location: ?act=listAssignments");
             exit();
         }
-    }
-
-           
-}
-
-
+    }      
+ }
 ?>
    
 
