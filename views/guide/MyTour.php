@@ -63,6 +63,7 @@
         <th>Số lượng tối đa</th>
         <th>Ghi chú</th>
         <th>Trạng thái</th>
+        <th>Hành động</th>
     </tr>
     <?php foreach ($MyTour as $departure): ?>
     <tr>
@@ -74,9 +75,14 @@
         <td>
             <strong class="status status-<?= $departure['status'] ?? 'unknown' ?>">
                 <?= ucfirst($departure['status'] ?? '') ?: 'Chưa xác định' ?>
-                
             </strong>
         </td>
+        <td>
+            <a href="index.php?act=showChecklistForGuide&departure_id=<?= $departure['id'] ?>" class="checklist-link">
+                 <i class="fas fa-clipboard-check"></i> Checklist
+            </a>
+        </td>
+
     </tr>
     <?php endforeach; ?>
 </table>
@@ -127,6 +133,30 @@
 .status-full    { background: #f8d7da; color: #721c24; }
 .status-cancelled { background: #fff3cd; color: #856404; }
 .status-unknown { background: #e2e3e5; color: #383d41; }
+
+/* CSS cho link checklist */
+.departure-table a.checklist-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* khoảng cách giữa icon và text */
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.departure-table a.checklist-link i {
+    font-size: 16px;
+}
+
+.departure-table a.checklist-link:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
 </style>
 
     

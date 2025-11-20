@@ -12,11 +12,14 @@ require_once './controllers/TourController.php';
 require_once './controllers/ScheduleController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
+require_once './controllers/ChecklistController.php';
+
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ScheduleModel.php';
 require_once './models/departuresModel.php';
+require_once './models/ChecklistModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -67,6 +70,11 @@ match ($act) {
     'editAssignment' => (new AssignmentController())->edit(),
     'updateAssignment' => (new AssignmentController())->update(),
     'deleteAssignment' => (new AssignmentController())->delete(),
+
+    //checklist cho admin và guide
+    'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
+    'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
+    'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
 
 
     //bắt đầu routr của guide
