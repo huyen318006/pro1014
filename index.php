@@ -81,6 +81,13 @@ match ($act) {
     //phần quản lí lịch trình tour của admin dành cho nhân viên
     'DepartureAdmin' => (new AssignmentController())->DepartureAdmin(),
 
+    //Quản lí dịch vụ
+    'services' => (new ServicesController())->index(),
+    'servicesCreate' => (new ServicesController())->create(),
+    'servicesStore' => (new ServicesController())->store(),
+    'servicesEdit' => (new ServicesController())->edit(),
+    'servicesUpdate' => (new ServicesController())->update(),
+    'servicesDelete' => (new ServicesController())->delete(),
 
 
 
