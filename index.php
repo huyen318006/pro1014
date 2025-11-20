@@ -12,6 +12,7 @@ require_once './controllers/TourController.php';
 require_once './controllers/ItineraryController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
+require_once './controllers/DepartureController.php';
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
@@ -76,8 +77,18 @@ match ($act) {
     'editAssignment' => (new AssignmentController())->edit(),
     'updateAssignment' => (new AssignmentController())->update(),
     'deleteAssignment' => (new AssignmentController())->delete(),
+
     //phần quản lí lịch trình tour của admin dành cho nhân viên
-    'DepartureAdmin' => (new AssignmentController())->DepartureAdmin(),
+    'DepartureAdmin' => (new DepartureController())->DepartureAdmin(),
+  //edit kịch trình tour
+  'editDepartureAdmin'=>(new DepartureController())->editDepartureAdmin(),
+      //cập nhật  lịch khởi hành 
+      'updateDeparture'=>(new DepartureController()) -> updateDeparture(),
+  'deleteDepartureAdmin'=> (new DepartureController())->deleteDepartureAdmin(),
+  //add  addDepartureAdmin
+  'addDepartureAdmin'=> (new DepartureController())->addDepartureAdmin(),
+  //fomr thêm lịch
+  'addDepartureForm'=>(new DepartureController()) ->addDepartureForm(),
 
 
 

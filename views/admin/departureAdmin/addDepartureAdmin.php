@@ -44,60 +44,51 @@
     <!-- Content -->
     <div class="content">
 
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">Chỉnh sửa Lịch Khởi Hành</h2>
-
-            <form action="<?= BASE_URL . '?act=updateDeparture' ?>" method="post" class="p-4 shadow rounded bg-white" style="max-width:600px;margin:auto;">
-
-                <!-- Chọn loại tour -->
+        <div class="form-container">
+            <h2>Thêm Lịch Khởi Hành</h2>
+            <form id="addDepartureForm" action="<?= BASE_URL . '?act=addDepartureForm' ?>" method="post">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Chọn loại tour</label>
-                    <select name="tour_id" class="form-select" required>
-
-                        <?php foreach ($getAllTours as $tour): ?>
+                    <label for="tour" class="form-label fw-bold">Chọn Tour</label>
+                    <select id="tour_id" name="tour" class="form-select" required>
+                        <?php
+                        foreach ($getAllTours as $tour) {
+                        ?>
                             <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
-                        <?php endforeach; ?>
+                        <?php
+                        }
+                        ?>
+
                     </select>
                 </div>
 
-                <!-- Ngày khởi hành -->
-             <?php
-             foreach($departures as $vl){?>
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Ngày khởi hành</label>
-                    <input type="date" name="departure_date" class="form-control" value="<?= $vl['departure_date'] ?>" required>
+                    <label for="departure_date" class="form-label fw-bold">Ngày Khởi Hành</label>
+                    <input type="date" id="departure_date" name="departure_date" class="form-control" required>
                 </div>
-
-                <!-- Điểm tập trung -->
                 <div class="mb-3">
                     <label class="form-label fw-bold">Điểm tập trung</label>
-                    <input type="text" name="meeting_point" class="form-control" value="<?= htmlspecialchars($vl['meeting_point']) ?>" required>
+                    <input type="text" name="meeting_point" class="form-control" required>
+
                 </div>
 
-                <!-- Số chỗ -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Số chỗ</label>
-                    <input type="number" name="max_participants" class="form-control" value="<?= $vl['max_participants'] ?>" required>
+                    <label for="max_participants" class="form-label fw-bold">Số Chỗ</label>
+                    <input type="number" id="max_participants" name="max_participants" class="form-control" min="1" required>
                 </div>
 
-                <!-- Ghi chú -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Ghi chú</label>
-                    <input type="text" name="note" class="form-control" value="<?= htmlspecialchars($vl['note']) ?>">
+                    <label for="note" class="form-label fw-bold">Ghi Chú</label>
+                    <input type="text" id="note" name="note" class="form-control" placeholder="Ghi chú thêm (nếu có)">
                 </div>
-             <?php
 
-             }
-             ?>
-
-                <!-- Ẩn ID để update -->
-                <input type="hidden" name="departure_id" value="<?= $vl['id'] ?>">
-
-                <button type="submit" name="updateDeparture" class="btn btn-primary w-100">Cập nhật</button>
+                <button type="submit" class="btn btn-primary w-100">Thêm Lịch Khởi Hành</button>
             </form>
         </div>
 
+
     </div>
+
+
 
 
     <!-- Bootstrap JS -->
