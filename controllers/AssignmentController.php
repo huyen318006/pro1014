@@ -102,16 +102,11 @@ class AssignmentController
             exit();
         }
     }
-<<<<<<< feat/them-duong-dan-va-taochecklist
-    
-=======
     //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
      public function DepartureAdmin(){
         $departures=$this->departures->getAllDepartures();
     require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
  }
-
->>>>>>> main
 }
 
 
