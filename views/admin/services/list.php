@@ -17,13 +17,6 @@ $act = 'services';
   <!-- CSS Dashboard đẹp y hệt trang chủ -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
   
-  <style>
-    /* Bổ sung một chút để bảng đẹp hơn */
-    .status-confirmed { background-color: #d4edda !important; }
-    .status-pending   { background-color: #fff3cd !important; }
-    .status-cancelled { background-color: #f8d7da !important; }
-    .table-card { margin-top: 20px; }
-  </style>
 </head>
 <body>
 
