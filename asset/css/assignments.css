@@ -1,0 +1,86 @@
+/* ------------------- GENERAL LAYOUT ------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    background: #f5f7fa;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ------------------- FORM BOX ------------------- */
+h2 {
+    margin-left: 270px;
+    margin-top: 120px;
+    font-weight: 600;
+}
+
+form {
+    margin-left: 270px;
+    margin-top: 20px;
+    width: 450px;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: rgba(0,0,0,0.08) 0 4px 20px;
+}
+
+/* Label đẹp */
+form label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Select box */
+form select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #c7c7c7;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    outline: none;
+    transition: 0.2s;
+}
+
+/* Hiệu ứng khi focus */
+form select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.4);
+}
+
+/* Button */
+form button {
+    width: 100%;
+    padding: 10px 15px;
+    background: #0d6efd;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+
+form button:hover {
+    background: #0b5ed7;
+}
+
+/* ------------------- ERROR MESSAGE ------------------- */
+p[style*='color:red'] {
+    margin-left: 270px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* ------------------- FIX SIDEBAR CONTENT OVERLAP ------------------- */
+.header {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+}
+
+/* Khoảng cách nội dung */
+.content {
+    margin-left: 240px;
+    padding: 20px;
+}
