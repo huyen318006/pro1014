@@ -43,20 +43,24 @@ class Services {
     // 3. Thêm dịch vụ
     // ================================
     public function create($departure_id, $service_name, $partner_name, $status, $note = null)
-    {
-        $sql = "INSERT INTO services 
-                (departure_id, service_name, partner_name, status, note) 
-                VALUES (?, ?, ?, ?, ?)";
+{
+    // Chỉ chấp nhận các giá trị hợp lệ
+    $allowed = ['pending', 'confirmed', 'cancelled'];
+    $status = in_array($status, $allowed) ? $status : 'pending';
 
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([
-            $departure_id,
-            $service_name,
-            $partner_name,
-            $status,
-            $note
-        ]);
-    }
+    $sql = "INSERT INTO services 
+            (departure_id, service_name, partner_name, status, note) 
+            VALUES (?, ?, ?, ?, ?)";
+
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([
+        $departure_id,
+        $service_name,
+        $partner_name,
+        $status,
+        $note
+    ]);
+}
 
     // ================================
     // 4. Cập nhật dịch vụ
