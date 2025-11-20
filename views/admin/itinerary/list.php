@@ -22,7 +22,7 @@
     </div>
     <h4>ADMIN</h4>
     <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-    <a href="#"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
+    <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
     <a href="index.php?act=listItinerary" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
     <a href="?act=listAssignments"><i class="fas fa-map-marked-alt"></i> <span>Phân công HDV</span></a>

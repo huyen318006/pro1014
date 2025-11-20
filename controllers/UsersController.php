@@ -32,9 +32,18 @@ public function formlogin() {
         if($user) {
             // Lưu TẤT CẢ user vào $_SESSION['user']
             $_SESSION['user'] = $user;
-            
-            // Chuyển hướng dựa vào role
-            if($user['role'] == 'admin') {
+
+                // Chuyển hướng dựa vào role
+                if ($user['status'] == 0) {
+                    echo "<script>
+            alert('Tài khoản đã bị khóa. Vui lòng liên hệ admin!');
+            window.location.href = '" . BASE_URL . "';
+          </script>";
+                    exit();
+                }
+
+
+                if($user['role'] == 'admin') {
                 $_SESSION['user'] = $user;
                 header('Location: ' . BASE_URL . '?act=admin');
                 exit();
@@ -145,4 +154,42 @@ public function admin(){
 public function guide(){
     require_once BASE_URL_VIEWS.'guide/guide.php';
 }
+
+
+    ////////////////////////////   quản lí phần account bên admin//////////////
+    public function account(){
+        $users=$this->modelUser->getallUser();
+        require_once BASE_URL_VIEWS.'admin/account/account.php';
+    }
+    public function change_role(){
+        if($_SERVER['REQUEST_METHOD']=='POST'){
+            $id = $_POST['id'];
+            $role = $_POST['role'];
+            //gọi hàm phân quyền
+            // Gọi hàm phân quyền trong model
+            $this->modelUser->changeRole($id, $role);
+            header('Location: ' . BASE_URL . '?act=account');
+            exit;
+        }
+    }
+
+    /// khóa tài khoản 
+    function block_user()
+    {
+        if (isset($_GET['id'])) {
+            //gọi hàm   cập nhật  trạng thái người dùng khóa nguời dùng
+            $lockuser = $this->modelUser->lockUser($_GET['id']);
+            header('Location: ' . BASE_URL . '?act=account');
+            exit;
+        }
+    }
+    public function open_user(){
+        if (isset($_GET['id'])) {
+            //gọi hàm   cập nhật  trạng thái người dùng khóa nguời dùng
+            $lockuser = $this->modelUser->openUser($_GET['id']);
+            header('Location: ' . BASE_URL . '?act=account');
+            exit;
+        }
+
+    }
 }

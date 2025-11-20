@@ -43,58 +43,55 @@
 
     <!-- Content -->
     <div class="content">
+        <h1 class="bl-heading">Quản lý Tài Khoản</h1>
 
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">Chỉnh sửa Lịch Khởi Hành</h2>
-
-            <form action="<?= BASE_URL . '?act=updateDeparture' ?>" method="post" class="p-4 shadow rounded bg-white" style="max-width:600px;margin:auto;">
-
-                <!-- Chọn loại tour -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Chọn loại tour</label>
-                    <select name="tour_id" class="form-select" required>
-
-                        <?php foreach ($getAllTours as $tour): ?>
-                            <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <!-- Ngày khởi hành -->
-                <?php
-                foreach ($departures as $vl) { ?>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Ngày khởi hành</label>
-                        <input type="date" name="departure_date" class="form-control" value="<?= $vl['departure_date'] ?>" required>
-                    </div>
-
-                    <!-- Điểm tập trung -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Điểm tập trung</label>
-                        <input type="text" name="meeting_point" class="form-control" value="<?= htmlspecialchars($vl['meeting_point']) ?>" required>
-                    </div>
-
-                    <!-- Số chỗ -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Số chỗ</label>
-                        <input type="number" name="max_participants" class="form-control" value="<?= $vl['max_participants'] ?>" required>
-                    </div>
-
-                    <!-- Ghi chú -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Ghi chú</label>
-                        <input type="text" name="note" class="form-control" value="<?= htmlspecialchars($vl['note']) ?>">
-                    </div>
-                <?php
-
-                }
-                ?>
-
-                <!-- Ẩn ID để update -->
-                <input type="hidden" name="departure_id" value="<?= $vl['id'] ?>">
-
-                <button type="submit" name="updateDeparture" class="btn btn-primary w-100">Cập nhật</button>
-            </form>
+        <div class="table-wrapper">
+            <table border="1" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?php echo $user['id']; ?></td>
+                            <td><?php echo htmlspecialchars($user['fullname']); ?></td>
+                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                            <td><span class="masked-password">********</span> </td>
+                            <td><?php echo htmlspecialchars($user['address'] ?? ''); ?></td>
+                            <th><?= $user['phone'] ?> </th>
+                            <td>
+                                <!-- chỗ để tôi phân quyền người dùng =)) -->
+                                <form method="post" action="?act=change_role" style="margin:0;">
+                                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                                    <select name="role" onchange="this.form.submit()">
+                                        <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
+                                        <option value="guide" <?php if ($user['role'] == 'guide') echo 'selected'; ?>>guide</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                <?php
+                                if ($user['status'] == 0) {
+                                    echo '<span style="color: red;">Đã khóa</span>';
+                                    echo '<a href="?act=open_user&id=' . $user['id'] . '" class="btn-edit">Mở lại tk</a>';
+                                } else {
+                                    echo '<a href="?act=block_user&id=' . $user['id'] . '" class="btn-edit">Khóa</a>';
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
 
     </div>
