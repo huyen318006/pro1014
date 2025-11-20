@@ -39,6 +39,9 @@
     <td>
         <a href="?act=editAssignment&id=<?= $a['id'] ?>">Sửa</a> |
         <a href="?act=deleteAssignment&id=<?= $a['id'] ?>" onclick="return confirm('Xóa phân công này?')">Xóa</a>
+        <a href="index.php?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>">
+            <i class="fas fa-clipboard-check"></i> Xem checklist
+        </a>
     </td>
 </tr>
 <?php endforeach; ?>
