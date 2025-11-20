@@ -11,8 +11,6 @@ class UserModel {
          $stmt->execute();
          $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
        return $user;
-         
-
 
     }
 
@@ -167,6 +165,32 @@ class UserModel {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':status'=>$status, ':id'=>$departure_id]);
         return $stmt->rowCount();
+    }
+
+
+    ///////////////////// phần phân quyền role cho account ////////////////
+        public function changeRole($id, $role){
+            $sql="UPDATE users SET role=:role WHERE id=:id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+            return $stmt->execute();
+
+
+        }
+    public function lockUser($id)
+    {
+        $sql = "UPDATE users SET status = 0 WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+    public function openUser($id)
+    {
+        $sql = "UPDATE users SET status = 1 WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 }
 ?>

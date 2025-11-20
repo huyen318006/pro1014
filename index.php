@@ -104,7 +104,14 @@ match ($act) {
     'servicesDelete' => (new ServicesController())->delete(),
 
 
-
+          ////////////Phần quản lí tài khoản////////////
+                'account'=>(new UsersController())->account(),
+                //phân quyền cho các tài khoản guide
+                'change_role'=>(new UsersController())->change_role(),
+                //khóa tài khoản user
+                'block_user'=>(new UsersController())->block_user(),
+                //mở khóa tài khoản
+                'open_user'=> (new UsersController())->open_user(),
 
     //Quản lí dịch vụ
     'services' => (new ServicesController())->index(),
