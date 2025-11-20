@@ -1,12 +1,19 @@
 <?php
 class AssignmentController
 {
-    private $model;
+
+    public $departures;
+     private $model;
 
     public function __construct()
     {
+        $this->departures = new Departures();
         $this->model = new UserModel();
     }
+    
+ 
+    
+
 
     // Hiển thị danh sách phân công
     public function index()
@@ -84,7 +91,7 @@ class AssignmentController
         exit();
     }
 
-    // Cập nhật trạng thái tour
+  // Cập nhật trạng thái tour
     public function updateStatus()
     {
         if ($_SERVER['REQUEST_METHOD']==='POST') {
@@ -95,6 +102,21 @@ class AssignmentController
             exit();
         }
     }
+<<<<<<< feat/them-duong-dan-va-taochecklist
     
+=======
+    //lịch khởi hành dành cho admin xem và phân công hướng dẫn viên
+     public function DepartureAdmin(){
+        $departures=$this->departures->getAllDepartures();
+    require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
+ }
+
+>>>>>>> main
 }
+
+
 ?>
+   
+
+
+

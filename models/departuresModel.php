@@ -22,8 +22,8 @@ class Departures {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAllDepartures()
-    {
+    //Hiển thị tất cả  các lịch khởi hành
+    public function getAllDepartures(){
         $sql = "SELECT  departures.*, tours.name AS tour_name, tours.price AS tour_price, users.fullname AS guide_name, tours.duration_days AS duration_days
          FROM departures
          JOIN tours ON  tours.id = departures.tour_id
@@ -36,5 +36,5 @@ class Departures {
     }
   
 
-} 
+}
 ?>
