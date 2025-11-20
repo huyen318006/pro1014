@@ -69,7 +69,6 @@ class Departures {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  
     }
   public function Updatedeparture($departure_id,$tour_id,$departure_date,$max_participants,$note){
-  
     // Chuẩn bị câu lệnh SQL
     $sql = "UPDATE departures 
             SET tour_id = :tour_id,
@@ -110,8 +109,21 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
         $stmt->bindParam(':max_participants', $max_participants);
         $stmt->bindParam(':note', $note);
         return $stmt->execute();
+    }
 
-
-}
+    public function getAllWithTourInfo()
+    {
+        $sql = "SELECT 
+                    d.*,
+                    COALESCE(t.name, CONCAT('Tour ID: ', d.tour_id)) AS tour_name,
+                    DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted,
+                    COALESCE(d.meeting_point, 'Chưa có điểm đón') AS meeting_point
+                FROM departures d
+                LEFT JOIN tours t ON d.tour_id = t.id
+                ORDER BY d.departure_date DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

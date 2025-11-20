@@ -12,6 +12,7 @@ require_once './controllers/TourController.php';
 require_once './controllers/ItineraryController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
+require_once './controllers/ServicesController.php';
 require_once './controllers/DepartureController.php';
 require_once './controllers/ChecklistController.php';
 
@@ -20,6 +21,7 @@ require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ItineraryModel.php';
 require_once './models/departuresModel.php';
+require_once "models/services.php";
 require_once './models/ChecklistModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
@@ -93,6 +95,13 @@ match ($act) {
   //fomr thêm lịch
   'addDepartureForm'=>(new DepartureController()) ->addDepartureForm(),
 
+    //Quản lí dịch vụ
+    'services' => (new ServicesController())->index(),
+    'servicesCreate' => (new ServicesController())->create(),
+    'servicesStore' => (new ServicesController())->store(),
+    'servicesEdit' => (new ServicesController())->edit(),
+    'servicesUpdate' => (new ServicesController())->update(),
+    'servicesDelete' => (new ServicesController())->delete(),
 
 
           ////////////Phần quản lí tài khoản////////////
@@ -104,6 +113,13 @@ match ($act) {
                 //mở khóa tài khoản
                 'open_user'=> (new UsersController())->open_user(),
 
+    //Quản lí dịch vụ
+    'services' => (new ServicesController())->index(),
+    'servicesCreate' => (new ServicesController())->create(),
+    'servicesStore' => (new ServicesController())->store(),
+    'servicesEdit' => (new ServicesController())->edit(),
+    'servicesUpdate' => (new ServicesController())->update(),
+    'servicesDelete' => (new ServicesController())->delete(),
     //checklist cho admin và guide
     'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
     'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),

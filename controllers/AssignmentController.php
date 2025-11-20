@@ -3,18 +3,13 @@ class AssignmentController
 {
 
 
-     private $model;
-public $assign;
+    private $model;
+    public $assign;
     public function __construct()
     {
         $this->model = new UserModel();
  
     }
-    
- 
-    
-
-
     // Hiển thị danh sách phân công
     public function index()
     {
@@ -101,9 +96,7 @@ public $assign;
             header("Location: ?act=listAssignments");
             exit();
         }
-    }
-
-           
+    }      
  }
          
 
