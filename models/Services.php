@@ -65,8 +65,12 @@ class Services {
     // ================================
     // 4. Cập nhật dịch vụ
     // ================================
-    public function update($id, $departure_id, $service_name, $partner_name, $status, $note = null)
+   public function update($id, $departure_id, $service_name, $partner_name, $status, $note = null)
     {
+        // BẮT BUỘC PHẢI CÓ DÒNG NÀY – FIX LỖI "Data truncated for column 'status'"
+        $allowed = ['pending', 'confirmed', 'cancelled'];
+        $status = in_array($status, $allowed) ? $status : 'pending';
+
         $sql = "UPDATE services 
                 SET departure_id = ?, 
                     service_name = ?, 
@@ -76,7 +80,14 @@ class Services {
                 WHERE id = ?";
 
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$departure_id, $service_name, $partner_name, $status, $note, $id]);
+        return $stmt->execute([
+            $departure_id,
+            $service_name,
+            $partner_name,
+            $status,     // ← giờ đã an toàn 100%
+            $note,
+            $id
+        ]);
     }
 
     // ================================
