@@ -13,12 +13,15 @@ require_once './controllers/ItineraryController.php';
 require_once './controllers/GuideController.php';
 require_once './controllers/AssignmentController.php';
 require_once './controllers/ServicesController.php';
+require_once './controllers/ChecklistController.php';
+
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
 require_once './models/TourModel.php';
 require_once './models/ItineraryModel.php';
 require_once './models/departuresModel.php';
 require_once "models/services.php";
+require_once './models/ChecklistModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -99,6 +102,11 @@ match ($act) {
     'servicesEdit' => (new ServicesController())->edit(),
     'servicesUpdate' => (new ServicesController())->update(),
     'servicesDelete' => (new ServicesController())->delete(),
+    //checklist cho admin và guide
+    'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
+    'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
+    'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
+
 
     //bắt đầu routr của guide
       //TRANG DASHBOARD CỦA GUIDE

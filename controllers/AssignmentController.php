@@ -107,7 +107,6 @@ class AssignmentController
         $departures=$this->departures->getAllDepartures();
     require_once BASE_URL_VIEWS . 'admin/departureAdmin/DepartureAdmin.php';
  }
-
 }
 
 
