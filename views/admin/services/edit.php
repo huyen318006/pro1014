@@ -56,7 +56,7 @@ if (!in_array($currentStatus, $allowedStatus)) {
 
 <div class="header">
   <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
-  <div class="user-info"><i class="fas fa-user-circle"></i> <span>Admin Chủ</span></div>
+  <div class="user-info"><i class="fas fa-user-circle"></i> <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span></div>
 </div>
 
 <div class="content">
