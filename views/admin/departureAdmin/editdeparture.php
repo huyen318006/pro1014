@@ -38,7 +38,7 @@
         <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
         <div class="user- info">
             <i class="fas fa-user-circle"></i>
-            <span>Admin Chủ</span>
+            <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
         </div>
     </div>
 

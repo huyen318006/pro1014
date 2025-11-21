@@ -5,6 +5,7 @@ $act = 'services';
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Quản lý Dịch vụ đi kèm | LOFT CITY</title>
@@ -16,8 +17,9 @@ $act = 'services';
 
   <!-- CSS Dashboard đẹp y hệt trang chủ -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
-  
+
 </head>
+
 <body>
 
   <!-- SIDEBAR ĐẸP Y HỆT TRANG DASHBOARD -->
@@ -41,7 +43,7 @@ $act = 'services';
     <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
     <div class="user-info">
       <i class="fas fa-user-circle"></i>
-      <span>Admin Chủ</span>
+      <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
     </div>
   </div>
 
@@ -61,15 +63,17 @@ $act = 'services';
       </div>
 
       <!-- Thông báo -->
-      <?php if(isset($_SESSION['success'])): ?>
+      <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show">
-          <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+          <?= $_SESSION['success'];
+          unset($_SESSION['success']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
-      <?php if(isset($_SESSION['error'])): ?>
+      <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show">
-          <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+          <?= $_SESSION['error'];
+          unset($_SESSION['error']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
@@ -91,18 +95,18 @@ $act = 'services';
                 </tr>
               </thead>
               <tbody>
-                <?php if(!empty($services)): ?>
-                  <?php foreach($services as $s): ?>
-                    <tr class="<?= $s['status']=='confirmed'?'status-confirmed':($s['status']=='pending'?'status-pending':'status-cancelled') ?>">
+                <?php if (!empty($services)): ?>
+                  <?php foreach ($services as $s): ?>
+                    <tr class="<?= $s['status'] == 'confirmed' ? 'status-confirmed' : ($s['status'] == 'pending' ? 'status-pending' : 'status-cancelled') ?>">
                       <td class="fw-bold"><?= $s['id'] ?></td>
-                      
+
                       <td>
-                        <?php if(!empty($s['tour_name'])): ?>
-                          <div class="fw-bold text-primary"><?= $s['tour_name'] ?></div>
+                        <?php if (!empty($s['tour_name'])): ?>
+                          <div class="fw-bold text-primary"><?= htmlspecialchars($s['tour_name']) ?></div>
                           <small class="text-muted">
                             <i class="fas fa-calendar"></i> <?= $s['departure_date_formatted'] ?? 'Chưa có ngày' ?>
-                            <?php if(!empty($s['meeting_point'])): ?>
-                              <br><i class="fas fa-map-marker-alt"></i> <?= $s['meeting_point'] ?>
+                            <?php if (!empty($s['meeting_point'])): ?>
+                              <br><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['meeting_point']) ?>
                             <?php endif; ?>
                           </small>
                         <?php else: ?>
@@ -120,8 +124,8 @@ $act = 'services';
 
                       <td>
                         <?php
-                        $statusClass = $s['status']=='confirmed' ? 'success' : ($s['status']=='pending' ? 'warning' : 'danger');
-                        $statusText  = $s['status']=='confirmed' ? 'Đã xác nhận' : ($s['status']=='pending' ? 'Chờ xử lý' : 'Đã hủy');
+                        $statusClass = $s['status'] == 'confirmed' ? 'success' : ($s['status'] == 'pending' ? 'warning' : 'danger');
+                        $statusText  = $s['status'] == 'confirmed' ? 'Đã xác nhận' : ($s['status'] == 'pending' ? 'Chờ xử lý' : 'Đã hủy');
                         ?>
                         <span class="badge bg-<?= $statusClass ?> fs-6">
                           <?= $statusText ?>
@@ -132,13 +136,13 @@ $act = 'services';
 
                       <td>
                         <div class="btn-group" role="group">
-                          <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>" 
-                             class="btn btn-sm btn-warning" title="Sửa">
+                          <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>"
+                            class="btn btn-sm btn-warning" title="Sửa">
                             <i class="fas fa-edit"></i>
                           </a>
                           <a href="index.php?act=servicesDelete&id=<?= $s['id'] ?>" 
                              class="btn btn-sm btn-danger" 
-                             onclick="return confirm('Xóa dịch vụ này?\n\nĐối tác: <?= $s['partner_name'] ?>');"
+                             onclick="return confirm('Xóa dịch vụ này?\n\nĐối tác: <?= htmlspecialchars($s['partner_name']) ?>');"
                              title="Xóa">
                             <i class="fas fa-trash"></i>
                           </a>
@@ -165,4 +169,5 @@ $act = 'services';
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

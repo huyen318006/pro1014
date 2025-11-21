@@ -38,7 +38,7 @@
         <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
         <div class="user- info">
             <i class="fas fa-user-circle"></i>
-            <span>Admin Chủ</span>
+            <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
         </div>
     </div>
 
@@ -82,7 +82,10 @@
                             <td><?= $departure['status'] ?></td>
                             <td>
                                 <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $departure['id'] ?>"><i class="fas fa-edit" title="Sửa lịch khởi hành"></i></a>
-                                <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"><i class="fas fa-trash" title="Xóa"></i></a>
+                                <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa lịch khởi hành này không?')">
+                                    <i class="fas fa-trash" title="Xóa"></i>
+                                </a>
 
                             </td>
                         </tr>

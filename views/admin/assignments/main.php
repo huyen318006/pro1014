@@ -38,7 +38,7 @@
 
   <div class="header">
     <h5><i class="fas fa-list"></i> Danh sách phân công HDV</h5>
-    <div class="user-info"><i class="fas fa-user-circle"></i> Admin Chủ</div>
+    <div class="user-info"><i class="fas fa-user-circle"></i> Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></div>
   </div>
 
   <!-- Content -->
@@ -47,65 +47,66 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
       <a href="<?= BASE_URL ?>?act=createAssignment" class="btn btn-success"><i class="fas fa-plus"></i> Thêm phân công</a>
     </div>
-<div class="table-card">
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>ID</th>
-          <th>Hướng dẫn viên</th>
-          <th>Tour</th>
-          <th>Ngày khởi hành</th>
-          <th>Điểm tập trung</th>
-          <th>Số lượng tối đa</th>
-          <th>Ghi chú</th>
-          <th>Trạng thái</th>
-          <th>Thời gian phân công</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if(!empty($assignList)): ?>
-          <?php foreach($assignList as $a): ?>
-          <tr>
-            <td><?= $a['id'] ?></td>
-            <td><?= $a['guide_name'] ?></td>
-            <td><?= $a['tour_id'] ?></td>
-            <td><?= $a['departure_date'] ?></td>
-            <td><?= $a['meeting_point'] ?></td>
-            <td><?= $a['max_participants'] ?></td>
-            <td><?= $a['note'] ?></td>
-            <td>
-              <form method="POST" action="<?= BASE_URL ?>?act=updateStatus" class="d-inline">
-                <input type="hidden" name="departure_id" value="<?= $a['departure_id'] ?>">
-                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                  <option value="planned" <?= $a['departure_status']=='planned'?'selected':'' ?>>Planned</option>
-                  <option value="ready" <?= $a['departure_status']=='ready'?'selected':'' ?>>Ready</option>
-                </select>
-              </form>
-            </td>
-            <td><?= date('d/m/Y H:i', strtotime($a['assigned_at'])) ?></td>
-            <td>
-            <div class="btn-action-group">
-                <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
-                <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
-            </div>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="10" class="text-center">Chưa có phân công nào</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Hướng dẫn viên</th>
+              <th>Tour</th>
+              <th>Ngày khởi hành</th>
+              <th>Điểm tập trung</th>
+              <th>Số lượng tối đa</th>
+              <th>Ghi chú</th>
+              <th>Trạng thái</th>
+              <th>Thời gian phân công</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if (!empty($assignList)): ?>
+              <?php foreach ($assignList as $a): ?>
+                <tr>
+                  <td><?= $a['id'] ?></td>
+                  <td><?= $a['guide_name'] ?></td>
+                  <td><?= $a['tour_id'] ?></td>
+                  <td><?= $a['departure_date'] ?></td>
+                  <td><?= $a['meeting_point'] ?></td>
+                  <td><?= $a['max_participants'] ?></td>
+                  <td><?= $a['note'] ?></td>
+                  <td>
+                    <form method="POST" action="<?= BASE_URL ?>?act=updateStatus" class="d-inline">
+                      <input type="hidden" name="departure_id" value="<?= $a['departure_id'] ?>">
+                      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="planned" <?= $a['departure_status'] == 'planned' ? 'selected' : '' ?>>Planned</option>
+                        <option value="ready" <?= $a['departure_status'] == 'ready' ? 'selected' : '' ?>>Ready</option>
+                      </select>
+                    </form>
+                  </td>
+                  <td><?= date('d/m/Y H:i', strtotime($a['assigned_at'])) ?></td>
+                  <td>
+                    <div class="btn-action-group">
+                      <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
+                      <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
+                      <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="10" class="text-center">Chưa có phân công nào</td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
