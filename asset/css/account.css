@@ -1,0 +1,114 @@
+/* account-table.css */
+
+/* ===== Table wrapper ===== */
+.table-wrapper {
+background: #fff;
+border-radius: 16px;
+padding: 20px;
+box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+border: 1px solid #eee;
+overflow-x: auto;
+margin-top: 25px;
+}
+
+/* ===== Table ===== */
+table.table {
+width: 100%;
+border-collapse: separate;
+border-spacing: 0;
+font-size: 0.94rem;
+}
+
+table.table th,
+table.table td {
+padding: 14px 16px;
+vertical-align: middle;
+}
+
+table.table th {
+background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+color: #fff;
+font-weight: 600;
+text-transform: uppercase;
+font-size: 0.875rem;
+letter-spacing: 0.5px;
+text-align: left;
+}
+
+table.table tr:nth-child(even) {
+background-color: #f9f9f9;
+}
+
+table.table tr:hover {
+background-color: #e0f7fa;
+}
+
+/* ===== Masked password ===== */
+.masked-password {
+font-family: monospace;
+letter-spacing: 2px;
+}
+
+/* ===== Role select ===== */
+td form select {
+padding: 5px 8px;
+border-radius: 6px;
+border: 1px solid #ccc;
+background-color: #fff;
+cursor: pointer;
+transition: 0.2s;
+}
+
+td form select:hover {
+border-color: var(--primary);
+}
+
+/* ===== Buttons ===== */
+.btn-edit {
+padding: 6px 12px;
+border-radius: 12px;
+font-size: 0.88rem;
+text-decoration: none;
+color: #fff;
+background-color: var(--primary);
+transition: all 0.2s;
+margin-left: 5px;
+}
+
+.btn-edit:hover {
+transform: translateY(-2px);
+background-color: var(--primary-dark);
+}
+
+/* ===== Status ===== */
+td span {
+font-weight: 600;
+padding: 4px 10px;
+border-radius: 50px;
+font-size: 0.82rem;
+}
+
+td span[style*="red"] {
+background-color: rgba(220, 53, 69, 0.15);
+color: var(--danger);
+}
+
+td span[style*="green"] {
+background-color: rgba(40, 167, 69, 0.15);
+color: var(--success);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+.table-wrapper {
+padding: 15px;
+}
+table.table th,
+table.table td {
+padding: 10px 8px;
+}
+.btn-edit {
+padding: 5px 8px;
+font-size: 0.8rem;
+}
+}
