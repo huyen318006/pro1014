@@ -72,7 +72,7 @@
                     <!-- Điểm tập trung -->
                     <div class="mb-3">
                         <label class="form-label fw-bold">Điểm tập trung</label>
-                        <input type="text" name="meeting_point" class="form-control" value="<?= htmlspecialchars($vl['meeting_point']) ?>" required>
+                        <input type="text" name="meeting_point" class="form-control" value="<?= $vl['meeting_point'] ?>" required>
                     </div>
 
                     <!-- Số chỗ -->
@@ -84,7 +84,7 @@
                     <!-- Ghi chú -->
                     <div class="mb-3">
                         <label class="form-label fw-bold">Ghi chú</label>
-                        <input type="text" name="note" class="form-control" value="<?= htmlspecialchars($vl['note']) ?>">
+                        <input type="text" name="note" class="form-control" value="<?= $vl['note'] ?>">
                     </div>
                 <?php
 

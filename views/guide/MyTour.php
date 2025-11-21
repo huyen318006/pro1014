@@ -92,7 +92,7 @@
     <h5><i class="fas fa-user-tie"></i> Tour Bạn Được Giao</h5>
     <div class="user-info">
         <i class="fas fa-user-circle"></i>
-        <span><?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
+        <span><?= $_SESSION['user']['fullname'] ?? '' ?></span>
     </div>
 </div>
 
@@ -123,11 +123,11 @@
                 <tbody>
                     <?php foreach ($MyTour as $departure): ?>
                     <tr>
-                        <td><strong><?= htmlspecialchars($departure['tour_name'] ?? '') ?></strong></td>
-                        <td><?= htmlspecialchars($departure['departure_date'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($departure['meeting_point'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($departure['max_participants'] ?? '') ?> người</td>
-                        <td><?= nl2br(htmlspecialchars($departure['note'] ?? '')) ?></td>
+                        <td><strong><?= $departure['tour_name'] ?? '' ?></strong></td>
+                        <td><?= $departure['departure_date'] ?? '' ?></td>
+                        <td><?= $departure['meeting_point'] ?? '' ?></td>
+                        <td><?= $departure['max_participants'] ?? '' ?> người</td>
+                        <td><?= nl2br($departure['note'] ?? '') ?></td>
                         <td>
                             <span class="badge status-badge status-<?= $departure['status'] ?? 'unknown' ?>">
                                 <?= ucfirst($departure['status'] ?? '') ?: 'Chưa xác định' ?>

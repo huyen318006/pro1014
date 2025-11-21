@@ -65,10 +65,10 @@
                 <?php foreach ($users as $user): ?>
                     <tr>
                         <td><?php echo $user['id']; ?></td>
-                        <td><?php echo htmlspecialchars($user['fullname']); ?></td>
-                        <td><?php echo htmlspecialchars($user['email']); ?></td>
+                        <td><?php echo $user['fullname']; ?></td>
+                        <td><?php echo $user['email']; ?></td>
                         <td><span class="masked-password">********</span></td>
-                        <td><?php echo htmlspecialchars($user['address'] ?? ''); ?></td>
+                        <td><?php echo $user['address'] ?? ''; ?></td>
                         <td><?= $user['phone'] ?></td>
                         <td>
                             <form method="post" action="?act=change_role" style="margin:0;">

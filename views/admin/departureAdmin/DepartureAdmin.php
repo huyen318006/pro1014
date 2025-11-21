@@ -72,14 +72,14 @@
                 <tbody>
                     <?php foreach ($departures as $departure): ?>
                         <tr>
-                            <td><?= htmlspecialchars($departure['tour_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($departure['departure_date'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($departure['meeting_point'] ?? '') ?></td>
+                            <td><?= $departure['tour_name'] ?? '' ?></td>
+                            <td><?= $departure['departure_date'] ?? '' ?></td>
+                            <td><?= $departure['meeting_point'] ?? '' ?></td>
 
-                            <td><?= htmlspecialchars($departure['max_participants'] ?? '') ?></td>
-                            <td><?= htmlspecialchars(number_format($departure['tour_price'] ?? 0, 0, ',', '.') . ' VND') ?></td>
-                            <td><?= htmlspecialchars($departure['note']) ?></td>
-                            <td><?= htmlspecialchars($departure['status']) ?></td>
+                            <td><?= $departure['max_participants'] ?? '' ?></td>
+                            <td><?= number_format($departure['tour_price'] ?? 0, 0, ',', '.') . ' VND' ?></td>
+                            <td><?= $departure['note'] ?></td>
+                            <td><?= $departure['status'] ?></td>
                             <td>
                                 <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $departure['id'] ?>"><i class="fas fa-edit" title="Sửa lịch khởi hành"></i></a>
                                 <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"><i class="fas fa-trash" title="Xóa"></i></a>

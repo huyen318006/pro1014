@@ -98,11 +98,11 @@ $act = 'services';
                       
                       <td>
                         <?php if(!empty($s['tour_name'])): ?>
-                          <div class="fw-bold text-primary"><?= htmlspecialchars($s['tour_name']) ?></div>
+                          <div class="fw-bold text-primary"><?= $s['tour_name'] ?></div>
                           <small class="text-muted">
                             <i class="fas fa-calendar"></i> <?= $s['departure_date_formatted'] ?? 'Chưa có ngày' ?>
                             <?php if(!empty($s['meeting_point'])): ?>
-                              <br><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['meeting_point']) ?>
+                              <br><i class="fas fa-map-marker-alt"></i> <?= $s['meeting_point'] ?>
                             <?php endif; ?>
                           </small>
                         <?php else: ?>
@@ -112,11 +112,11 @@ $act = 'services';
 
                       <td>
                         <span class="badge bg-info fs-6">
-                          <?= htmlspecialchars(ucfirst($s['service_name'])) ?>
+                          <?= ucfirst($s['service_name']) ?>
                         </span>
                       </td>
 
-                      <td class="fw-bold"><?= htmlspecialchars($s['partner_name']) ?></td>
+                      <td class="fw-bold"><?= $s['partner_name'] ?></td>
 
                       <td>
                         <?php
@@ -128,7 +128,7 @@ $act = 'services';
                         </span>
                       </td>
 
-                      <td><small><?= nl2br(htmlspecialchars($s['note'] ?? '-')) ?></small></td>
+                      <td><small><?= nl2br($s['note'] ?? '-') ?></small></td>
 
                       <td>
                         <div class="btn-group" role="group">
@@ -138,7 +138,7 @@ $act = 'services';
                           </a>
                           <a href="index.php?act=servicesDelete&id=<?= $s['id'] ?>" 
                              class="btn btn-sm btn-danger" 
-                             onclick="return confirm('Xóa dịch vụ này?\n\nĐối tác: <?= htmlspecialchars($s['partner_name']) ?>');"
+                             onclick="return confirm('Xóa dịch vụ này?\n\nĐối tác: <?= $s['partner_name'] ?>');"
                              title="Xóa">
                             <i class="fas fa-trash"></i>
                           </a>

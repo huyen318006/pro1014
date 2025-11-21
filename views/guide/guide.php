@@ -48,7 +48,7 @@
 
     <div class="user-info">
       <i class="fas fa-user-circle"></i>
-      <span><?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
+      <span><?= $_SESSION['user']['fullname'] ?? '' ?></span>
     </div>
   </div>
 

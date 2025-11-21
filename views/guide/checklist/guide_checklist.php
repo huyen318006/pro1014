@@ -37,7 +37,7 @@
 
     <div class="user-info">
         <i class="fas fa-user-circle"></i>
-        <span><?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
+        <span><?= $_SESSION['user']['fullname'] ?? '' ?></span>
     </div>
 </div>
 
@@ -65,7 +65,7 @@
                            <?= ($item['is_checked'] && $item['checked_by_name'] == ($_SESSION['user']['fullname'] ?? '')) ? 'checked' : '' ?>>
 
                     <label class="form-check-label" for="item_<?= md5($item['item_name']) ?>">
-                        <?= htmlspecialchars($item['item_name']) ?>
+                        <?= $item['item_name'] ?>
                     </label>
                 </div>
             <?php endforeach; ?>

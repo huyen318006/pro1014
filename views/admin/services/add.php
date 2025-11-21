@@ -89,9 +89,9 @@
         <select name="departure_id" class="form-select form-select-lg" required>
             <option value="">-- Chọn chuyến đi --</option>
             <?php foreach($departures as $d): 
-                $display = htmlspecialchars($d['tour_name'] ?? 'Tour ID: '.$d['tour_id']);
+                $display = $d['tour_name'] ?? 'Tour ID: '.$d['tour_id'];
                 $display .= ' - ' . ($d['departure_date_formatted'] ?? $d['departure_date']);
-                $display .= !empty($d['meeting_point']) ? ' • ' . htmlspecialchars($d['meeting_point']) : '';
+                $display .= !empty($d['meeting_point']) ? ' • ' . $d['meeting_point'] : '';
                 $selected = (isset($_SESSION['old']['departure_id']) && $_SESSION['old']['departure_id'] == $d['id']) ? 'selected' : '';
             ?>
                 <option value="<?= $d['id'] ?>" <?= $selected ?>><?= $display ?></option>
@@ -103,7 +103,7 @@
     <div class="col-lg-6">
         <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
         <input type="text" name="service_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? '') ?>"
+               value="<?= $_SESSION['old']['service_name'] ?? '' ?>"
                placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
     </div>
 
@@ -111,7 +111,7 @@
     <div class="col-lg-6">
         <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
         <input type="text" name="partner_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? '') ?>"
+               value="<?= $_SESSION['old']['partner_name'] ?? '' ?>"
                placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
     </div>
 
@@ -132,7 +132,7 @@
     <div class="col-lg-12">
         <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
         <textarea name="note" rows="5" class="form-control form-control-lg"
-                  placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= htmlspecialchars($_SESSION['old']['note'] ?? '') ?></textarea>
+                  placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= $_SESSION['old']['note'] ?? '' ?></textarea>
     </div>
 </div>
 

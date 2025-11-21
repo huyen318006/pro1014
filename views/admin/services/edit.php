@@ -65,7 +65,7 @@ if (!in_array($currentStatus, $allowedStatus)) {
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-primary">
       <i class="fas fa-edit"></i> Chỉnh sửa Dịch vụ đi kèm
-      <small class="text-muted d-block fs-5">ID: #<?= $service['id'] ?? '' ?> • <?= htmlspecialchars($service['service_name'] ?? '') ?></small>
+      <small class="text-muted d-block fs-5">ID: #<?= $service['id'] ?? '' ?> • <?= $service['service_name'] ?? '' ?></small>
     </h2>
     <a href="index.php?act=services" class="btn btn-secondary btn-lg">
       <i class="fas fa-arrow-left"></i> Quay lại danh sách
@@ -111,9 +111,9 @@ if (!in_array($currentStatus, $allowedStatus)) {
                 <option value="">-- Chọn chuyến đi --</option>
                 <?php foreach($departures as $d): 
                     $selected = ($d['id'] == ($_SESSION['old']['departure_id'] ?? $service['departure_id'] ?? '')) ? 'selected' : '';
-                    $display = htmlspecialchars($d['tour_name'] ?? 'Tour ID: '.$d['tour_id']);
+                    $display = $d['tour_name'] ?? 'Tour ID: '.$d['tour_id'];
                     $display .= ' - ' . $d['departure_date_formatted'];
-                    $display .= !empty($d['meeting_point']) ? ' • ' . htmlspecialchars($d['meeting_point']) : '';
+                    $display .= !empty($d['meeting_point']) ? ' • ' . $d['meeting_point'] : '';
                 ?>
                     <option value="<?= $d['id'] ?>" <?= $selected ?>><?= $display ?></option>
                 <?php endforeach; ?>
@@ -124,13 +124,13 @@ if (!in_array($currentStatus, $allowedStatus)) {
         <div class="col-lg-6">
             <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
             <input type="text" name="service_name" class="form-control form-control-lg" 
-                   value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? $service['service_name'] ?? '') ?>" 
+                   value="<?= $_SESSION['old']['service_name'] ?? $service['service_name'] ?? '' ?>" 
                    placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
         </div>
         <div class="col-lg-6">
             <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
             <input type="text" name="partner_name" class="form-control form-control-lg" 
-                   value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? $service['partner_name'] ?? '') ?>" 
+                   value="<?= $_SESSION['old']['partner_name'] ?? $service['partner_name'] ?? '' ?>" 
                    placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
         </div>
 
@@ -154,7 +154,7 @@ if (!in_array($currentStatus, $allowedStatus)) {
         <div class="col-lg-12">
             <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
             <textarea name="note" rows="5" class="form-control form-control-lg"
-                      placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= htmlspecialchars($_SESSION['old']['note'] ?? $service['note'] ?? '') ?></textarea>
+                      placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= $_SESSION['old']['note'] ?? $service['note'] ?? '' ?></textarea>
         </div>
     </div>
 

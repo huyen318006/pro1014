@@ -57,7 +57,7 @@
                             <i class="bi bi-exclamation-triangle"></i> <strong>Lỗi!</strong>
                             <ul class="mb-0 mt-2">
                                 <?php foreach ($errors as $error): ?>
-                                    <li><?= htmlspecialchars($error) ?></li>
+                                    <li><?= $error ?></li>
                                 <?php endforeach; ?>
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -65,7 +65,7 @@
                     <?php endif; ?>
 
                     <!-- Form thêm tour -->
-                    <form method="POST" action="">
+                    <form method="POST" action="" enctype="multipart/form-data">
                         <div class="form-row">
                             <!-- Cột trái -->
                             <div>
@@ -73,7 +73,7 @@
                                 <div class="form-group mb-3">
                                     <label for="code" class="form-label">Mã Tour <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="code" name="code"
-                                        value="<?= htmlspecialchars($code ?? '') ?>"
+                                        value="<?= $code ?? '' ?>"
                                         placeholder="VD: TOUR001" required>
                                     <small class="form-text text-muted">Mã tour duy nhất trong hệ thống</small>
                                 </div>
@@ -82,7 +82,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Tên Tour <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="<?= htmlspecialchars($name ?? '') ?>"
+                                        value="<?= $name ?? '' ?>"
                                         placeholder="VD: Đà Nẵng - Hội An 3 ngày" required>
                                 </div>
 
@@ -90,7 +90,7 @@
                                 <div class="form-group mb-3">
                                     <label for="destination" class="form-label">Địa điểm <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="destination" name="destination"
-                                        value="<?= htmlspecialchars($destination ?? '') ?>"
+                                        value="<?= $destination ?? '' ?>"
                                         placeholder="VD: Đà Nẵng" required>
                                 </div>
                             </div>
@@ -100,13 +100,10 @@
                                 <!-- Loại Tour -->
                                 <div class="form-group mb-3">
                                     <label for="type" class="form-label">Loại Tour <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="type" name="type" required>
-                                        <option value="">-- Chọn loại tour --</option>
-                                        <option value="in_country" <?= ($type ?? '') === 'in_country' ? 'selected' : '' ?>>Trong nước</option>
-                                        <option value="abroad" <?= ($type ?? '') === 'abroad' ? 'selected' : '' ?>>Nước ngoài</option>
-                                        <option value="adventure" <?= ($type ?? '') === 'adventure' ? 'selected' : '' ?>>Phiêu lưu</option>
-                                        <option value="luxury" <?= ($type ?? '') === 'luxury' ? 'selected' : '' ?>>Sang trọng</option>
-                                        <option value="family" <?= ($type ?? '') === 'family' ? 'selected' : '' ?>>Gia đình</option>
+                                    <select id="category" name="category_id" class="form-select">
+                                        <?php foreach ($categories as $cat){ ?>
+                                            <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
 
@@ -125,7 +122,7 @@
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="price" name="price"
-                                        value="<?= htmlspecialchars($price ?? '') ?>"
+                                        value="<?= $price ?? '' ?>"
                                         placeholder="VD: 5000000" min="0" required>
                                 </div>
 
@@ -133,15 +130,20 @@
                                 <div class="form-group mb-3">
                                     <label for="duration_days" class="form-label">Số ngày <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="duration_days" name="duration_days"
-                                        value="<?= htmlspecialchars($duration_days ?? '') ?>"
+                                        value="<?= $duration_days ?? '' ?>"
                                         placeholder="VD: 3" min="1" required>
+                                </div>
+                                <!-- Hình ảnh -->
+                                <div class="form-group mb-3">
+                                    <label for="image" class="form-label">Hình ảnh <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" id="image" name="image" required>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Nút submit -->
                         <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-submit">
+                            <button type="submit" name="submit" class="btn btn-primary btn-submit">
                                 <i class="bi bi-check-circle"></i> Thêm Tour
                             </button>
                             <a href="<?= BASE_URL ?>?act=listTours" class="btn btn-secondary btn-back">

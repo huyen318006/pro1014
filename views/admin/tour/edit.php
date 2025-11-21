@@ -65,7 +65,7 @@
                             <i class="bi bi-exclamation-triangle"></i> <strong>Lỗi!</strong>
                             <ul class="mb-0 mt-2">
                                 <?php foreach ($errors as $error): ?>
-                                    <li><?= htmlspecialchars($error) ?></li>
+                                    <li><?= $error ?></li>
                                 <?php endforeach; ?>
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -73,8 +73,8 @@
                     <?php endif; ?>
 
                     <!-- Form cập nhật tour -->
-                    <form method="POST" action="">
-                        <input type="hidden" name="original_id" value="<?= htmlspecialchars($originalId ?? $id) ?>">
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        <input type="hidden" name="original_id" value="<?= $originalId ?? $id ?>">
                         <div class="form-row">
                             <!-- Cột trái -->
                             <div>
@@ -82,7 +82,7 @@
                                 <div class="form-group mb-3">
                                     <label for="code" class="form-label">Mã Tour <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="code" name="code"
-                                        value="<?= htmlspecialchars($code ?? '') ?>"
+                                        value="<?= $code ?? '' ?>"
                                         placeholder="VD: TOUR001" required>
                                     <small class="form-text text-muted">Mã tour duy nhất trong hệ thống</small>
                                 </div>
@@ -91,7 +91,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Tên Tour <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="<?= htmlspecialchars($name ?? '') ?>"
+                                        value="<?= $name ?? '' ?>"
                                         placeholder="VD: Đà Nẵng - Hội An 3 ngày" required>
                                 </div>
 
@@ -99,7 +99,7 @@
                                 <div class="form-group mb-3">
                                     <label for="destination" class="form-label">Địa điểm <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="destination" name="destination"
-                                        value="<?= htmlspecialchars($destination ?? '') ?>"
+                                        value="<?= $destination ?? '' ?>"
                                         placeholder="VD: Đà Nẵng" required>
                                 </div>
                             </div>
@@ -109,13 +109,15 @@
                                 <!-- Loại Tour -->
                                 <div class="form-group mb-3">
                                     <label for="type" class="form-label">Loại Tour <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="type" name="type" required>
-                                        <option value="">-- Chọn loại tour --</option>
-                                        <option value="in_country" <?= ($type ?? '') === 'in_country' ? 'selected' : '' ?>>Trong nước</option>
-                                        <option value="abroad" <?= ($type ?? '') === 'abroad' ? 'selected' : '' ?>>Nước ngoài</option>
-                                        <option value="adventure" <?= ($type ?? '') === 'adventure' ? 'selected' : '' ?>>Phiêu lưu</option>
-                                        <option value="luxury" <?= ($type ?? '') === 'luxury' ? 'selected' : '' ?>>Sang trọng</option>
-                                        <option value="family" <?= ($type ?? '') === 'family' ? 'selected' : '' ?>>Gia đình</option>
+                                    <select id="category" name="category_id" class="form-select">
+                                        <?php foreach ($categories as $cat){ ?>
+                                            <?php
+                                                if($cat['id'] == $tour['category_id']) {?>
+                                                    <option selected value="<?= $cat['id'] ?>" ><?= $cat['name'] ?></option>
+                                                <?php } else { ?>
+                                                    <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+                                                <?php } ?>
+                                        <?php } ?>
                                     </select>
                                 </div>
 
@@ -134,7 +136,7 @@
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="price" name="price"
-                                        value="<?= htmlspecialchars($price ?? '') ?>"
+                                        value="<?= $price ?? '' ?>"
                                         placeholder="VD: 5000000" min="0" required>
                                 </div>
 
@@ -142,15 +144,30 @@
                                 <div class="form-group mb-3">
                                     <label for="duration_days" class="form-label">Số ngày <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="duration_days" name="duration_days"
-                                        value="<?= htmlspecialchars($duration_days ?? '') ?>"
+                                        value="<?= $duration_days ?? '' ?>"
                                         placeholder="VD: 3" min="1" required>
+                                </div>
+                                <!-- Hình ảnh -->
+                                <div class="form-group mb-3">
+                                    <label for="image" class="form-label">Hình ảnh</label>
+                                    <?php if (!empty($tour['image'])): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>" 
+                                                 alt="Current image" 
+                                                 class="img-thumbnail" 
+                                                 style="max-width: 200px; max-height: 200px;">
+                                            <p class="text-muted small mt-1">Hình ảnh hiện tại</p>
+                                        </div>
+                                    <?php endif; ?>
+                                    <input type="file" class="form-control" id="image" name="image">
+                                    <small class="form-text text-muted">Để trống nếu không muốn thay đổi hình ảnh</small>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Nút submit -->
                         <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-submit">
+                            <button type="submit" name="submit" class="btn btn-primary btn-submit">
                                 <i class="bi bi-check-circle"></i> Cập nhật
                             </button>
                             <a href="<?= BASE_URL ?>?act=listTours" class="btn btn-secondary btn-back">

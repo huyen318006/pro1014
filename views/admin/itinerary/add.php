@@ -55,7 +55,7 @@
                     <?php if (isset($_SESSION['error'])): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <i class="bi bi-exclamation-triangle"></i> <strong>Lỗi!</strong>
-                            <?= htmlspecialchars($_SESSION['error']) ?>
+                            <?= $_SESSION['error'] ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         <?php unset($_SESSION['error']); ?>
@@ -67,7 +67,7 @@
                             <i class="bi bi-exclamation-triangle"></i> <strong>Lỗi!</strong>
                             <ul class="mb-0 mt-2">
                                 <?php foreach ($errors as $error): ?>
-                                    <li><?= htmlspecialchars($error) ?></li>
+                                    <li><?= $error ?></li>
                                 <?php endforeach; ?>
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -84,7 +84,7 @@
                                     <option value="">-- Chọn tour --</option>
                                     <?php foreach ($tours as $tour): ?>
                                         <option value="<?= $tour['id'] ?>" <?= (isset($tour_id) && $tour_id == $tour['id']) ? 'selected' : '' ?>>
-                                            #<?= $tour['id'] ?> - <?= htmlspecialchars($tour['name']) ?> (<?= htmlspecialchars($tour['destination']) ?>)
+                                            #<?= $tour['id'] ?> - <?= $tour['name'] ?> (<?= $tour['destination'] ?>)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -94,28 +94,28 @@
                             <div class="form-group mb-3">
                                 <label for="day_number" class="form-label">Ngày đi<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="day_number" name="day_number"
-                                    value="<?= htmlspecialchars($day_number ?? '') ?>" required>
+                                    value="<?= $day_number ?? '' ?>" required>
                             </div>
 
                             <!-- Title -->
                             <div class="form-group mb-3">
                                 <label for="title" class="form-label">Tiêu đề ngày <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="title" name="title"
-                                    value="<?= htmlspecialchars($title ?? '') ?>"
+                                    value="<?= $title ?? '' ?>"
                                     placeholder="VD: Khởi hành đến Đà Nẵng" maxlength="255" required>
                             </div>
                             <!-- Activities -->
                             <div class="form-group mb-3">
                                 <label for="activities" class="form-label">Hoạt động trong ngày<span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="activities" name="activities" rows="5"
-                                    placeholder="Liệt kê các điểm tham quan, hoạt động chính" required><?= htmlspecialchars($activities ?? '') ?></textarea>
+                                    placeholder="Liệt kê các điểm tham quan, hoạt động chính" required><?= $activities ?? '' ?></textarea>
                             </div>
 
                             <!-- Notes -->
                             <div class="form-group mb-3">
                                 <label for="notes" class="form-label">Ghi chú thêm (notes)</label>
                                 <textarea class="form-control" id="notes" name="notes" rows="3"
-                                    placeholder="Ghi chú chuẩn bị, lưu ý đặc biệt"><?= htmlspecialchars($notes ?? '') ?></textarea>
+                                    placeholder="Ghi chú chuẩn bị, lưu ý đặc biệt"><?= $notes ?? '' ?></textarea>
                             </div>
                         </div>
 

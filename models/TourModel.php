@@ -10,7 +10,9 @@ class TourModel
 
     public function getAllTours()
     {
-        $sql = "SELECT * FROM `tours`";
+        $sql = "SELECT tours.*, categories.name as category_name 
+                FROM `tours` 
+                LEFT JOIN `categories` ON tours.category_id = categories.id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,43 +20,32 @@ class TourModel
    
     public function getTourById($id)
     {
-        $sql = "SELECT * FROM `tours` WHERE id = :id";
+        $sql = "SELECT tours.*, categories.name as category_name 
+                FROM `tours` 
+                LEFT JOIN `categories` ON tours.category_id = categories.id 
+                WHERE tours.id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function addTour($data)
+    public function addTour($code, $name, $destination, $category_id, $status, $price, $duration_days, $image)
     {
-        $sql = 'INSERT INTO `tours` (code, name, destination, type, status, price, duration_days) 
-                VALUES (:code, :name, :destination, :type, :status, :price, :duration_days)';
+        $sql = "INSERT INTO tours (code, name, destination, category_id, status, price, duration_days, image) 
+            VALUES ('$code', '$name', '$destination', '$category_id', '$status', '$price', '$duration_days', '$image')";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute($data);
-        
-        return $stmt->rowCount();
-        
+        return $stmt->execute();
     }
-
-    public function updateTour($data)
+    public function updateTour($id, $code, $name, $destination, $category_id, $status, $price, $duration_days, $image)
     {
-        $sql = "UPDATE `tours` 
-                SET code = :code,
-                    name = :name, 
-                    destination = :destination,
-                    type = :type,
-                    status = :status,
-                    price = :price, 
-                    duration_days = :duration_days
-                WHERE id = :id";
-        
+        $sql = "UPDATE `tours` SET code = '$code', name = '$name', destination = '$destination', category_id = '$category_id', status = '$status', price = '$price', duration_days = '$duration_days', image = '$image' WHERE id = '$id'";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute($data);
+        return $stmt->execute();
     }
     public function deleteTour($id)
     {
-        $sql = "DELETE FROM `tours` WHERE id = :id";
+        $sql = "DELETE FROM `tours` WHERE id = '$id'";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 }
