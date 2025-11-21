@@ -42,7 +42,7 @@ class TourController
             $code = $_POST['code'];
             $name = $_POST['name'];
             $destination = $_POST['destination'];
-            $type = $_POST['type'];
+            $category_id = $_POST['category_id'];
             $status = $_POST['status'];
             $price = $_POST['price'];
             $duration_days = $_POST['duration_days'];
@@ -56,7 +56,7 @@ class TourController
             move_uploaded_file($from, $to);
 
             // Lưu dữ liệu vào trong database
-            $result = $this->modelTour->addTour($code, $name, $destination, $type, $status, $price, $duration_days, $to);
+            $result = $this->modelTour->addTour($code, $name, $destination, $category_id, $status, $price, $duration_days, $to);
             
             if ($result) {
                 $_SESSION['success'] = 'Thêm tour thành công';
