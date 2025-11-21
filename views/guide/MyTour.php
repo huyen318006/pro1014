@@ -198,11 +198,9 @@ background: linear-gradient(135deg, #00bcd4, #006978);
 transform: translateY(-2px) scale(1.05);
 box-shadow: 0 6px 16px rgba(0,151,167,0.35);
 }
-
 /* ===== ROW HOVER ===== */
 .departure-table tr:hover {
 background: #f4f9fa;
 transition: 0.25s;
 }
-
 </style>
