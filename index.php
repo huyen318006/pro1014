@@ -15,6 +15,8 @@ require_once './controllers/AssignmentController.php';
 require_once './controllers/ServicesController.php';
 require_once './controllers/DepartureController.php';
 require_once './controllers/ChecklistController.php';
+require_once './controllers/IncidentReportController.php';
+
 
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
@@ -23,6 +25,7 @@ require_once './models/ItineraryModel.php';
 require_once './models/departuresModel.php';
 require_once "models/services.php";
 require_once './models/ChecklistModel.php';
+require_once './models/IncidentReportModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -124,6 +127,18 @@ match ($act) {
     'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
     'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
     'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
+    //báo cáo sự cố của admin và guide
+    // Guide tạo báo cáo
+    'incident' => (new IncidentReportController())->create(),
+
+    // Admin danh sách báo cáo
+    'incidents' => (new IncidentReportController())->index(),
+
+    // Xóa báo cáo (không phân quyền)
+    'incidentReportsDelete' => (new IncidentReportController())->delete(),
+
+
+
 
 
     //bắt đầu routr của guide

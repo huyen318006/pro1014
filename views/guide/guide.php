@@ -31,11 +31,9 @@
 
     <a href="<?= BASE_URL.'?act=MyTour' ?>"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
 
-    <a href="guideChecklist.php"><i class="fas fa-clipboard-check"></i> <span>Checklist</span></a>
-
     <a href="guideDiary.php"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
 
-    <a href="guideReport.php"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
+    <a href="?act=incident"><i class="fas fa-exclamation-triangle"></i><span>Báo cáo sự cố</span>
 
     <a href="guideStatistic.php"><i class="fas fa-chart-line"></i> <span>Thống kê</span></a>
     <a href="<?= BASE_URL.'?act=logout' ?>">

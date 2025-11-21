@@ -1,9 +1,9 @@
 <?php
 class ChecklistModel {
-    private $connection;
+    public $conn;
 
     public function __construct() {
-        $this->connection = connectDB(); // Hàm kết nối DB
+        $this->conn = connectDB(); // Hàm kết nối DB
     }
 
     // Lấy checklist theo departure, kèm tên HDV
@@ -13,7 +13,7 @@ class ChecklistModel {
                 LEFT JOIN users u ON c.checked_by = u.id
                 WHERE c.departure_id = ?
                 ORDER BY c.id ASC";
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->execute([$departureId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -22,11 +22,11 @@ class ChecklistModel {
     public function saveChecklist($departureId, $guideId, $checkedItems) {
         // Reset tất cả về chưa tick
         $sqlReset = "UPDATE checklists SET is_checked=0, checked_by=NULL WHERE departure_id=?";
-        $this->connection->prepare($sqlReset)->execute([$departureId]);
+        $this->conn->prepare($sqlReset)->execute([$departureId]);
 
         // Cập nhật các mục đã tick
         $sqlUpdate = "UPDATE checklists SET is_checked=1, checked_by=? WHERE departure_id=? AND item_name=?";
-        $stmt = $this->connection->prepare($sqlUpdate);
+        $stmt = $this->conn->prepare($sqlUpdate);
 
         foreach ($checkedItems as $item) {
             $stmt->execute([$guideId, $departureId, $item]);
@@ -39,11 +39,11 @@ class ChecklistModel {
         foreach ($defaultItems as $item) {
             // Kiểm tra trùng
             $checkSql = "SELECT 1 FROM checklists WHERE departure_id=? AND item_name=?";
-            $stmtCheck = $this->connection->prepare($checkSql);
+            $stmtCheck = $this->conn->prepare($checkSql);
             $stmtCheck->execute([$departureId, $item]);
             if (!$stmtCheck->fetch()) {
                 $insertSql = "INSERT INTO checklists (departure_id, item_name, is_checked, checked_by) VALUES (?, ?, 0, NULL)";
-                $this->connection->prepare($insertSql)->execute([$departureId, $item]);
+                $this->conn->prepare($insertSql)->execute([$departureId, $item]);
             }
         }
     }

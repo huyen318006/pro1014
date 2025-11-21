@@ -21,11 +21,6 @@ class Departures {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
-
-
-
     //Hiển thị tất cả  các lịch khởi hành
     public function getAllDepartures(){
         $sql = "SELECT  departures.*, tours.name AS tour_name, tours.price AS tour_price,  tours.duration_days AS duration_days
