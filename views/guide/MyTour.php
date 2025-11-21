@@ -133,13 +133,13 @@ font-size: 0.85rem;
 font-weight: 600;
 border-radius: 20px;
 text-transform: capitalize;
-color: #f0dc05ff;
+color: #e1d030ff;
 transition: all 0.3s ease;
 box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 /* Các trạng thái */
-.status-pending { background-color: #f0ad4e; }   /* Chờ xử lý */
+.status-pending { background-color: #f7b456ff; }   /* Chờ xử lý */
 .status-confirmed { background-color: #28a745; } /* Xác nhận */
 .status-cancelled { background-color: #dc3545; } /* Hủy */
 .status-unknown { background-color: #6c757d; }   /* Chưa xác định */
