@@ -25,7 +25,6 @@
     <a href="<?= BASE_URL ?>?act=guideDashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="<?= BASE_URL ?>?act=guideDepartures"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
     <a href="<?= BASE_URL ?>?act=MyTour"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
-    <a href="<?= BASE_URL ?>?act=guideChecklist" class="active"><i class="fas fa-clipboard-check"></i> <span>Checklist</span></a>
     <a href="<?= BASE_URL ?>?act=guideDiary"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
     <a href="<?= BASE_URL ?>?act=guideReport"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
     <a href="<?= BASE_URL ?>?act=guideStatistic"><i class="fas fa-chart-line"></i> <span>Thống kê</span></a>
