@@ -22,20 +22,28 @@ class Departures {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     //Hiển thị tất cả  các lịch khởi hành
-    public function getAllDepartures(){
-        $sql = "SELECT  departures.*, tours.name AS tour_name, tours.price AS tour_price,  tours.duration_days AS duration_days
-         FROM departures
-         JOIN tours ON  tours.id = departures.tour_id";
-    
-    
+    public function getAllDepartures()
+    {
+        $sql = "SELECT 
+                departures.*, 
+                tours.name AS tour_name, 
+                tours.price AS tour_price,
+                tours.duration_days AS duration_days,
+                users.fullname AS guide_name
+            FROM departures
+            JOIN tours ON tours.id = departures.tour_id
+            LEFT JOIN assignments ON assignments.departure_id = departures.id
+            LEFT JOIN users ON users.id = assignments.guide_id";
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
     }
 
+
+
     //truy van departures của phần gudie
-       public function getByDepartures($departures_id){
+    public function getByDepartures($departures_id){
         $sql = "SELECT  departures.*, tours.name AS tour_name, tours.price AS tour_price, users.fullname AS guide_name, tours.duration_days AS duration_days, assignments.id AS assignments_id
          FROM departures
          JOIN tours ON  tours.id = departures.tour_id

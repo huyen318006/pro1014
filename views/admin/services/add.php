@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Thêm Dịch vụ mới | LOFT CITY</title>
@@ -13,11 +14,22 @@
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
 
   <style>
-    .form-control, .form-select { border-radius: 12px; }
-    .btn-lg { border-radius: 50px; }
-    .card { border-radius: 20px; overflow: hidden; }
+    .form-control,
+    .form-select {
+      border-radius: 12px;
+    }
+
+    .btn-lg {
+      border-radius: 50px;
+    }
+
+    .card {
+      border-radius: 20px;
+      overflow: hidden;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- SIDEBAR ĐẸP Y HỆT TRANG DASHBOARD -->
@@ -41,7 +53,7 @@
     <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
     <div class="user-info">
       <i class="fas fa-user-circle"></i>
-      <span>Admin Chủ</span>
+      <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
     </div>
   </div>
 
@@ -61,15 +73,17 @@
       </div>
 
       <!-- Thông báo -->
-      <?php if(isset($_SESSION['success'])): ?>
+      <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show">
-          <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+          <?= $_SESSION['success'];
+          unset($_SESSION['success']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
-      <?php if(isset($_SESSION['error'])): ?>
+      <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show">
-          <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+          <?= $_SESSION['error'];
+          unset($_SESSION['error']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
@@ -78,73 +92,73 @@
       <div class="table-card">
         <div class="card-body p-5">
           <form action="index.php?act=servicesStore" method="POST">
-    <!-- CSRF Token -->
-    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
 
-```
-<div class="row g-4">
-    <!-- Chuyến đi -->
-    <div class="col-lg-12">
-        <label class="form-label fw-bold"><i class="fas fa-route"></i> Chuyến đi <span class="text-danger">*</span></label>
-        <select name="departure_id" class="form-select form-select-lg" required>
-            <option value="">-- Chọn chuyến đi --</option>
-            <?php foreach($departures as $d): 
-                $display = htmlspecialchars($d['tour_name'] ?? 'Tour ID: '.$d['tour_id']);
-                $display .= ' - ' . ($d['departure_date_formatted'] ?? $d['departure_date']);
-                $display .= !empty($d['meeting_point']) ? ' • ' . htmlspecialchars($d['meeting_point']) : '';
-                $selected = (isset($_SESSION['old']['departure_id']) && $_SESSION['old']['departure_id'] == $d['id']) ? 'selected' : '';
-            ?>
-                <option value="<?= $d['id'] ?>" <?= $selected ?>><?= $display ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
+            ```
+            <div class="row g-4">
+              <!-- Chuyến đi -->
+              <div class="col-lg-12">
+                <label class="form-label fw-bold"><i class="fas fa-route"></i> Chuyến đi <span class="text-danger">*</span></label>
+                <select name="departure_id" class="form-select form-select-lg" required>
+                  <option value="">-- Chọn chuyến đi --</option>
+                  <?php foreach ($departures as $d):
+                    $display = htmlspecialchars($d['tour_name'] ?? 'Tour ID: ' . $d['tour_id']);
+                    $display .= ' - ' . ($d['departure_date_formatted'] ?? $d['departure_date']);
+                    $display .= !empty($d['meeting_point']) ? ' • ' . htmlspecialchars($d['meeting_point']) : '';
+                    $selected = (isset($_SESSION['old']['departure_id']) && $_SESSION['old']['departure_id'] == $d['id']) ? 'selected' : '';
+                  ?>
+                    <option value="<?= $d['id'] ?>" <?= $selected ?>><?= $display ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
 
-    <!-- Loại dịch vụ -->
-    <div class="col-lg-6">
-        <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
-        <input type="text" name="service_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? '') ?>"
-               placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
-    </div>
+              <!-- Loại dịch vụ -->
+              <div class="col-lg-6">
+                <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
+                <input type="text" name="service_name" class="form-control form-control-lg"
+                  value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? '') ?>"
+                  placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
+              </div>
 
-    <!-- Đối tác -->
-    <div class="col-lg-6">
-        <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
-        <input type="text" name="partner_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? '') ?>"
-               placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
-    </div>
+              <!-- Đối tác -->
+              <div class="col-lg-6">
+                <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
+                <input type="text" name="partner_name" class="form-control form-control-lg"
+                  value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? '') ?>"
+                  placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
+              </div>
 
-    <!-- Trạng thái -->
-    <div class="col-lg-6">
-        <label class="form-label fw-bold"><i class="fas fa-check-circle"></i> Trạng thái</label>
-        <select name="status" class="form-select form-select-lg">
-            <?php 
-                $statusOld = $_SESSION['old']['status'] ?? 'pending';
-            ?>
-            <option value="pending" <?= $statusOld=='pending' ? 'selected' : '' ?>>Chờ xử lý</option>
-            <option value="confirmed" <?= $statusOld=='confirmed' ? 'selected' : '' ?>>Đã xác nhận</option>
-            <option value="cancelled" <?= $statusOld=='cancelled' ? 'selected' : '' ?>>Đã hủy</option>
-        </select>
-    </div>
+              <!-- Trạng thái -->
+              <div class="col-lg-6">
+                <label class="form-label fw-bold"><i class="fas fa-check-circle"></i> Trạng thái</label>
+                <select name="status" class="form-select form-select-lg">
+                  <?php
+                  $statusOld = $_SESSION['old']['status'] ?? 'pending';
+                  ?>
+                  <option value="pending" <?= $statusOld == 'pending' ? 'selected' : '' ?>>Chờ xử lý</option>
+                  <option value="confirmed" <?= $statusOld == 'confirmed' ? 'selected' : '' ?>>Đã xác nhận</option>
+                  <option value="cancelled" <?= $statusOld == 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
+                </select>
+              </div>
 
-    <!-- Ghi chú -->
-    <div class="col-lg-12">
-        <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
-        <textarea name="note" rows="5" class="form-control form-control-lg"
+              <!-- Ghi chú -->
+              <div class="col-lg-12">
+                <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
+                <textarea name="note" rows="5" class="form-control form-control-lg"
                   placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= htmlspecialchars($_SESSION['old']['note'] ?? '') ?></textarea>
-    </div>
-</div>
+              </div>
+            </div>
 
-<div class="text-end mt-5">
-    <button type="submit" class="btn btn-success btn-lg px-5">
-        <i class="fas fa-plus-circle"></i> Thêm Dịch vụ
-    </button>
-</div>
-```
+            <div class="text-end mt-5">
+              <button type="submit" class="btn btn-success btn-lg px-5">
+                <i class="fas fa-plus-circle"></i> Thêm Dịch vụ
+              </button>
+            </div>
+            ```
 
-</form>
-<?php unset($_SESSION['old']); ?>
+          </form>
+          <?php unset($_SESSION['old']); ?>
 
         </div>
       </div>
@@ -154,4 +168,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

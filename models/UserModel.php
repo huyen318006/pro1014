@@ -185,6 +185,7 @@ class UserModel {
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+    //mở khóa tài khoản
     public function openUser($id)
     {
         $sql = "UPDATE users SET status = 1 WHERE id = :id";
