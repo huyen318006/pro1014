@@ -1,77 +1,54 @@
-<?php
-
-class Policy
+<?php 
+class policy
 {
-    private $conn;
-
+    public $conn;
     public function __construct()
     {
-        // Lấy kết nối PDO từ file config
-        global $conn;
-        $this->conn = $conn;
+        $this->conn = connectDB();
     }
 
-    // ===========================
-    // LẤY TẤT CẢ POLICIES + TÊN TOUR
-    // ===========================
     public function getAllPolicies()
     {
-        $sql = "SELECT p.*, t.name AS tour_name
-                FROM policies p
-                LEFT JOIN tours t ON p.tour_id = t.id
-                ORDER BY p.id DESC";
-
+        $sql = "SELECT policies.*, tours.name as tour_name 
+                FROM `policies` 
+                LEFT JOIN `tours` ON policies.tour_id = tours.id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // ===========================
-    // LẤY 1 POLICY THEO ID
-    // ===========================
     public function getPolicyById($id)
     {
-        $sql = "SELECT * FROM policies WHERE id = ?";
+        $sql = "SELECT policies.*, tours.name as tour_name 
+                FROM `policies` 
+                LEFT JOIN `tours` ON policies.tour_id = tours.id
+                WHERE policies.id = '$id'";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$id]);
-
-        return $stmt->fetch();
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // ===========================
-    // TẠO MỚI CHÍNH SÁCH
-    // ===========================
     public function createPolicy($tour_id, $policy_type, $content)
     {
-        $sql = "INSERT INTO policies (tour_id, policy_type, content)
-                VALUES (?, ?, ?)";
-
+        $sql = "INSERT INTO policies (tour_id, policy_type, content) 
+                VALUES ('$tour_id', '$policy_type', '$content')";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$tour_id, $policy_type, $content]);
+        return $stmt->execute();
     }
 
-    // ===========================
-    // CẬP NHẬT CHÍNH SÁCH
-    // ===========================
     public function updatePolicy($id, $tour_id, $policy_type, $content)
     {
         $sql = "UPDATE policies 
-                SET tour_id = ?, policy_type = ?, content = ?
-                WHERE id = ?";
-
+                SET tour_id = '$tour_id', policy_type = '$policy_type', content = '$content'
+                WHERE id = '$id'";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$tour_id, $policy_type, $content, $id]);
+        return $stmt->execute();
     }
 
-    // ===========================
-    // XÓA CHÍNH SÁCH
-    // ===========================
     public function deletePolicy($id)
     {
-        $sql = "DELETE FROM policies WHERE id = ?";
+        $sql = "DELETE FROM policies WHERE id = '$id'";
         $stmt = $this->conn->prepare($sql);
-
-        return $stmt->execute([$id]);
+        return $stmt->execute();
     }
 }
