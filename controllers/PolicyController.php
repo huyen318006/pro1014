@@ -18,7 +18,7 @@ class PolicyController
         $policies = $this->modelPolicy->getAllPolicies();
         $tours    = $this->modelTour->getAllTours();
 
-        require_once './views/admin/policies/list.php';
+        require_once './views/admin/policy/list.php';
     }
 
     // ===========================
@@ -27,7 +27,7 @@ class PolicyController
     public function create()
     {
         $tours = $this->modelTour->getAllTours();
-        require_once './views/admin/policies/create.php';
+        require_once './views/admin/policy/create.php';
     }
 
     // ===========================
@@ -62,7 +62,7 @@ class PolicyController
         $policy = $this->modelPolicy->getPolicyById($id);
         $tours = $this->modelTour->getAllTours();
 
-        require_once './views/admin/policies/edit.php';
+        require_once './views/admin/policy/edit.php';
     }
 
     // ===========================
