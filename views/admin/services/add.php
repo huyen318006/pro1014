@@ -96,7 +96,7 @@
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
 
-            ```
+
             <div class="row g-4">
               <!-- Chuyến đi -->
               <div class="col-lg-12">
@@ -156,7 +156,6 @@
                 <i class="fas fa-plus-circle"></i> Thêm Dịch vụ
               </button>
             </div>
-            ```
 
           </form>
           <?php unset($_SESSION['old']); ?>
