@@ -11,6 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/policy.css">
 </head>
 
 <body>
@@ -21,9 +22,9 @@
             <i class="fas fa-user-shield"></i>
         </div>
         <h4>ADMIN</h4>
-        <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+        <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
         <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
-        <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
+        <a href="index.php?act=listTours" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
         <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
         <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
         <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
@@ -52,7 +53,7 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h2 class="mb-3">
-                                <i class="fas fa-map-marked-alt text-primary"></i>
+                                <i class="fas fa-map-marked-alt"></i>
                                 <?= $tour['name'] ?>
                             </h2>
                             <div class="mb-2">
@@ -189,6 +190,21 @@
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td class="bg-light">
+                                                <strong><i class="fas fa-scroll text-warning"></i> Loại chính sách</strong>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($tour['policy_type'])): ?>
+                                                    <span class="badge policy-type-badge badge-chung">
+                                                        <?= htmlspecialchars($tour['policy_type']) ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Chưa có chính sách</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                       
                                     </tbody>
                                 </table>
                             </div>
