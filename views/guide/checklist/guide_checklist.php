@@ -26,7 +26,7 @@
     <a href="<?= BASE_URL.'?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
     <a href="<?= BASE_URL.'?act=MyTour' ?>" class="active"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
     <a href="guideDiary.php"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
-    <a href="guideReport.php"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
+    <a href="<?= BASE_URL.'?act=incident'?>"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
     <a href="<?= BASE_URL.'?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
 </div>
 
