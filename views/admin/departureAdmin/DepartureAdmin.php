@@ -80,14 +80,28 @@
                             <td><?= number_format($departure['tour_price'] ?? 0, 0, ',', '.') . ' VND' ?></td>
                             <td><?= $departure['note'] ?></td>
                             <td><?= $departure['status'] ?></td>
+                            <!-- Phầm kiểm tra trạng thái  xem nếu trạng thái danh sách lịch trình nếu đã sẵn sàng xuất phát  thì ko thể xóa -->
                             <td>
-                                <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $departure['id'] ?>"><i class="fas fa-edit" title="Sửa lịch khởi hành"></i></a>
-                                <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa lịch khởi hành này không?')">
-                                    <i class="fas fa-trash" title="Xóa"></i>
-                                </a>
-
+                                <?php if ($departure['status'] !== 'ready'): ?>
+                                    <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $departure['id'] ?>">
+                                        <i class="fas fa-edit" title="Sửa lịch khởi hành"></i>
+                                    </a>
+                                    <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa lịch khởi hành này không?')">
+                                        <i class="fas fa-trash" title="Xóa"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <!-- Khi trạng thái là ready, dùng onclick alert -->
+                                    <a href="javascript:void(0);" onclick="alert('Không thể sửa khi trạng thái tour đã  Ready!');">
+                                        <i class="fas fa-edit text-secondary" title="Không thể sửa"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="alert('Không thể xóa khi trạng thái tour đã Ready!');">
+                                        <i class="fas fa-trash text-secondary" title="Không thể xóa"></i>
+                                    </a>
+                                <?php endif; ?>
                             </td>
+
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

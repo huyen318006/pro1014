@@ -58,12 +58,13 @@
                         <th>Password</th>
                         <th>Địa chỉ</th>
                         <th>Số điện thoại</th>
-                        <th>Role</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($users as $user): ?>
+                        <!-- kiểm tra nếu tôi thấy role là admin thì dùng continue để bỏ qua  nó và chuyển sang vòng lặp tiếp theo trong danh sách -->
+                        <?php if ($user['role'] === 'admin') continue; ?> <!-- Bỏ qua admin -->
                         <tr>
                             <td><?php echo $user['id']; ?></td>
                             <td><?php echo htmlspecialchars($user['fullname']); ?></td>
@@ -71,15 +72,6 @@
                             <td><span class="masked-password">********</span></td>
                             <td><?php echo htmlspecialchars($user['address'] ?? ''); ?></td>
                             <td><?= $user['phone'] ?></td>
-                            <td>
-                                <form method="post" action="?act=change_role" style="margin:0;">
-                                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-                                    <select name="role" onchange="this.form.submit()">
-                                        <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
-                                        <option value="guide" <?php if ($user['role'] == 'guide') echo 'selected'; ?>>Guide</option>
-                                    </select>
-                                </form>
-                            </td>
                             <td>
                                 <?php if ($user['status'] == 0): ?>
                                     <span class="status locked">Đã khóa</span>
