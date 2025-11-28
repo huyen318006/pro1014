@@ -156,6 +156,11 @@ match ($act) {
   'policiesDelete'  => (new PolicyController())->delete($_GET['id'] ?? 0),
 
 
+  //------------------chức năng booking----------
+  'booking' => (new BookingController())->booking(),
+  'bookingassig' => (new BookingController())->bookingassig(),
+  'addbooking' => (new BookingController())->addbooking(),
+
   // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
   default => (new UsersController())->Login(),
 };
