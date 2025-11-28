@@ -29,6 +29,7 @@ class Departures {
                 tours.name AS tour_name, 
                 tours.price AS tour_price,
                 tours.duration_days AS duration_days,
+                tours.image AS image,
                 users.fullname AS guide_name
             FROM departures
             JOIN tours ON tours.id = departures.tour_id
@@ -127,6 +128,44 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    ////////////////////////--------------phần model lấy cho booking controller-------////////////////////
+    function departureandbooking($id) {
+        $sql = "SELECT departures.*, tours.name AS tour_name, tours.price as tour_price, tours.image as tour_image
+        FROM departures inner join tours on departures.tour_id=tours.id  
+        WHERE departures.id=:id
+        ";
+        $stmt= $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    //cập nhật số ghế khi mà đã đặt xong  booking
+    public function updateSeats($departure_id, $quantity_booked)
+    {
+        // Lấy số vé còn hiện tại
+        $sql = "SELECT max_participants FROM departures WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $departure_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $newSeats = $row['max_participants'] - $quantity_booked;
+
+            if ($newSeats < 0) {
+                $newSeats = 0; // tránh số âm
+            }
+
+            // Cập nhật số vé còn lại
+            $sqlUpdate = "UPDATE departures SET max_participants = :newSeats WHERE id = :id";
+            $stmtUpdate = $this->conn->prepare($sqlUpdate);
+            $stmtUpdate->execute([
+                ':newSeats' => $newSeats,
+                ':id' => $departure_id
+            ]);
+        }
     }
 }
 ?>

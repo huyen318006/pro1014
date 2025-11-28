@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Quản lý Chính sách Tour | LOFT CITY</title>
@@ -13,22 +14,26 @@
   <link rel="stylesheet" href="<?= BASE_URL ?>asset/css/trangchu.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>asset/css/policy.css">
 </head>
+
 <body>
 
   <!-- ========== SIDEBAR - ĐÃ SỬA LINK ĐÚNG + ACTIVE ========== -->
   <div class="sidebar">
-    <div class="logo"><i class="fas fa-user-shield"></i></div>
+    <div class="logo">
+      <i class="fas fa-user-shield"></i>
+    </div>
     <h4>ADMIN</h4>
-    <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
     <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
     <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
     <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
-    <a href="index.php?act=policies" class="active"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
+    <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
     <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
     <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-    <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="<?= BASE_URL . '?act=booking'  ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
+    <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>>
   </div>
 
   <!-- ========== HEADER ========== -->
@@ -45,16 +50,18 @@
     <div class="container-fluid mt-4">
 
       <!-- Thông báo -->
-      <?php if(isset($_SESSION['success'])): ?>
+      <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show">
-          <i class="fas fa-check-circle"></i> <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+          <i class="fas fa-check-circle"></i> <?= $_SESSION['success'];
+                                              unset($_SESSION['success']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
 
-      <?php if(isset($_SESSION['error'])): ?>
+      <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show">
-          <i class="fas fa-exclamation-circle"></i> <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+          <i class="fas fa-exclamation-circle"></i> <?= $_SESSION['error'];
+                                                    unset($_SESSION['error']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
@@ -81,7 +88,7 @@
               </tr>
             </thead>
             <tbody>
-              <?php if(empty($policies)): ?>
+              <?php if (empty($policies)): ?>
                 <tr>
                   <td colspan="5" class="text-center py-5 text-muted">
                     <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
@@ -89,7 +96,7 @@
                   </td>
                 </tr>
               <?php else: ?>
-                <?php foreach($policies as $p): ?>
+                <?php foreach ($policies as $p): ?>
                   <tr>
                     <td class="text-center fw-bold">#<?= $p['id'] ?></td>
                     <td><strong><?= htmlspecialchars($p['tour_name'] ?? 'Chưa xác định') ?></strong></td>
@@ -102,13 +109,13 @@
                       <?= htmlspecialchars(mb_substr(strip_tags($p['content']), 0, 100)) ?>...
                     </td>
                     <td class="text-center">
-                      <a href="<?= BASE_URL ?>?act=policiesEdit&id=<?= $p['id'] ?>" 
-                         class="btn btn-policy-edit btn-sm" title="Sửa">
+                      <a href="<?= BASE_URL ?>?act=policiesEdit&id=<?= $p['id'] ?>"
+                        class="btn btn-policy-edit btn-sm" title="Sửa">
                         <i class="fas fa-edit"></i>
                       </a>
-                      <a href="<?= BASE_URL ?>?act=policiesDelete&id=<?= $p['id'] ?>" 
-                         class="btn btn-policy-delete btn-sm" title="Xóa"
-                         onclick="return confirm('Xóa chính sách này?\nHành động không thể hoàn tác!')">
+                      <a href="<?= BASE_URL ?>?act=policiesDelete&id=<?= $p['id'] ?>"
+                        class="btn btn-policy-delete btn-sm" title="Xóa"
+                        onclick="return confirm('Xóa chính sách này?\nHành động không thể hoàn tác!')">
                         <i class="fas fa-trash-alt"></i>
                       </a>
                     </td>
@@ -125,4 +132,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
