@@ -57,9 +57,6 @@ $act = 'services';
           <i class="fas fa-concierge-bell"></i> Quản lý Dịch vụ đi kèm
           <small class="text-muted d-block fs-6">Khách sạn • Xe đưa đón • Nhà hàng • Vé tham quan...</small>
         </h2>
-        <a href="index.php?act=servicesCreate" class="btn btn-success btn-lg shadow">
-          <i class="fas fa-plus-circle"></i> Thêm Dịch vụ
-        </a>
       </div>
 
       <!-- Thông báo -->
@@ -86,18 +83,16 @@ $act = 'services';
               <thead class="table-primary">
                 <tr>
                   <th width="5%">#ID</th>
-                  <th width="25%">Chuyến đi</th>
-                  <th width="15%">Loại dịch vụ</th>
-                  <th width="20%">Đối tác</th>
-                  <th width="10%">Trạng thái</th>
-                  <th>Ghi chú</th>
-                  <th width="10%">Hành động</th>
+                  <th width="35%">Chuyến đi</th>
+                  <th width="30%">Dịch vụ</th>
+                  <th width="8%">Hành động</th>
                 </tr>
               </thead>
+
               <tbody>
                 <?php if (!empty($services)): ?>
                   <?php foreach ($services as $s): ?>
-                    <tr class="<?= $s['status'] == 'confirmed' ? 'status-confirmed' : ($s['status'] == 'pending' ? 'status-pending' : 'status-cancelled') ?>">
+                    <tr>
                       <td class="fw-bold"><?= $s['id'] ?></td>
 
                       <td>
@@ -115,44 +110,25 @@ $act = 'services';
                       </td>
 
                       <td>
-                        <span class="badge bg-info fs-6">
-                          <?= ucfirst($s['service_name']) ?>
-                        </span>
-                      </td>
+                        <a href="index.php?act=servicesCreate" class="btn btn-success btn-lg shadow">
+                          <i class="fas fa-plus-circle"></i>Dịch vụ
+                        </a>
 
-                      <td class="fw-bold"><?= $s['partner_name'] ?></td>
+                      </td>
 
                       <td>
-                        <?php
-                        $statusClass = $s['status'] == 'confirmed' ? 'success' : ($s['status'] == 'pending' ? 'warning' : 'danger');
-                        $statusText  = $s['status'] == 'confirmed' ? 'Đã xác nhận' : ($s['status'] == 'pending' ? 'Chờ xử lý' : 'Đã hủy');
-                        ?>
-                        <span class="badge bg-<?= $statusClass ?> fs-6">
-                          <?= $statusText ?>
-                        </span>
+                        <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>"
+                          class="btn btn-sm btn-warning" title="Sửa">
+                          <i class="fas fa-edit"></i>
+                        </a>
                       </td>
 
-                      <td><small><?= nl2br($s['note'] ?? '-') ?></small></td>
-
-                      <td>
-                        <div class="btn-group" role="group">
-                          <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>"
-                            class="btn btn-sm btn-warning" title="Sửa">
-                            <i class="fas fa-edit"></i>
-                          </a>
-                          <a href="index.php?act=servicesDelete&id=<?= $s['id'] ?>" 
-                             class="btn btn-sm btn-danger" 
-                             onclick="return confirm('Xóa dịch vụ này?\n\nĐối tác: <?= htmlspecialchars($s['partner_name']) ?>');"
-                             title="Xóa">
-                            <i class="fas fa-trash"></i>
-                          </a>
-                        </div>
-                      </td>
                     </tr>
                   <?php endforeach; ?>
+
                 <?php else: ?>
                   <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="4" class="text-center py-5 text-muted">
                       <i class="fas fa-inbox fa-3x mb-3"></i><br>
                       Chưa có dịch vụ nào được thêm
                     </td>
@@ -160,6 +136,7 @@ $act = 'services';
                 <?php endif; ?>
               </tbody>
             </table>
+
           </div>
         </div>
       </div>

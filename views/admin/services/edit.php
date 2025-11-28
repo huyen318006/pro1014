@@ -5,13 +5,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
-// Trạng thái hợp lệ
-$allowedStatus = ['pending','confirmed','cancelled'];
-$currentStatus = $_SESSION['old']['status'] ?? $service['status'] ?? 'pending';
-if (!in_array($currentStatus, $allowedStatus)) {
-    $currentStatus = 'pending';
-}
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +59,6 @@ if (!in_array($currentStatus, $allowedStatus)) {
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-primary">
       <i class="fas fa-edit"></i> Chỉnh sửa Dịch vụ đi kèm
-      <small class="text-muted d-block fs-5">ID: #<?= $service['id'] ?? '' ?> • <?= $service['service_name'] ?? '' ?></small>
     </h2>
     <a href="index.php?act=services" class="btn btn-secondary btn-lg">
       <i class="fas fa-arrow-left"></i> Quay lại danh sách
@@ -77,23 +69,20 @@ if (!in_array($currentStatus, $allowedStatus)) {
 
   <?php if(isset($_SESSION['success'])): ?>
 
-```
 <div class="alert alert-success alert-dismissible fade show">
   <?= $_SESSION['success']; unset($_SESSION['success']); ?>
   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
-```
+
 
   <?php endif; ?>
 
   <?php if(isset($_SESSION['error'])): ?>
 
-```
 <div class="alert alert-danger alert-dismissible fade show">
   <?= $_SESSION['error']; unset($_SESSION['error']); ?>
   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
-```
 
   <?php endif; ?>
 
@@ -103,13 +92,12 @@ if (!in_array($currentStatus, $allowedStatus)) {
         <input type="hidden" name="id" value="<?= $service['id'] ?>">
         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
-```
     <div class="row g-4">
         <!-- Chuyến đi -->
         <div class="col-lg-12">
             <label class="form-label fw-bold"><i class="fas fa-route"></i> Chuyến đi <span class="text-danger">*</span></label>
             <select name="departure_id" class="form-select form-select-lg" required>
-                <option value="">-- Chọn chuyến đi --</option>
+                <option value="">-- Chuyến đi --</option>
                 <?php foreach($departures as $d): 
                     $selected = ($d['id'] == ($_SESSION['old']['departure_id'] ?? $service['departure_id'] ?? '')) ? 'selected' : '';
                     $display = $d['tour_name'] ?? 'Tour ID: '.$d['tour_id'];
@@ -167,7 +155,6 @@ if (!in_array($currentStatus, $allowedStatus)) {
   </form>
   <?php unset($_SESSION['old']); ?>
 </div>
-```
 
   </div>
 
