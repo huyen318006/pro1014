@@ -21,18 +21,18 @@
             <i class="fas fa-user-shield"></i>
         </div>
         <h4>ADMIN</h4>
-        <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+        <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
         <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
         <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
-        <a href="index.php?act=listItinerary" class="active"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
+        <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
         <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
         <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
         <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
         <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
         <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+        <a href="<?= BASE_URL . '?act=booking'  ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
         <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
     </div>
-
     <!-- Header -->
     <div class="header">
         <h5><i class="fas fa-cogs"></i> Bảng điều khiển lịch trình</h5>
@@ -99,10 +99,17 @@
 
                             <!-- Title -->
                             <div class="form-group mb-3">
-                                <label for="title" class="form-label">Tiêu đề ngày <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="<?= $title ?? '' ?>"
-                                    placeholder="VD: Khởi hành đến Đà Nẵng" maxlength="255" required>
+                                <label for="title" class="form-label">Lịch trình trong ngày <span class="text-danger">*</span></label>
+                                <select class="form-select" id="title" name="title" required>
+                                    <option value="">-- Chọn ngày --</option>
+                                    <option value="Ngày 1" <?= (isset($title) && $title == 'Ngày 1') ? 'selected' : '' ?>>Ngày 1</option>
+                                    <option value="Ngày 2" <?= (isset($title) && $title == 'Ngày 2') ? 'selected' : '' ?>>Ngày 2</option>
+                                    <option value="Ngày 3" <?= (isset($title) && $title == 'Ngày 3') ? 'selected' : '' ?>>Ngày 3</option>
+                                    <option value="Ngày 4" <?= (isset($title) && $title == 'Ngày 4') ? 'selected' : '' ?>>Ngày 4</option>
+                                    <option value="Ngày 5" <?= (isset($title) && $title == 'Ngày 5') ? 'selected' : '' ?>>Ngày 5</option>
+                                    <option value="Ngày 6" <?= (isset($title) && $title == 'Ngày 6') ? 'selected' : '' ?>>Ngày 6</option>
+                                    <option value="Ngày 7" <?= (isset($title) && $title == 'Ngày 7') ? 'selected' : '' ?>>Ngày 7</option>
+                                </select>
                             </div>
                             <!-- Activities -->
                             <div class="form-group mb-3">
