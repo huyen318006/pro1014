@@ -34,7 +34,7 @@
       <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
       <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
       <a href="<?= BASE_URL . '?act=booking'  ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
-      <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>>
+      <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
     </div>
     <!-- Header -->
 
@@ -81,18 +81,7 @@
         </form>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Tour</label>
-        <select name="departure_id" class="form-select" required>
-          <?php foreach ($departures as $d): ?>
-            <option value="<?= $d['id'] ?>">
-              <?= htmlspecialchars($d['tour_name']) ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-add">Phân công</button>
+     
     </form>
   </div>
 </div>
