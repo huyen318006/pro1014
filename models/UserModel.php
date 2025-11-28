@@ -95,7 +95,17 @@ class UserModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+   public function getAssignmentsByGuide($guide_id)
+{
+    $sql = "SELECT a.id, d.tour_id, t.name AS tour_name, a.departure_id
+            FROM assignments a
+            JOIN departures d ON a.departure_id = d.id
+            JOIN tours t ON d.tour_id = t.id
+            WHERE a.guide_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$guide_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     // Lấy 1 phân công theo id
     public function getAssignmentById($id)
     {
