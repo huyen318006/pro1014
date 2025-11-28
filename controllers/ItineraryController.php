@@ -21,7 +21,7 @@ class ItineraryController
     {
         $modelTour = new TourModel();
         $tours = $modelTour->getAllTours();
-        
+
         $errors = [];
         $tour_id = '';
         $day_number = '';
@@ -36,28 +36,33 @@ class ItineraryController
             $activities = $_POST['activities'] ?? '';
             $notes = $_POST['notes'] ?? '';
 
-            $data = [
-                ':tour_id' => $tour_id,
-                ':day_number' => $day_number,
-                ':title' => $title,
-                ':activities' => $activities,
-                ':notes' => $notes,
-            ];
+            // Kiểm tra trùng lặp ngày trong cùng tour
+            if ($this->modelItinerary->checkDuplicateDay($tour_id, $title)) {
+                $_SESSION['error'] = "Lịch trình '{$title}' đã tồn tại trong tour này. Vui lòng chọn ngày khác.";
+            } else {
+                $data = [
+                    ':tour_id' => $tour_id,
+                    ':day_number' => $day_number,
+                    ':title' => $title,
+                    ':activities' => $activities,
+                    ':notes' => $notes,
+                ];
 
-            try {
-                $result = $this->modelItinerary->addItinerary($data);
-                if ($result) {
-                    $_SESSION['success'] = 'Thêm lịch trình thành công';
-                    header('Location: ' . BASE_URL . '?act=listItinerary');
-                    exit();
-                } else {
-                    $_SESSION['error'] = 'Thêm lịch trình thất bại';
-                }
-            } catch (PDOException $e) {
-                if ($e->getCode() == 23000) {
-                    $_SESSION['error'] = 'Mã tour không tồn tại. Vui lòng chọn tour hợp lệ.';
-                } else {
-                    $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
+                try {
+                    $result = $this->modelItinerary->addItinerary($data);
+                    if ($result) {
+                        $_SESSION['success'] = 'Thêm lịch trình thành công';
+                        header('Location: ' . BASE_URL . '?act=listItinerary');
+                        exit();
+                    } else {
+                        $_SESSION['error'] = 'Thêm lịch trình thất bại';
+                    }
+                } catch (PDOException $e) {
+                    if ($e->getCode() == 23000) {
+                        $_SESSION['error'] = 'Mã tour không tồn tại. Vui lòng chọn tour hợp lệ.';
+                    } else {
+                        $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
+                    }
                 }
             }
         }
@@ -70,7 +75,7 @@ class ItineraryController
     {
         $modelTour = new TourModel();
         $tours = $modelTour->getAllTours();
-        
+
         $errors = [];
         $itinerary = $this->modelItinerary->getItineraryById($id);
 
@@ -99,29 +104,34 @@ class ItineraryController
             $activities = $_POST['activities'] ?? '';
             $notes = $_POST['notes'] ?? '';
 
-            $data = [
-                ':id' => $id,
-                ':tour_id' => $tour_id,
-                ':day_number' => $day_number,
-                ':title' => $title,
-                ':activities' => $activities,
-                ':notes' => $notes,
-            ];
+            // Kiểm tra trùng lặp ngày trong cùng tour (loại trừ chính nó)
+            if ($this->modelItinerary->checkDuplicateDay($tour_id, $title, $id)) {
+                $_SESSION['error'] = "Lịch trình '{$title}' đã tồn tại trong tour này. Vui lòng chọn ngày khác.";
+            } else {
+                $data = [
+                    ':id' => $id,
+                    ':tour_id' => $tour_id,
+                    ':day_number' => $day_number,
+                    ':title' => $title,
+                    ':activities' => $activities,
+                    ':notes' => $notes,
+                ];
 
-            try {
-                $result = $this->modelItinerary->editItinerary($data);
-                if ($result) {
-                    $_SESSION['success'] = 'Sửa lịch trình thành công';
-                    header('Location: ' . BASE_URL . '?act=listItinerary');
-                    exit();
-                } else {
-                    $_SESSION['error'] = 'Sửa lịch trình thất bại';
-                }
-            } catch (PDOException $e) {
-                if ($e->getCode() == 23000) {
-                    $_SESSION['error'] = 'Mã tour không tồn tại. Vui lòng chọn tour hợp lệ.';
-                } else {
-                    $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
+                try {
+                    $result = $this->modelItinerary->editItinerary($data);
+                    if ($result) {
+                        $_SESSION['success'] = 'Sửa lịch trình thành công';
+                        header('Location: ' . BASE_URL . '?act=listItinerary');
+                        exit();
+                    } else {
+                        $_SESSION['error'] = 'Sửa lịch trình thất bại';
+                    }
+                } catch (PDOException $e) {
+                    if ($e->getCode() == 23000) {
+                        $_SESSION['error'] = 'Mã tour không tồn tại. Vui lòng chọn tour hợp lệ.';
+                    } else {
+                        $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
+                    }
                 }
             }
         }
@@ -157,26 +167,29 @@ class ItineraryController
     }
 
     /////////////////////////////////////////        phần hiển thị chi tiết lịch trình      /////////////////////////////////////////
-    public function detailItinerary($id)
+    public function detailItinerary($tourId)
     {
-        $itinerary = $this->modelItinerary->getItineraryById($id);
+        // Lấy tất cả lịch trình của tour
+        $itineraries = $this->modelItinerary->getItinerariesByTourId($tourId);
 
-        if (!$itinerary) {
-            $_SESSION['error'] = 'Lịch trình không tồn tại';
+        if (empty($itineraries)) {
+            $_SESSION['error'] = 'Tour này chưa có lịch trình nào';
             header('Location: ' . BASE_URL . '?act=listItinerary');
             exit();
         }
 
-        $isLocked = !empty($itinerary['has_ready_departure']);
+        // Lấy thông tin tour từ lịch trình đầu tiên
+        $firstItinerary = $itineraries[0];
+        $isLocked = !empty($firstItinerary['has_ready_departure']);
 
         $tour = null;
-        if (!empty($itinerary['tour_id'])) {
+        if (!empty($firstItinerary['tour_id'])) {
             $modelTour = new TourModel();
-            $tour = $modelTour->getTourById($itinerary['tour_id']);
+            $tour = $modelTour->getTourById($firstItinerary['tour_id']);
         }
 
         require_once BASE_URL_VIEWS . 'admin/itinerary/detail.php';
-    }   
+    }
 
     /////////////////////////////////////////        phần sửa lịch trình      ////////////////////////////////////////
 }

@@ -99,10 +99,17 @@
 
                             <!-- Title -->
                             <div class="form-group mb-3">
-                                <label for="title" class="form-label">Tiêu đề ngày <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="<?= $title ?? '' ?>"
-                                    placeholder="VD: Khởi hành đến Đà Nẵng" maxlength="255" required>
+                                <label for="title" class="form-label">Lịch trình trong ngày <span class="text-danger">*</span></label>
+                                <select class="form-select" id="title" name="title" required>
+                                    <option value="">-- Chọn ngày --</option>
+                                    <option value="Ngày 1" <?= (isset($title) && $title == 'Ngày 1') ? 'selected' : '' ?>>Ngày 1</option>
+                                    <option value="Ngày 2" <?= (isset($title) && $title == 'Ngày 2') ? 'selected' : '' ?>>Ngày 2</option>
+                                    <option value="Ngày 3" <?= (isset($title) && $title == 'Ngày 3') ? 'selected' : '' ?>>Ngày 3</option>
+                                    <option value="Ngày 4" <?= (isset($title) && $title == 'Ngày 4') ? 'selected' : '' ?>>Ngày 4</option>
+                                    <option value="Ngày 5" <?= (isset($title) && $title == 'Ngày 5') ? 'selected' : '' ?>>Ngày 5</option>
+                                    <option value="Ngày 6" <?= (isset($title) && $title == 'Ngày 6') ? 'selected' : '' ?>>Ngày 6</option>
+                                    <option value="Ngày 7" <?= (isset($title) && $title == 'Ngày 7') ? 'selected' : '' ?>>Ngày 7</option>
+                                </select>
                             </div>
                             <!-- Activities -->
                             <div class="form-group mb-3">
