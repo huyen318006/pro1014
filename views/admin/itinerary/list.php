@@ -24,13 +24,13 @@
     <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
-    <a href="index.php?act=listItinerary" class="active"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Lịch Trình</span></a>
-    <a href="?act=listAssignments"><i class="fas fa-map-marked-alt"></i> <span>Phân công HDV</span></a>
-    <a href="index.php?act=services" class="active"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
-    <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
-    <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
-    <a href=""><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-    <a href="index.php?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="index.php?act=listItinerary" class="active"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
+    <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
+    <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
+    <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
+    <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
+    <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+    <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 
   <!-- Header -->
@@ -54,28 +54,66 @@
           <table class="table table-hover align-middle mb-0">
             <thead>
               <tr>
-                <th>Mã Tour</th>
-                <th>Ngày Đi</th>
-                <th>Tiêu đề</th>
-                <th>Hoạt động</th>
-                <th>Ghi chú</th>
-                <th>Hành động</th>
+                <th>Tên Tour</th>
+                <th>Ảnh Tour</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($itineraries as $item) { ?>
+              <?php if (!empty($itineraries)): ?>
+                <?php foreach ($itineraries as $item): 
+                  $isLocked = !empty($item['has_ready_departure']);
+                ?>
+                  <tr>
+                    <td>
+                      <strong><?= htmlspecialchars($item["tour_name"] ?? 'Không xác định') ?></strong>
+                      <?php if (!empty($item['tour_code'])): ?>
+                        <div class="text-muted small">Mã tour: <?= htmlspecialchars($item["tour_code"]) ?></div>
+                      <?php endif; ?>
+                      <?php if ($isLocked): ?>
+                        <span class="badge bg-warning text-dark mt-2">Có tour READY</span>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <?php if (!empty($item["tour_image"])): ?>
+                        <img src="<?= BASE_URL . 'uploads/' . basename($item["tour_image"]) ?>"
+                             alt="<?= htmlspecialchars($item["tour_name"] ?? 'Tour') ?>"
+                             class="img-thumbnail"
+                             style="width: 160px; height: 120px; object-fit: cover;">
+                      <?php else: ?>
+                        <div class="bg-light text-muted d-flex align-items-center justify-content-center rounded"
+                             style="width: 160px; height: 120px;">
+                          Chưa có ảnh
+                        </div>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <a href="index.php?act=detailItinerary&id=<?= $item["id"] ?>" class="btn btn-info btn-action" title="Xem chi tiết">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <?php if ($isLocked): ?>
+                        <button type="button" class="btn btn-secondary btn-action" disabled title="Tour READY nên không thể sửa">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-action" disabled title="Tour READY nên không thể xoá">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      <?php else: ?>
+                        <a href="index.php?act=editItinerary&id=<?= $item["id"] ?>" class="btn btn-primary btn-action" title="Chỉnh sửa">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="index.php?act=deleteItinerary&id=<?= $item["id"] ?>" class="btn btn-danger btn-action" title="Xoá" onclick="return confirm('Bạn có chắc muốn xoá lịch trình này?');">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      <?php endif; ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
                 <tr>
-                  <td><?= $item["tour_id"] ?></td>
-                  <td><?= $item["day_number"] ?></td>
-                  <td><?= $item["title"] ?></td>
-                  <td><?= $item["activities"] ?></td>
-                  <td><?= $item["notes"] ?></td>
-                  <td>
-                    <a href="index.php?act=editItinerary&id=<?= $item["id"] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                    <a href="index.php?act=deleteItinerary&id=<?= $item["id"] ?>" class="btn btn-danger btn-action"><i class="fas fa-trash"></i></a>
-                  </td>
+                  <td colspan="3" class="text-center text-muted py-4">Chưa có lịch trình nào</td>
                 </tr>
-              <?php } ?>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>

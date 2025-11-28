@@ -79,6 +79,8 @@ match ($act) {
 
     'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
+    'detailItinerary' => (new ItineraryController())->detailItinerary($_GET['id'] ?? 0),
+
     // Quản lý phân công hướng dẫn viên
     'listAssignments' => (new AssignmentController())->index(),
     'createAssignment' => (new AssignmentController())->create(),
@@ -116,14 +118,6 @@ match ($act) {
                 'block_user'=>(new UsersController())->block_user(),
                 //mở khóa tài khoản
                 'open_user'=> (new UsersController())->open_user(),
-
-    //Quản lí dịch vụ
-    'services' => (new ServicesController())->index(),
-    'servicesCreate' => (new ServicesController())->create(),
-    'servicesStore' => (new ServicesController())->store(),
-    'servicesEdit' => (new ServicesController())->edit(),
-    'servicesUpdate' => (new ServicesController())->update(),
-    'servicesDelete' => (new ServicesController())->delete(),
     //checklist cho admin và guide
     'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
     'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),

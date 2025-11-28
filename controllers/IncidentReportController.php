@@ -1,15 +1,20 @@
 <?php
-class IncidentReportController {
+class IncidentReportController
+{
     private $model;
     private $userModel;
+    private $tourModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new IncidentReportModel();
         $this->userModel = new UserModel();
+        $this->tourModel = new TourModel();
     }
 
     // HDV tạo báo cáo
-    public function create() {
+    public function create()
+    {
         // Lấy danh sách assignment + guide
         $assignments = $this->userModel->getAllAssignments();
 
@@ -33,17 +38,18 @@ class IncidentReportController {
     }
 
     // Admin: danh sách báo cáo
-    public function index() {
+    public function index()
+    {
         $reports = $this->model->getAll();
         require './views/admin/incident/index.php';
     }
 
     // Admin: xóa báo cáo
-    public function delete() {
+    public function delete()
+    {
         $id = $_GET['id'] ?? 0;
         $this->model->delete($id);
         header("Location: ?act=incidents");
         exit;
     }
 }
-?>
