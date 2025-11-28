@@ -37,7 +37,7 @@
   <!-- Header -->
   <div class="header">
     <h5><i class="fas fa-cogs"></i> Bảng điều khiển lịch trình</h5>
-    <div class="user- info">
+    <div class="user-info">
       <i class="fas fa-user-circle"></i>
       <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
     </div>
@@ -57,12 +57,13 @@
               <tr>
                 <th>Tên Tour</th>
                 <th>Ảnh Tour</th>
+                <th>Số lịch trình</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
               <?php if (!empty($itineraries)): ?>
-                <?php foreach ($itineraries as $item): 
+                <?php foreach ($itineraries as $item):
                   $isLocked = !empty($item['has_ready_departure']);
                 ?>
                   <tr>
@@ -78,49 +79,40 @@
                     <td>
                       <?php if (!empty($item["tour_image"])): ?>
                         <img src="<?= BASE_URL . 'uploads/' . basename($item["tour_image"]) ?>"
-                             alt="<?= htmlspecialchars($item["tour_name"] ?? 'Tour') ?>"
-                             class="img-thumbnail"
-                             style="width: 160px; height: 120px; object-fit: cover;">
+                          alt="<?= htmlspecialchars($item["tour_name"] ?? 'Tour') ?>"
+                          class="img-thumbnail"
+                          style="width: 160px; height: 120px; object-fit: cover;">
                       <?php else: ?>
                         <div class="bg-light text-muted d-flex align-items-center justify-content-center rounded"
-                             style="width: 160px; height: 120px;">
+                          style="width: 160px; height: 120px;">
                           Chưa có ảnh
                         </div>
                       <?php endif; ?>
                     </td>
                     <td>
-                      <a href="index.php?act=detailItinerary&id=<?= $item["id"] ?>" class="btn btn-info btn-action" title="Xem chi tiết">
+                      <span class="badge bg-info"><?= $item['itinerary_count'] ?? 0 ?> lịch trình</span>
+                    </td>
+                    <td>
+                      <a href="index.php?act=detailItinerary&tour_id=<?= $item["tour_id"] ?>" class="btn btn-info btn-action" title="Xem chi tiết">
                         <i class="fas fa-eye"></i>
                       </a>
-                      <?php if ($isLocked): ?>
-                        <button type="button" class="btn btn-secondary btn-action" disabled title="Tour READY nên không thể sửa">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-action" disabled title="Tour READY nên không thể xoá">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      <?php else: ?>
-                        <a href="index.php?act=editItinerary&id=<?= $item["id"] ?>" class="btn btn-primary btn-action" title="Chỉnh sửa">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="index.php?act=deleteItinerary&id=<?= $item["id"] ?>" class="btn btn-danger btn-action" title="Xoá" onclick="return confirm('Bạn có chắc muốn xoá lịch trình này?');">
-                          <i class="fas fa-trash"></i>
-                        </a>
-                      <?php endif; ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="3" class="text-center text-muted py-4">Chưa có lịch trình nào</td>
+                  <td colspan="4" class="text-center text-muted py-4">Chưa có lịch trình nào</td>
                 </tr>
               <?php endif; ?>
             </tbody>
           </table>
         </div>
       </div>
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

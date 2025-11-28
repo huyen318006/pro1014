@@ -25,10 +25,10 @@
         <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
         <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
         <a href="index.php?act=listItinerary" class="active"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
-        <a href="?act=listAssignments"><i class="fas fa-map-marked-alt"></i> <span>Phân công HDV</span></a>
+        <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
         <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
-        <a href="#"><i class="fas fa-shopping-cart"></i> <span>Quản lý đơn đặt</span></a>
-        <a href="#"><i class="fas fa-comments"></i> <span>Quản lý bình luận</span></a>
+        <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
+        <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
         <a href="<?= BASE_URL . '?act=DepartureAdmin'  ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
         <a href="index.php?act=logout"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
     </div>
@@ -36,7 +36,7 @@
     <!-- Header -->
     <div class="header">
         <h5><i class="fas fa-cogs"></i> Bảng điều khiển lịch trình</h5>
-        <div class="user- info">
+        <div class="user-info">
             <i class="fas fa-user-circle"></i>
             <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
         </div>
@@ -46,17 +46,11 @@
     <div class="content">
         <div class="container-fluid">
 
-            <?php
-                $dayLabel = !empty($itinerary['day_number'])
-                    ? date('d/m/Y', strtotime($itinerary['day_number']))
-                    : 'Chưa cập nhật';
-            ?>
-
             <div class="row align-items-center mb-4">
                 <div class="col-md-8">
                     <h2 class="fw-bold mb-2">
                         <i class="fas fa-route text-primary me-2"></i>
-                        <?= htmlspecialchars($itinerary['title']) ?>
+                        Lịch trình: <?= htmlspecialchars($tour['name'] ?? 'Tour') ?>
                     </h2>
                     <?php if (!empty($isLocked)): ?>
                         <div class="alert alert-warning py-2 px-3 mb-0 d-inline-flex align-items-center gap-2">
@@ -69,31 +63,23 @@
                     <a href="<?= BASE_URL ?>?act=listItinerary" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
                     </a>
-                    <?php if (empty($isLocked)): ?>
-                        <a href="<?= BASE_URL ?>?act=editItinerary&id=<?= $itinerary['id'] ?>" class="btn btn-primary mt-2 mt-md-0">
-                            <i class="fas fa-edit me-1"></i> Sửa lịch trình
-                        </a>
-                    <?php else: ?>
-                        <button type="button" class="btn btn-secondary mt-2 mt-md-0" disabled>
-                            <i class="fas fa-ban me-1"></i> Đã khoá (READY)
-                        </button>
-                    <?php endif; ?>
                 </div>
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-5">
+                <!-- Thông tin tour -->
+                <div class="col-lg-4">
                     <div class="card shadow-sm h-100">
                         <div class="card-header bg-white d-flex align-items-center justify-content-between">
                             <h5 class="mb-0"><i class="fas fa-plane-departure text-primary me-2"></i>Thông tin tour</h5>
                             <?php if (!empty($tour['status'])): ?>
                                 <?php
-                                    $statusLabels = [
-                                        'published' => ['label' => 'Đang hoạt động', 'class' => 'bg-success'],
-                                        'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
-                                        'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
-                                    ];
-                                    $statusMeta = $statusLabels[$tour['status']] ?? ['label' => ucfirst($tour['status']), 'class' => 'bg-secondary'];
+                                $statusLabels = [
+                                    'published' => ['label' => 'Đang hoạt động', 'class' => 'bg-success'],
+                                    'draft' => ['label' => 'Bản nháp', 'class' => 'bg-warning text-dark'],
+                                    'archived' => ['label' => 'Ngừng kinh doanh', 'class' => 'bg-secondary']
+                                ];
+                                $statusMeta = $statusLabels[$tour['status']] ?? ['label' => ucfirst($tour['status']), 'class' => 'bg-secondary'];
                                 ?>
                                 <span class="badge <?= $statusMeta['class'] ?>"><?= $statusMeta['label'] ?></span>
                             <?php endif; ?>
@@ -119,9 +105,9 @@
                                 <?php if (!empty($tour['image'])): ?>
                                     <div class="mt-4">
                                         <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
-                                             class="img-fluid rounded shadow-sm w-100"
-                                             alt="<?= htmlspecialchars($tour['name']) ?>"
-                                             style="max-height: 280px; object-fit: cover;">
+                                            class="img-fluid rounded shadow-sm w-100"
+                                            alt="<?= htmlspecialchars($tour['name']) ?>"
+                                            style="max-height: 280px; object-fit: cover;">
                                     </div>
                                 <?php endif; ?>
                             <?php else: ?>
@@ -131,54 +117,70 @@
                     </div>
                 </div>
 
-                <div class="col-lg-7">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header bg-white">
-                            <h5 class="mb-0"><i class="fas fa-info-circle text-primary me-2"></i>Thông tin lịch trình</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <small class="text-muted d-block">Ngày khởi hành</small>
-                                    <span class="fw-bold"><?= $dayLabel ?></span>
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="text-muted d-block">Mã lịch trình</small>
-                                    <span>#<?= $itinerary['id'] ?></span>
-                                </div>
-                                <div class="col-12">
-                                    <small class="text-muted d-block">Tiêu đề</small>
-                                    <span class="fw-bold"><?= htmlspecialchars($itinerary['title']) ?></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header bg-white d-flex align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-list-check text-success me-2"></i>Hoạt động trong ngày</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-0" style="white-space: pre-line;"><?= nl2br(htmlspecialchars($itinerary['activities'])) ?></p>
-                        </div>
-                    </div>
-
+                <!-- Danh sách lịch trình trong ngày -->
+                <div class="col-lg-8">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-white d-flex align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-sticky-note text-warning me-2"></i>Ghi chú</h5>
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-calendar-alt text-success me-2"></i>Danh sách lịch trình (<?= count($itineraries) ?> ngày)</h5>
                         </div>
                         <div class="card-body">
-                            <?php if (!empty($itinerary['notes'])): ?>
-                                <p class="mb-0" style="white-space: pre-line;"><?= nl2br(htmlspecialchars($itinerary['notes'])) ?></p>
-                            <?php else: ?>
-                                <p class="text-muted mb-0">Không có ghi chú bổ sung.</p>
-                            <?php endif; ?>
+                            <?php foreach ($itineraries as $index => $itinerary): ?>
+                                <?php
+                                $dayLabel = !empty($itinerary['day_number'])
+                                    ? date('d/m/Y', strtotime($itinerary['day_number']))
+                                    : 'Chưa cập nhật';
+                                ?>
+                                <div class="border rounded p-4 mb-3 <?= $index > 0 ? 'mt-3' : '' ?>">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 class="text-primary mb-1">
+                                                <i class="fas fa-map-marker-alt me-2"></i>
+                                                <?= htmlspecialchars($itinerary['title']) ?>
+                                            </h5>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                Ngày khởi hành: <?= $dayLabel ?>
+                                            </small>
+                                        </div>
+                                        <?php if (empty($isLocked)): ?>
+                                            <div class="btn-group">
+                                                <a href="<?= BASE_URL ?>?act=editItinerary&id=<?= $itinerary['id'] ?>"
+                                                    class="btn btn-sm btn-primary" title="Chỉnh sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="<?= BASE_URL ?>?act=deleteItinerary&id=<?= $itinerary['id'] ?>"
+                                                    class="btn btn-sm btn-danger" title="Xoá"
+                                                    onclick="return confirm('Bạn có chắc muốn xoá lịch trình này?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h6 class="text-success mb-2">
+                                            <i class="fas fa-list-check me-2"></i>Hoạt động trong ngày
+                                        </h6>
+                                        <p class="mb-0" style="white-space: pre-line;"><?= nl2br(htmlspecialchars($itinerary['activities'])) ?></p>
+                                    </div>
+
+                                    <?php if (!empty($itinerary['notes'])): ?>
+                                        <div>
+                                            <h6 class="text-warning mb-2">
+                                                <i class="fas fa-sticky-note me-2"></i>Ghi chú
+                                            </h6>
+                                            <p class="mb-0 text-muted" style="white-space: pre-line;"><?= nl2br(htmlspecialchars($itinerary['notes'])) ?></p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
