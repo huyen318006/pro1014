@@ -1,0 +1,209 @@
+/* ============================================================= */
+/*                  POLICY ADMIN - LOFT CITY                     */
+/*        File riêng cho trang Quản lý Chính sách Tour          */
+/* ============================================================= */
+
+:root {
+  --policy-primary: #00D4D4;      /* Màu chủ đạo chính sách */
+  --policy-gradient-start: #00CED1;
+  --policy-gradient-end: #20B2AA;
+  --policy-hover: #00B8B8;
+  --policy-dark: #008B8B;
+  --light-bg: #f8f9fa;
+  --card-shadow: 0 8px 25px rgba(0, 212, 212, 0.12);
+  --border-radius: 16px;
+}
+
+/* Header chính sách - đẹp hơn dashboard một bậc */
+.policy-header {
+  background: linear-gradient(135deg, var(--policy-gradient-start), var(--policy-gradient-end));
+  color: white;
+  padding: 25px 35px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 10px 30px rgba(0, 206, 209, 0.25);
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.policy-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.policy-header h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 2rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.policy-header .breadcrumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+}
+
+/* Card chính sách */
+.policy-card {
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(0, 212, 212, 0.15);
+}
+
+.policy-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(0, 212, 212, 0.22);
+  border-color: var(--policy-primary);
+}
+
+/* Nút thêm chính sách nổi bật */
+.btn-add-policy {
+  background: linear-gradient(45deg, var(--policy-primary), var(--policy-hover));
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0, 212, 212, 0.3);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-add-policy:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 212, 212, 0.4);
+  background: linear-gradient(45deg, var(--policy-hover), var(--policy-dark));
+  color: white;
+}
+
+.btn-add-policy i {
+  margin-right: 8px;
+}
+
+/* Badge loại chính sách */
+.policy-type-badge {
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-huy {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+  color: white;
+}
+
+.badge-suckhoe {
+  background: linear-gradient(45deg, #51cf66, #40b357);
+  color: white;
+}
+
+.badge-treem {
+  background: linear-gradient(45deg, #3399ff, #0077cc);
+  color: white;
+}
+
+.badge-chung {
+  background: linear-gradient(45deg, var(--policy-primary), #00a0a0);
+  color: white;
+}
+
+/* Bảng chính sách */
+.policy-table th {
+  background: linear-gradient(90deg, rgba(0,212,212,0.1), rgba(0,212,212,0.05));
+  color: var(--policy-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  border-bottom: 3px solid var(--policy-primary);
+}
+
+.policy-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.policy-table tbody tr:hover {
+  background-color: rgba(0, 212, 212, 0.05);
+  transform: scale(1.01);
+}
+
+/* Nút hành động */
+.btn-policy-edit {
+  background: linear-gradient(45deg, #ffc107, #ffb300);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.btn-policy-delete {
+  background: linear-gradient(45deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.btn-policy-edit:hover, .btn-policy-delete:hover {
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+/* Nội dung tóm tắt */
+.content-preview {
+  font-size: 0.92rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .policy-header {
+    padding: 20px;
+    text-align: center;
+  }
+  .policy-header h2 {
+    font-size: 1.6rem;
+  }
+  .btn-add-policy {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .policy-table {
+    font-size: 0.85rem;
+  }
+  .btn-add-policy {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+/* ==== LÀM CHỮ "DANH SÁCH CHÍNH SÁCH TOUR" MÀU ĐEN (ĐẬM ĐẸP) ==== */
+.custom-title,
+.content h3,
+.policy-card h3,
+.text-primary {
+    color: #1893ae !important;           /* Màu đen đậm */
+    font-weight: 100 !important;      /* Chữ đậm hơn */
+    text-shadow: none !important;     /* Bỏ hiệu ứng bóng nếu có */
+}

@@ -47,4 +47,33 @@ class ChecklistModel {
             }
         }
     }
+    // Lấy thông tin tour theo departure_id
+    public function getDepartureInfo($departureId) {
+    $sql = "SELECT departures.id, departures.departure_date, tours.name AS tour_name
+            FROM departures
+            JOIN tours ON departures.tour_id = tours.id
+            WHERE departures.id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$departureId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    // ADMIN xem checklist kèm tên HDV + tên tour
+public function getChecklistFullForAdmin($departureId) {
+    $sql = "SELECT 
+                c.*, 
+                u.fullname AS guide_name,
+                t.name AS tour_name,
+                d.departure_date
+            FROM checklists c
+            LEFT JOIN users u ON c.checked_by = u.id
+            LEFT JOIN departures d ON c.departure_id = d.id
+            LEFT JOIN tours t ON d.tour_id = t.id
+            WHERE c.departure_id = ?
+            ORDER BY c.id ASC";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$departureId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }

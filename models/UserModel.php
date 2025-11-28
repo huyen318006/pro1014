@@ -148,12 +148,16 @@ class UserModel
 
     // Lấy danh sách departures
     public function getAllDepartures()
-    {
-        $sql = "SELECT * FROM departures ORDER BY departure_date ASC";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+{
+    $sql = "SELECT d.id, d.departure_date, d.status, t.name AS tour_name
+            FROM departures d
+            JOIN tours t ON d.tour_id = t.id
+            ORDER BY d.departure_date ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // Kiểm tra trùng lịch: guide đã được phân công cho departure này chưa
     public function checkDuplicate($guide_id, $departure_id)

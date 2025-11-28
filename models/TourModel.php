@@ -20,10 +20,14 @@ class TourModel
    
     public function getTourById($id)
     {
-        $sql = "SELECT tours.*, categories.name as category_name 
+        $sql = "SELECT tours.*, 
+                       categories.name as category_name, 
+                       GROUP_CONCAT(DISTINCT policies.policy_type SEPARATOR ', ') as policy_type 
                 FROM `tours` 
                 LEFT JOIN `categories` ON tours.category_id = categories.id 
-                WHERE tours.id = :id";
+                LEFT JOIN `policies` ON tours.id = policies.tour_id
+                WHERE tours.id = :id
+                GROUP BY tours.id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

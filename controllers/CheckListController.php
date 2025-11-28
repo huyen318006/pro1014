@@ -8,15 +8,23 @@ class ChecklistController {
 
     // HDV xem checklist
     public function showChecklistForGuide() {
-        $departureId = $_GET['departure_id'];
-        $guideId = $_SESSION['user']['id'];
+    $departureId = $_GET['departure_id'];
+    $guideId = $_SESSION['user']['id'];
 
-        // Tạo checklist mặc định nếu chưa có
-        $this->model->createDefaultChecklist($departureId);
+    // Lấy thông tin tour
+    $departureInfo = $this->model->getDepartureInfo($departureId);
 
-        $checklistItems = $this->model->getChecklistByDeparture($departureId);
-        require_once BASE_URL_VIEWS . 'guide/checklist/guide_checklist.php';
-    }
+    // Tạo checklist mặc định nếu chưa có
+    $this->model->createDefaultChecklist($departureId);
+
+    // Lấy danh sách checklist
+    $checklistItems = $this->model->getChecklistByDeparture($departureId);
+
+    // Lấy tên HDV từ session
+    $guideName = $_SESSION['user']['fullname'];
+
+    require_once BASE_URL_VIEWS . 'guide/checklist/guide_checklist.php';
+}
 
     // HDV lưu checklist
     public function saveChecklistForGuide() {
@@ -34,9 +42,14 @@ class ChecklistController {
 
 
     // Admin xem checklist
+   // Admin xem checklist
     public function showChecklistForAdmin() {
-        $departureId = $_GET['departure_id'];
-        $checklistItems = $this->model->getChecklistByDeparture($departureId);
-        require_once BASE_URL_VIEWS . 'admin/checklist/admin_checklist.php';
-    }
+    $departureId = $_GET['departure_id'];
+
+    // Lấy checklist + tên HDV + tên tour
+    $checklistItems = $this->model->getChecklistFullForAdmin($departureId);
+
+    require_once BASE_URL_VIEWS . 'admin/checklist/admin_checklist.php';
+}
+
 }
