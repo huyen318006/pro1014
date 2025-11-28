@@ -61,7 +61,7 @@
                     <div class="departure-card">
                         <!-- Ảnh tour (nếu có) -->
                         <div class="card-image">
-                            <img src="<?= $d['image'] ?? 'default-tour.jpg' ?>" alt="<?= $d['tour_name'] ?>">
+                            <img src="<?= BASE_URL . 'uploads/' . basename($d['image'] ?? 'default-tour.jpg') ?>" alt="<?= $d['tour_name'] ?>">
                         </div>
 
                         <!-- Nội dung tour -->
@@ -168,3 +168,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+</html>
