@@ -1,29 +1,17 @@
 <h2>Tạo báo cáo sự cố</h2>
 
 <form action="?act=incident" method="POST">
-
-    <!-- Hiển thị tên HDV đang đăng nhập -->
     <label>Hướng dẫn viên:</label>
-    <input 
-        type="text" 
-        value="<?= $_SESSION['user']['fullname'] ?>" 
-        class="form-control"
-        disabled
-    >
-    <input type="hidden" name="guide_id" value="<?= $_SESSION['user']['id'] ?>">
+    <input type="text" value="<?= $_SESSION['user']['fullname'] ?>" class="form-control" disabled>
     <br><br>
 
-    <!-- Lựa chọn assignment của đúng HDV -->
-   <label>Chọn Tour báo cáo:</label>
+    <label>Chọn Tour báo cáo:</label>
     <select name="assignment_id" required>
-    <option value="">-- Chọn --</option>
-    <?php foreach($assignments as $a): ?>
-        <option value="<?= $a['id'] ?>">
-        <?= $a['tour_name']?>
-        </option>
-    <?php endforeach; ?>
-</select>
-
+        <option value="">-- Chọn --</option>
+        <?php foreach($assignments as $a): ?>
+            <option value="<?= $a['id'] ?>"><?= $a['tour_name'] ?></option>
+        <?php endforeach; ?>
+    </select>
     <br><br>
 
     <label>Ngày sự cố:</label>
@@ -48,6 +36,7 @@
 
     <button type="submit">Gửi báo cáo</button>
 </form>
+
 
 <style>
 form {

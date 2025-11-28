@@ -3,35 +3,35 @@ class IncidentReportController
 {
     private $model;
     private $userModel;
-    private $tourModel;
 
     public function __construct()
     {
         $this->model = new IncidentReportModel();
         $this->userModel = new UserModel();
-        $this->tourModel = new TourModel();
     }
 
     // HDV tạo báo cáo
     public function create()
     {
-        // Lấy ID HDV đang đăng nhập
         $guide_id = $_SESSION['user']['id'];
 
-        // Lấy danh sách assignment của đúng HDV đó
+        // Lấy danh sách assignment của HDV
         $assignments = $this->userModel->getAssignmentsByGuide($guide_id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $assignment_id = $_POST['assignment_id'];
 
+            // Lấy tour_id từ assignment
+            $tour_id = $this->getTourIdFromAssignment($assignment_id);
+
             $data = [
-                'guide_id'      => $guide_id,  // TỰ GÁN, KHÔNG LẤY TỪ FORM
                 'assignment_id' => $assignment_id,
                 'incident_date' => $_POST['incident_date'],
                 'description'   => $_POST['description'],
                 'severity'      => $_POST['severity'],
                 'resolution'    => $_POST['resolution'],
                 'reported_at'   => date('Y-m-d H:i:s'),
+                'tour_id'       => $tour_id,
             ];
 
             $this->model->insert($data);
@@ -42,7 +42,7 @@ class IncidentReportController
 
         require './views/guide/incident/create.php';
     }
-    // Helper method để lấy tour_id từ assignment
+
     private function getTourIdFromAssignment($assignment_id)
     {
         $sql = "SELECT d.tour_id 
@@ -55,14 +55,12 @@ class IncidentReportController
         return $result['tour_id'] ?? null;
     }
 
-    // Admin: danh sách báo cáo
     public function index()
     {
         $reports = $this->model->getAll();
         require './views/admin/incident/index.php';
     }
 
-    // Admin: xóa báo cáo
     public function delete()
     {
         $id = $_GET['id'] ?? 0;
@@ -70,5 +68,5 @@ class IncidentReportController
         header("Location: ?act=incidents");
         exit;
     }
-    
 }
+
