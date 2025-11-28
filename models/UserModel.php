@@ -101,8 +101,8 @@ class UserModel {
     // Thêm phân công
     public function storeAssignment($data)
     {
-        $sql = "INSERT INTO assignments (departure_id, guide_id, assigned_at)
-                VALUES (:departure_id, :guide_id, :assigned_at)";
+        $sql = "INSERT INTO assignments (departure_id, guide_id, assigned_at,booking_id)
+                VALUES (:departure_id, :guide_id, :assigned_at,:booking_id)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($data);
         return $stmt->rowCount();

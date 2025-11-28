@@ -34,18 +34,21 @@
 
   <!-- SIDEBAR ĐẸP Y HỆT TRANG DASHBOARD -->
   <div class="sidebar">
-    <div class="logo"><i class="fas fa-user-shield"></i></div>
+    <div class="logo">
+      <i class="fas fa-user-shield"></i>
+    </div>
     <h4>ADMIN</h4>
-    <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
     <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
     <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
-    <a href="index.php?act=services" class="active"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
+    <a href="index.php?act=services"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
     <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
     <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
     <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
-    <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="<?= BASE_URL . '?act=booking'  ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
+    <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>>
   </div>
 
   <!-- HEADER ĐẸP NHƯ TRANG CHỦ -->
@@ -113,21 +116,21 @@
                 </select>
               </div>
 
-    <!-- Loại dịch vụ -->
-    <div class="col-lg-6">
-        <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
-        <input type="text" name="service_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? '') ?>"
-               placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
-    </div>
+              <!-- Loại dịch vụ -->
+              <div class="col-lg-6">
+                <label class="form-label fw-bold"><i class="fas fa-concierge-bell"></i> Loại dịch vụ <span class="text-danger">*</span></label>
+                <input type="text" name="service_name" class="form-control form-control-lg"
+                  value="<?= htmlspecialchars($_SESSION['old']['service_name'] ?? '') ?>"
+                  placeholder="VD: Khách sạn, Xe đưa đón, Nhà hàng..." required>
+              </div>
 
-    <!-- Đối tác -->
-    <div class="col-lg-6">
-        <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
-        <input type="text" name="partner_name" class="form-control form-control-lg"
-               value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? '') ?>"
-               placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
-    </div>
+              <!-- Đối tác -->
+              <div class="col-lg-6">
+                <label class="form-label fw-bold"><i class="fas fa-building"></i> Đối tác <span class="text-danger">*</span></label>
+                <input type="text" name="partner_name" class="form-control form-control-lg"
+                  value="<?= htmlspecialchars($_SESSION['old']['partner_name'] ?? '') ?>"
+                  placeholder="VD: Hotel Paradise, Xe Minh Tâm..." required>
+              </div>
 
               <!-- Trạng thái -->
               <div class="col-lg-6">
@@ -142,13 +145,13 @@
                 </select>
               </div>
 
-    <!-- Ghi chú -->
-    <div class="col-lg-12">
-        <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
-        <textarea name="note" rows="5" class="form-control form-control-lg"
+              <!-- Ghi chú -->
+              <div class="col-lg-12">
+                <label class="form-label fw-bold"><i class="fas fa-sticky-note"></i> Ghi chú</label>
+                <textarea name="note" rows="5" class="form-control form-control-lg"
                   placeholder="Thông tin bổ sung: số lượng phòng, loại xe, giờ đón..."><?= htmlspecialchars($_SESSION['old']['note'] ?? '') ?></textarea>
-    </div>
-</div>
+              </div>
+            </div>
 
             <div class="text-end mt-5">
               <button type="submit" class="btn btn-success btn-lg px-5">

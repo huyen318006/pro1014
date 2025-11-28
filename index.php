@@ -17,6 +17,7 @@ require_once './controllers/DepartureController.php';
 require_once './controllers/ChecklistController.php';
 require_once './controllers/IncidentReportController.php';
 require_once './controllers/PolicyController.php';
+require_once './controllers/BookingController.php';
 
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
@@ -28,6 +29,7 @@ require_once './models/ChecklistModel.php';
 require_once './models/IncidentReportModel.php';
 require_once './models/CategoryModel.php';
 require_once './models/PolicyModel.php';
+require_once './models/BookingModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -154,6 +156,13 @@ match ($act) {
     'policiesUpdate'  => (new PolicyController())->update(),
     'policiesDelete'  => (new PolicyController())->delete($_GET['id'] ?? 0),
 
+
+
+
+  //chức năng booking
+  'booking' =>(new BookingController())->booking(),
+  'bookingassig'=>(new BookingController())->bookingassig(),
+  'addbooking'=>(new BookingController())->addbooking(),
     
     // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
     default => (new UsersController())->Login(),

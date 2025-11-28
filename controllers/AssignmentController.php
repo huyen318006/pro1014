@@ -4,10 +4,12 @@ class AssignmentController
 
 
     private $model;
+    private $bookingmodel;
     public $assign;
     public function __construct()
     {
         $this->model = new UserModel();
+        $this->bookingmodel= new BookingModel();
  
     }
     // Hiển thị danh sách phân công
@@ -21,35 +23,40 @@ class AssignmentController
     public function create()
     {
         $guides = $this->model->getAllGuides();
-        $departures = $this->model->getAllDepartures();
+        $getallbooking=$this->bookingmodel->getallbooking();
         require_once 'views/admin/assignments/create.php';
     }
 
     // Xử lý lưu phân công mới
-    public function store()
-    {
-        if ($_SERVER['REQUEST_METHOD']==='POST') {
-            $guide_id = $_POST['guide_id'];
-            $departure_id = $_POST['departure_id'];
+        public function store()
+        {
+            if ($_SERVER['REQUEST_METHOD']==='POST') {
+                $guide_id = $_POST['guide_id'];
+                $booking_id = $_POST['booking_id'];
+                
+        // Lấy departure_id từ booking_id
+        $booking = $this->bookingmodel->getBookingById($booking_id);
+        $departure_id = $booking['departure_id'];
 
-            // Kiểm tra trùng lịch
-            if ($this->model->checkDuplicate($guide_id, $departure_id)) {
-                $_SESSION['error'] = "Hướng dẫn viên đã được phân công cho tour này!";
-                header("Location: ?act=createAssignment");
+                // Kiểm tra trùng lịch
+                if ($this->model->checkDuplicate($guide_id, $departure_id)) {
+                    $_SESSION['error'] = "Hướng dẫn viên đã được phân công cho tour này!";
+                    header("Location: ?act=createAssignment");
+                    exit();
+                }
+
+                $data = [
+                    ':guide_id'=>$guide_id,
+                    ':booking_id'=> $booking_id,
+                    ':departure_id'=> $departure_id,
+                    ':assigned_at'=>date('Y-m-d H:i:s')
+                ];
+
+                $this->model->storeAssignment($data);
+                header("Location: ?act=listAssignments");
                 exit();
             }
-
-            $data = [
-                ':guide_id'=>$guide_id,
-                ':departure_id'=>$departure_id,
-                ':assigned_at'=>date('Y-m-d H:i:s')
-            ];
-
-            $this->model->storeAssignment($data);
-            header("Location: ?act=listAssignments");
-            exit();
         }
-    }
 
     // Hiển thị form sửa
     public function edit()
