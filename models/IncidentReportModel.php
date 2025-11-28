@@ -23,10 +23,7 @@ class IncidentReportModel
     {
         $sql = "SELECT ir.*, 
                        u.fullname AS guide_name, 
-                       t.name AS tour_name,
-                       a.id AS assignment_id_debug,
-                       d.id AS departure_id_debug,
-                       d.tour_id AS tour_id_debug
+                       t.name AS tour_name
                 FROM incident_reports ir
                 LEFT JOIN assignments a ON ir.assignment_id = a.id
                 LEFT JOIN users u ON a.guide_id = u.id
