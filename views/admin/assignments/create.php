@@ -49,35 +49,38 @@
 
     <!-- Content -->
 
-    <div class="content">
-      <div class="table-card p-4">
-        <?php if (isset($_SESSION['error'])) {
-          echo "<p style='color:red'>" . $_SESSION['error'] . "</p>";
-          unset($_SESSION['error']);
-        } ?>
-        <form method="POST" action="?act=storeAssignment">
-          <div class="mb-3">
-            <label class="form-label">Hướng dẫn viên</label>
-            <select name="guide_id" class="form-select" required>
-              <?php foreach ($guides as $g): ?>
-                <option value="<?= $g['id'] ?>"><?= $g['fullname'] ?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Tour</label>
-            <select name="departure_id" class="form-select" required>
-              <?php foreach ($departures as $d): ?>
-                <option value="<?= $d['id'] ?>">
-                  <?= $d['tour_id'] ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
-                </option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary btn-add">Phân công</button>
-        </form>
+   <div class="content">
+  <div class="table-card p-4">
+    <?php if (isset($_SESSION['error'])): ?>
+      <p style="color:red"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="?act=storeAssignment">
+      <div class="mb-3">
+        <label class="form-label">Hướng dẫn viên</label>
+        <select name="guide_id" class="form-select" required>
+          <?php foreach ($guides as $g): ?>
+            <option value="<?= $g['id'] ?>"><?= htmlspecialchars($g['fullname']) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tour</label>
+        <select name="departure_id" class="form-select" required>
+          <?php foreach ($departures as $d): ?>
+            <option value="<?= $d['id'] ?>">
+              <?= htmlspecialchars($d['tour_name']) ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-add">Phân công</button>
+    </form>
+  </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   </body>
