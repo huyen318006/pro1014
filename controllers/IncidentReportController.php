@@ -19,8 +19,13 @@ class IncidentReportController
         $assignments = $this->userModel->getAllAssignments();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Lấy tour_id từ assignment
+            $assignment_id = $_POST['assignment_id'];
+            $tour_id = $this->getTourIdFromAssignment($assignment_id);
+
             $data = [
-                'assignment_id' => $_POST['assignment_id'], // từ select list
+                'assignment_id' => $assignment_id,
+                'tour_id' => $tour_id,
                 'incident_date' => $_POST['incident_date'],
                 'description' => $_POST['description'],
                 'severity' => $_POST['severity'],
@@ -35,6 +40,19 @@ class IncidentReportController
         }
 
         require './views/guide/incident/create.php';
+    }
+
+    // Helper method để lấy tour_id từ assignment
+    private function getTourIdFromAssignment($assignment_id)
+    {
+        $sql = "SELECT d.tour_id 
+                FROM assignments a 
+                JOIN departures d ON a.departure_id = d.id 
+                WHERE a.id = ?";
+        $stmt = $this->model->conn->prepare($sql);
+        $stmt->execute([$assignment_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['tour_id'] ?? null;
     }
 
     // Admin: danh sách báo cáo

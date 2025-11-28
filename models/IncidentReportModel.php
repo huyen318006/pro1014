@@ -12,8 +12,8 @@ class IncidentReportModel
     public function insert($data)
     {
         $sql = "INSERT INTO incident_reports 
-                (assignment_id, incident_date, description, severity, resolution, reported_at)
-                VALUES (:assignment_id, :incident_date, :description, :severity, :resolution, :reported_at)";
+                (assignment_id, tour_id, incident_date, description, severity, resolution, reported_at)
+                VALUES (:assignment_id, :tour_id, :incident_date, :description, :severity, :resolution, :reported_at)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($data);
     }
