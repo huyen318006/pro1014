@@ -9,15 +9,14 @@ class IncidentReportModel
     }
 
     // Thêm báo cáo
-    public function insert($data)
-    {
-        $sql = "INSERT INTO incident_reports 
-                (assignment_id, tour_id, incident_date, description, severity, resolution, reported_at)
-                VALUES (:assignment_id, :tour_id, :incident_date, :description, :severity, :resolution, :reported_at)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute($data);
-    }
-
+   public function insert($data)
+{
+    $sql = "INSERT INTO incident_reports 
+            (guide_id, assignment_id, incident_date, description, severity, resolution, reported_at)
+            VALUES (:guide_id, :assignment_id, :incident_date, :description, :severity, :resolution, :reported_at)";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute($data);
+}
     // Lấy tất cả báo cáo với tên HDV
     public function getAll()
     {

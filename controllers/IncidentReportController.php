@@ -15,33 +15,33 @@ class IncidentReportController
     // HDV tạo báo cáo
     public function create()
     {
-        // Lấy danh sách assignment + guide
-        $assignments = $this->userModel->getAllAssignments();
+        // Lấy ID HDV đang đăng nhập
+        $guide_id = $_SESSION['user']['id'];
+
+        // Lấy danh sách assignment của đúng HDV đó
+        $assignments = $this->userModel->getAssignmentsByGuide($guide_id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Lấy tour_id từ assignment
             $assignment_id = $_POST['assignment_id'];
-            $tour_id = $this->getTourIdFromAssignment($assignment_id);
 
             $data = [
+                'guide_id'      => $guide_id,  // TỰ GÁN, KHÔNG LẤY TỪ FORM
                 'assignment_id' => $assignment_id,
-                'tour_id' => $tour_id,
                 'incident_date' => $_POST['incident_date'],
-                'description' => $_POST['description'],
-                'severity' => $_POST['severity'],
-                'resolution' => $_POST['resolution'],
-                'reported_at' => date('Y-m-d H:i:s'),
+                'description'   => $_POST['description'],
+                'severity'      => $_POST['severity'],
+                'resolution'    => $_POST['resolution'],
+                'reported_at'   => date('Y-m-d H:i:s'),
             ];
+
             $this->model->insert($data);
 
-            // Chuyển về trang dashboard của HDV
             header("Location: ?act=guideDashboard");
             exit;
         }
 
         require './views/guide/incident/create.php';
     }
-
     // Helper method để lấy tour_id từ assignment
     private function getTourIdFromAssignment($assignment_id)
     {
@@ -70,4 +70,5 @@ class IncidentReportController
         header("Location: ?act=incidents");
         exit;
     }
+    
 }
