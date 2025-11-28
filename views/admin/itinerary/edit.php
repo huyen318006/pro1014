@@ -37,7 +37,7 @@
     <!-- Header -->
     <div class="header">
         <h5><i class="fas fa-cogs"></i> Bảng điều khiển lịch trình</h5>
-        <div class="user- info">
+        <div class="user-info">
             <i class="fas fa-user-circle"></i>
             <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
         </div>
@@ -49,7 +49,7 @@
 
                 <div class="form-container">
                     <h1 class="form-title">
-                        <i class="bi bi-plus-circle"></i> Thêm Lịch Trình Mới
+                        <i class="bi bi-pencil-square"></i> Sửa Lịch Trình
                     </h1>
 
                     <!-- Hiển thị thông báo lỗi từ session -->
@@ -75,7 +75,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <!-- Form thêm lịch trình -->
+                    <!-- Form sửa lịch trình -->
                     <form method="POST" action="">
                         <div class="row g-4">
                             <!-- Tour ID -->
@@ -98,13 +98,21 @@
                                     value="<?= $day_number ?? '' ?>" required>
                             </div>
 
-                            <!-- Title -->
+                            <!-- Title - Đổi thành select với 7 ngày -->
                             <div class="form-group mb-3">
-                                <label for="title" class="form-label">Tiêu đề ngày <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="<?= $title ?? '' ?>"
-                                    placeholder="VD: Khởi hành đến Đà Nẵng" maxlength="255" required>
+                                <label for="title" class="form-label">Lịch trình trong ngày <span class="text-danger">*</span></label>
+                                <select class="form-select" id="title" name="title" required>
+                                    <option value="">-- Chọn ngày --</option>
+                                    <option value="Ngày 1" <?= (isset($title) && $title == 'Ngày 1') ? 'selected' : '' ?>>Ngày 1</option>
+                                    <option value="Ngày 2" <?= (isset($title) && $title == 'Ngày 2') ? 'selected' : '' ?>>Ngày 2</option>
+                                    <option value="Ngày 3" <?= (isset($title) && $title == 'Ngày 3') ? 'selected' : '' ?>>Ngày 3</option>
+                                    <option value="Ngày 4" <?= (isset($title) && $title == 'Ngày 4') ? 'selected' : '' ?>>Ngày 4</option>
+                                    <option value="Ngày 5" <?= (isset($title) && $title == 'Ngày 5') ? 'selected' : '' ?>>Ngày 5</option>
+                                    <option value="Ngày 6" <?= (isset($title) && $title == 'Ngày 6') ? 'selected' : '' ?>>Ngày 6</option>
+                                    <option value="Ngày 7" <?= (isset($title) && $title == 'Ngày 7') ? 'selected' : '' ?>>Ngày 7</option>
+                                </select>
                             </div>
+
                             <!-- Activities -->
                             <div class="form-group mb-3">
                                 <label for="activities" class="form-label">Hoạt động trong ngày<span class="text-danger">*</span></label>
@@ -123,7 +131,7 @@
                         <!-- Nút submit -->
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-primary btn-submit">
-                                <i class="bi bi-check-circle"></i> Thêm Lịch Trình
+                                <i class="bi bi-check-circle"></i> Cập Nhật Lịch Trình
                             </button>
                             <a href="<?= BASE_URL ?>?act=listItinerary" class="btn btn-secondary btn-back">
                                 <i class="bi bi-x-circle"></i> Hủy

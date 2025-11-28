@@ -39,133 +39,123 @@ $act = $_GET['act'] ?? '/';
 // Để bảo bảo tính chất chỉ gọi 1 hàm Controller để xử lý request thì mình sử dụng match
 
 match ($act) {
-    // Trang chủ
-    '/' => $_SERVER['REQUEST_METHOD'] == 'POST' ? (new UsersController())->formlogin() : (new UsersController())->Login(),
+  // Trang chủ
+  '/' => $_SERVER['REQUEST_METHOD'] == 'POST' ? (new UsersController())->formlogin() : (new UsersController())->Login(),
 
-    // Xử lý đăng nhập
-    'formlogin' => (new UsersController())->formlogin(),
-    //xử lý đăng kí
-    'register' => (new UsersController())->register(),
-    'formregister' => (new UsersController())->formregister(),
-    'logout' => (new UsersController())->logout(),
+  // Xử lý đăng nhập
+  'formlogin' => (new UsersController())->formlogin(),
+  //xử lý đăng kí
+  'register' => (new UsersController())->register(),
+  'formregister' => (new UsersController())->formregister(),
+  'logout' => (new UsersController())->logout(),
 
-    //xử lí quên mật khẩu
-    'forgotpassword' => (new UsersController())->forgotpass(),
-    'formforgotpassword' => (new UsersController())->formforgotpassword(),
+  //xử lí quên mật khẩu
+  'forgotpassword' => (new UsersController())->forgotpass(),
+  'formforgotpassword' => (new UsersController())->formforgotpassword(),
 
 
 
-    // Redirects from controller can point here; map to Login for now
-    'admin' => (new UsersController())->admin(),
-    'guide' => (new UsersController())->guide(),
+  // Redirects from controller can point here; map to Login for now
+  'admin' => (new UsersController())->admin(),
+  'guide' => (new UsersController())->guide(),
 
-    // Dashboard hiển thị tour
-    'home' => (new TourController())->Home(),
+  // Dashboard hiển thị tour
+  'home' => (new TourController())->Home(),
 
-    // Quản lý tour
-    'listTours' => (new TourController())->listTours(),
+  // Quản lý tour
+  'listTours' => (new TourController())->listTours(),
 
-    'detailTour' => (new TourController())->detailTour($_GET['id'] ?? 0),
+  'detailTour' => (new TourController())->detailTour($_GET['id'] ?? 0),
 
-    'addTourForm' => (new TourController())->addTourForm(),
+  'addTourForm' => (new TourController())->addTourForm(),
 
-    'editTourForm' => (new TourController())->editTourForm($_GET['id'] ?? 0),
+  'editTourForm' => (new TourController())->editTourForm($_GET['id'] ?? 0),
 
-    'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
+  'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
 
-    // Quản lý lịch trình
-    'listItinerary' => (new ItineraryController())->listItinerary(),
+  // Quản lý lịch trình
+  'listItinerary' => (new ItineraryController())->listItinerary(),
 
-    'addItineraryForm' => (new ItineraryController())->addItinerary(),
+  'addItineraryForm' => (new ItineraryController())->addItinerary(),
 
-    'editItinerary' => (new ItineraryController())->editItinerary($_GET['id'] ?? 0),
+  'editItinerary' => (new ItineraryController())->editItinerary($_GET['id'] ?? 0),
 
-    'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
+  'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
-    'detailItinerary' => (new ItineraryController())->detailItinerary($_GET['id'] ?? 0),
+  'detailItinerary' => (new ItineraryController())->detailItinerary($_GET['tour_id'] ?? 0),
 
-    // Quản lý phân công hướng dẫn viên
-    'listAssignments' => (new AssignmentController())->index(),
-    'createAssignment' => (new AssignmentController())->create(),
-    'storeAssignment' => (new AssignmentController())->store(),
-    'editAssignment' => (new AssignmentController())->edit(),
-    'updateAssignment' => (new AssignmentController())->update(),
-    'deleteAssignment' => (new AssignmentController())->delete(),
+  // Quản lý phân công hướng dẫn viên
+  'listAssignments' => (new AssignmentController())->index(),
+  'createAssignment' => (new AssignmentController())->create(),
+  'storeAssignment' => (new AssignmentController())->store(),
+  'editAssignment' => (new AssignmentController())->edit(),
+  'updateAssignment' => (new AssignmentController())->update(),
+  'deleteAssignment' => (new AssignmentController())->delete(),
 
-    //phần quản lí lịch trình tour của admin dành cho nhân viên
-    'DepartureAdmin' => (new DepartureController())->DepartureAdmin(),
+  //phần quản lí lịch trình tour của admin dành cho nhân viên
+  'DepartureAdmin' => (new DepartureController())->DepartureAdmin(),
   //edit kịch trình tour
-  'editDepartureAdmin'=>(new DepartureController())->editDepartureAdmin(),
-      //cập nhật  lịch khởi hành 
-      'updateDeparture'=>(new DepartureController()) -> updateDeparture(),
-  'deleteDepartureAdmin'=> (new DepartureController())->deleteDepartureAdmin(),
+  'editDepartureAdmin' => (new DepartureController())->editDepartureAdmin(),
+  //cập nhật  lịch khởi hành 
+  'updateDeparture' => (new DepartureController())->updateDeparture(),
+  'deleteDepartureAdmin' => (new DepartureController())->deleteDepartureAdmin(),
   //add  addDepartureAdmin
-  'addDepartureAdmin'=> (new DepartureController())->addDepartureAdmin(),
+  'addDepartureAdmin' => (new DepartureController())->addDepartureAdmin(),
   //fomr thêm lịch
-  'addDepartureForm'=>(new DepartureController()) ->addDepartureForm(),
+  'addDepartureForm' => (new DepartureController())->addDepartureForm(),
 
-    //Quản lí dịch vụ
-    'services' => (new ServicesController())->index(),
-    'servicesCreate' => (new ServicesController())->create(),
-    'servicesStore' => (new ServicesController())->store(),
-    'servicesEdit' => (new ServicesController())->edit(),
-    'servicesUpdate' => (new ServicesController())->update(),
-    'servicesDelete' => (new ServicesController())->delete(),
-
-
-          ////////////Phần quản lí tài khoản////////////
-                'account'=>(new UsersController())->account(),
-                //phân quyền cho các tài khoản guide
-                'change_role'=>(new UsersController())->change_role(),
-                //khóa tài khoản user
-                'block_user'=>(new UsersController())->block_user(),
-                //mở khóa tài khoản
-                'open_user'=> (new UsersController())->open_user(),
-    //checklist cho admin và guide
-    'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
-    'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
-    'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
-    //báo cáo sự cố của admin và guide
-    // Guide tạo báo cáo
-    'incident' => (new IncidentReportController())->create(),
-
-    // Admin danh sách báo cáo
-    'incidents' => (new IncidentReportController())->index(),
-
-    // Xóa báo cáo (không phân quyền)
-    'incidentReportsDelete' => (new IncidentReportController())->delete(),
+  //Quản lí dịch vụ
+  'services' => (new ServicesController())->index(),
+  'servicesCreate' => (new ServicesController())->create(),
+  'servicesStore' => (new ServicesController())->store(),
+  'servicesEdit' => (new ServicesController())->edit(),
+  'servicesUpdate' => (new ServicesController())->update(),
+  'servicesDelete' => (new ServicesController())->delete(),
 
 
+  ////////////Phần quản lí tài khoản////////////
+  'account' => (new UsersController())->account(),
+  //phân quyền cho các tài khoản guide
+  'change_role' => (new UsersController())->change_role(),
+  //khóa tài khoản user
+  'block_user' => (new UsersController())->block_user(),
+  //mở khóa tài khoản
+  'open_user' => (new UsersController())->open_user(),
+  //checklist cho admin và guide
+  'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
+  'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
+  'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
+  //báo cáo sự cố của admin và guide
+  // Guide tạo báo cáo
+  'incident' => (new IncidentReportController())->create(),
+
+  // Admin danh sách báo cáo
+  'incidents' => (new IncidentReportController())->index(),
+
+  // Xóa báo cáo (không phân quyền)
+  'incidentReportsDelete' => (new IncidentReportController())->delete(),
+
+  //bắt đầu routr của guide
+  
+  //TRANG DASHBOARD CỦA GUIDE
+  'guideDashboard' => (new GuideController())->guideDashboard(),
+  //trang lịch khởi hành của guide
+  'guideDepartures' => (new GuideController())->guideDepartures(),
+  //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
+  'MyTour' => (new GuideController())->MyTour(),
+  //Về phần status 
+  'updateStatus' => (new AssignmentController())->updateStatus(),
 
 
-
-    //bắt đầu routr của guide
-      //TRANG DASHBOARD CỦA GUIDE
-      'guideDashboard' => (new GuideController())->guideDashboard(),
-      //trang lịch khởi hành của guide
-      'guideDepartures' => (new GuideController())->guideDepartures(),
-      //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
-      'MyTour' => (new GuideController())->MyTour(),
-      //Về phần status 
-      'updateStatus' => (new AssignmentController())->updateStatus(),
+  // Quản lý chính sách tour
+  'policies'        => (new PolicyController())->index(),
+  'policiesCreate'  => (new PolicyController())->create(),
+  'policiesStore'   => (new PolicyController())->store(),
+  'policiesEdit'    => (new PolicyController())->edit($_GET['id'] ?? 0),
+  'policiesUpdate'  => (new PolicyController())->update(),
+  'policiesDelete'  => (new PolicyController())->delete($_GET['id'] ?? 0),
 
 
-    // Quản lý chính sách tour
-    'policies'        => (new PolicyController())->index(),
-    'policiesCreate'  => (new PolicyController())->create(),
-    'policiesStore'   => (new PolicyController())->store(),
-    'policiesEdit'    => (new PolicyController())->edit($_GET['id'] ?? 0),
-    'policiesUpdate'  => (new PolicyController())->update(),
-    'policiesDelete'  => (new PolicyController())->delete($_GET['id'] ?? 0),
-
-
-
-
-  //chức năng booking
-  'booking' =>(new BookingController())->booking(),
-  'bookingassig'=>(new BookingController())->bookingassig(),
-  'addbooking'=>(new BookingController())->addbooking(),
-    
-    // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
-    default => (new UsersController())->Login(),
+  // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
+  default => (new UsersController())->Login(),
 };
