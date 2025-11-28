@@ -21,7 +21,7 @@ class ItineraryModel
         $sql = "SELECT * FROM `itineraries` WHERE `id` = :id LIMIT 1";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt->execute();   
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

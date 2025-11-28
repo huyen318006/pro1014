@@ -70,24 +70,26 @@ class UserModel {
 }
     // Lấy tất cả phân công, JOIN để lấy thông tin guide và tour đầy đủ
     public function getAllAssignments()
-    {
-        $sql = "SELECT 
-                    a.*, 
-                    u.fullname AS guide_name, 
-                    d.tour_id,
-                    d.departure_date,
-                    d.meeting_point,
-                    d.max_participants,
-                    d.note,
-                    d.status AS departure_status
-                FROM assignments a
-                JOIN users u ON a.guide_id = u.id
-                JOIN departures d ON a.departure_id = d.id
-                ORDER BY a.id DESC";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+{
+    $sql = "SELECT 
+                a.*, 
+                u.fullname AS guide_name, 
+                d.departure_date,
+                d.meeting_point,
+                d.max_participants,
+                d.note,
+                d.status AS departure_status,
+                t.name AS tour_name
+            FROM assignments a
+            JOIN users u ON a.guide_id = u.id
+            JOIN departures d ON a.departure_id = d.id
+            JOIN tours t ON d.tour_id = t.id
+            ORDER BY a.id DESC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // Lấy 1 phân công theo id
     public function getAssignmentById($id)
@@ -141,12 +143,16 @@ class UserModel {
 
     // Lấy danh sách departures
     public function getAllDepartures()
-    {
-        $sql = "SELECT * FROM departures ORDER BY departure_date ASC";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+{
+    $sql = "SELECT d.id, d.departure_date, d.status, t.name AS tour_name
+            FROM departures d
+            JOIN tours t ON d.tour_id = t.id
+            ORDER BY d.departure_date ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // Kiểm tra trùng lịch: guide đã được phân công cho departure này chưa
     public function checkDuplicate($guide_id, $departure_id)

@@ -47,40 +47,48 @@
     </div>
   </div>
   <div class="content">
-    <div class="table-card">
-      <h2>Sửa phân công hướng dẫn viên</h2>
+  <div class="table-card p-4">
+    <h2>Sửa phân công hướng dẫn viên</h2>
 
-      <?php if (isset($_SESSION['error'])) {
-        echo "<p style='color:red'>" . $_SESSION['error'] . "</p>";
-        unset($_SESSION['error']);
-      } ?>
+    <?php if (isset($_SESSION['error'])): ?>
+      <p style="color:red"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    <?php endif; ?>
 
-      <form method="POST" action="?act=updateAssignment">
-        <input type="hidden" name="id" value="<?= $assign['id'] ?>">
+    <form method="POST" action="?act=updateAssignment">
+      <input type="hidden" name="id" value="<?= $assign['id'] ?>">
 
-        <label>Hướng dẫn viên</label>
-        <select name="guide_id" required>
+      <div class="mb-3">
+        <label class="form-label">Hướng dẫn viên</label>
+        <select name="guide_id" class="form-select" required>
           <?php foreach ($guides as $g): ?>
-            <option value="<?= $g['id'] ?>" <?= $g['id'] == $assign['guide_id'] ? 'selected' : '' ?>><?= $g['fullname'] ?></option>
-          <?php endforeach; ?>
-        </select>
-
-        <label>Tour</label>
-        <select name="departure_id" required>
-          <?php foreach ($departures as $d): ?>
-            <option value="<?= $d['id'] ?>" <?= $d['id'] == $assign['departure_id'] ? 'selected' : '' ?>>
-              <?= $d['tour_id'] ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
+            <option value="<?= $g['id'] ?>" <?= $g['id'] == $assign['guide_id'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($g['fullname']) ?>
             </option>
           <?php endforeach; ?>
         </select>
+      </div>
 
-        <label>Thời gian phân công</label>
-        <input type="text" name="assigned_at" value="<?= $assign['assigned_at'] ?>" required>
+      <div class="mb-3">
+        <label class="form-label">Tour</label>
+        <select name="departure_id" class="form-select" required>
+          <?php foreach ($departures as $d): ?>
+            <option value="<?= $d['id'] ?>" <?= $d['id'] == $assign['departure_id'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($d['tour_name']) ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
 
-        <button type="submit">Cập nhật</button>
-      </form>
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Thời gian phân công</label>
+        <input type="text" name="assigned_at" class="form-control" value="<?= $assign['assigned_at'] ?>" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-add">Cập nhật</button>
+    </form>
   </div>
+</div>
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
