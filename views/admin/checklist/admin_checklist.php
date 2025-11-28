@@ -1,5 +1,21 @@
 <h2>Danh sách checklist của HDV</h2>
 
+<!-- THÔNG TIN TOUR + HDV -->
+<div style="margin-top: 15px; margin-bottom: 20px; padding: 15px; border-left: 4px solid #006978; background: #f1fafa;">
+    <p style="margin: 0; font-size: 16px;">
+        <strong>Tour:</strong> <span style="color:#006978;"><?= $checklistItems[0]['tour_name'] ?? 'Không có dữ liệu' ?></span>
+    </p>
+
+    <p style="margin: 5px 0 0 0; font-size: 16px;">
+        <strong>Ngày khởi hành:</strong> <?= $checklistItems[0]['departure_date'] ?? '-' ?>
+    </p>
+
+    <p style="margin: 5px 0 0 0; font-size: 16px;">
+        <strong>HDV:</strong> <?= $checklistItems[0]['guide_name'] ?? '<i>HDV vẫn chưa hoàn thiện checklist</i>' ?>
+    </p>
+</div>
+
+
 <table class="table table-bordered">
 <tr>
     <th>Tên mục</th>
@@ -10,15 +26,23 @@
 <?php foreach($checklistItems as $item): ?>
 <tr>
     <td><?= $item['item_name'] ?></td>
-    <td><?= $item['is_checked'] ? 'Đã tick' : 'Chưa tick' ?></td>
-    <td><?= $item['checked_by_name'] ?? '-' ?></td>
+
+    <td>
+        <?= $item['is_checked'] 
+            ? '<span style="color: green; font-weight: 600;">Đã tick</span>' 
+            : '<span style="color: gray;">Chưa tick</span>' ?>
+    </td>
+
+    <td><?= $item['guide_name'] ?: '-' ?></td>
 </tr>
 <?php endforeach; ?>
 </table>
 
 <a href="?act=listAssignments" class="btn btn-primary">Quay lại trang phân công HDV</a>
+
+
 <style>
-    /* Bảng */
+/* Bảng */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -68,5 +92,4 @@ h2 {
     background-color: #0097A7;
     transform: translateY(-2px);
 }
-
 </style>

@@ -27,20 +27,12 @@
 
     <h4>HƯỚNG DẪN VIÊN</h4>
 
-    <a href="<?= BASE_URL . '?act=guideDashboard' ?>" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span> </a>
-
-    <a href="<?= BASE_URL . '?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
-
-    <a href="<?= BASE_URL . '?act=MyTour' ?>"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
-
+    <a href="<?= BASE_URL.'?act=guideDashboard' ?>"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="<?= BASE_URL.'?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
+    <a href="<?= BASE_URL.'?act=MyTour' ?>" class="active"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
     <a href="guideDiary.php"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
-
-    <a href="guideReport.php"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
-
-    <a href="guideStatistic.php"><i class="fas fa-chart-line"></i> <span>Thống kê</span></a>
-    <a href="<?= BASE_URL . '?act=logout' ?>">
-      <i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span>
-    </a>
+    <a href="<?= BASE_URL.'?act=incident'?>"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
+    <a href="<?= BASE_URL.'?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
 
   </div>
 
