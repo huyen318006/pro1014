@@ -82,6 +82,8 @@ match ($act) {
 
     'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
+    'detailItinerary' => (new ItineraryController())->detailItinerary($_GET['id'] ?? 0),
+
     // Quản lý phân công hướng dẫn viên
     'listAssignments' => (new AssignmentController())->index(),
     'createAssignment' => (new AssignmentController())->create(),

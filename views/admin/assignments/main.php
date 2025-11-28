@@ -71,7 +71,7 @@
                 <tr>
                   <td><?= $a['id'] ?></td>
                   <td><?= $a['guide_name'] ?></td>
-                  <td><?= $a['tour_id'] ?></td>
+                  <td><?= $a['tour_name'] ?></td>
                   <td><?= $a['departure_date'] ?></td>
                   <td><?= $a['meeting_point'] ?></td>
                   <td><?= $a['max_participants'] ?></td>

@@ -42,7 +42,28 @@
 
 <!-- CONTENT -->
 <div class="content">
-    <h2 class="page-title mb-4"><i class="fas fa-clipboard-check"></i> Checklist Tour</h2>
+    <h2 class="page-title mb-4">
+        <i class="fas fa-clipboard-check"></i> Checklist Tour
+    </h2>
+
+    <!-- THÔNG TIN TOUR + HDV -->
+    <div class="card p-3 mb-4" style="border-left: 4px solid var(--primary);">
+        <h5 class="mb-2"><i class="fas fa-map-marked-alt"></i> Tour: 
+            <span style="color: var(--primary);">
+                <?= $departureInfo['tour_name'] ?>
+            </span>
+        </h5>
+
+        <p class="mb-1">
+            <i class="fas fa-calendar-alt"></i> 
+            <strong>Ngày khởi hành:</strong> <?= $departureInfo['departure_date'] ?>
+        </p>
+
+        <p class="mb-0">
+            <i class="fas fa-user-check"></i> 
+            <strong>Hướng dẫn viên thực hiện:</strong> <?= $guideName ?>
+        </p>
+    </div>
 
     <?php if(isset($_GET['success'])): ?>
         <div class="alert alert-success">
@@ -75,6 +96,7 @@
         </form>
     </div>
 </div>
+
 
 </body>
 </html>

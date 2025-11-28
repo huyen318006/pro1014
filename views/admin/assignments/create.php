@@ -80,7 +80,23 @@
           <button type="submit" class="btn btn-primary btn-add">Phân công</button>
         </form>
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tour</label>
+        <select name="departure_id" class="form-select" required>
+          <?php foreach ($departures as $d): ?>
+            <option value="<?= $d['id'] ?>">
+              <?= htmlspecialchars($d['tour_name']) ?> - <?= $d['departure_date'] ?> (<?= $d['status'] ?>)
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-add">Phân công</button>
+    </form>
+  </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   </body>
