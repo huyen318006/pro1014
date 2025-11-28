@@ -80,6 +80,12 @@ class ItineraryController
             exit();
         }
 
+        if (!empty($itinerary['has_ready_departure'])) {
+            $_SESSION['error'] = 'Tour đang ở trạng thái READY, không thể chỉnh sửa lịch trình.';
+            header('Location: ' . BASE_URL . '?act=listItinerary');
+            exit();
+        }
+
         $tour_id = $itinerary['tour_id'];
         $day_number = $itinerary['day_number'];
         $title = $itinerary['title'];
@@ -126,6 +132,20 @@ class ItineraryController
     /////////////////////////////////////////        phần xoá lịch trình      /////////////////////////////////////////
     public function deleteItinerary($id)
     {
+        $itinerary = $this->modelItinerary->getItineraryById($id);
+
+        if (!$itinerary) {
+            $_SESSION['error'] = 'Lịch trình không tồn tại';
+            header('Location: ' . BASE_URL . '?act=listItinerary');
+            exit();
+        }
+
+        if (!empty($itinerary['has_ready_departure'])) {
+            $_SESSION['error'] = 'Tour đang ở trạng thái READY, không thể xoá lịch trình.';
+            header('Location: ' . BASE_URL . '?act=listItinerary');
+            exit();
+        }
+
         $result = $this->modelItinerary->deleteItinerary($id);
         if ($result) {
             $_SESSION['success'] = 'Xoá lịch trình thành công';
@@ -135,4 +155,28 @@ class ItineraryController
         header('Location: ' . BASE_URL . '?act=listItinerary');
         exit();
     }
+
+    /////////////////////////////////////////        phần hiển thị chi tiết lịch trình      /////////////////////////////////////////
+    public function detailItinerary($id)
+    {
+        $itinerary = $this->modelItinerary->getItineraryById($id);
+
+        if (!$itinerary) {
+            $_SESSION['error'] = 'Lịch trình không tồn tại';
+            header('Location: ' . BASE_URL . '?act=listItinerary');
+            exit();
+        }
+
+        $isLocked = !empty($itinerary['has_ready_departure']);
+
+        $tour = null;
+        if (!empty($itinerary['tour_id'])) {
+            $modelTour = new TourModel();
+            $tour = $modelTour->getTourById($itinerary['tour_id']);
+        }
+
+        require_once BASE_URL_VIEWS . 'admin/itinerary/detail.php';
+    }   
+
+    /////////////////////////////////////////        phần sửa lịch trình      ////////////////////////////////////////
 }
