@@ -55,8 +55,13 @@
                     $today = date('Y-m-d');
 
                     // Chỉ hiển thị tour có ngày >= hôm nay và trạng thái = 'planned'
-                    if ($d['departure_date'] < $today || $d['status'] != 'planned') continue;
-
+                    if (
+                        $d['departure_date'] < $today ||
+                        $d['status'] != 'planned' ||
+                        $d['max_participants'] <= 0
+                    ) {
+                        continue; 
+                    }
                 ?>
                     <div class="departure-card">
                         <!-- Ảnh tour (nếu có) -->

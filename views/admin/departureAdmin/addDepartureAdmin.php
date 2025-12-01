@@ -48,7 +48,7 @@
 
         <div class="form-container">
             <h2>Thêm Lịch Khởi Hành</h2>
-            <form id="addDepartureForm" action="<?= BASE_URL . '?act=addDepartureForm' ?>" method="post">
+            <form id="addDepartureForm" action="<?= BASE_URL . '?act=addDepartureForm' ?>" method="post" onsubmit=" return hanld()">
                 <div class="mb-3">
                     <label for="tour" class="form-label fw-bold">Chọn Tour</label>
                     <select id="tour_id" name="tour" class="form-select" required>
@@ -65,7 +65,9 @@
 
                 <div class="mb-3">
                     <label for="departure_date" class="form-label fw-bold">Ngày Khởi Hành</label>
-                    <input type="date" id="departure_date" name="departure_date" class="form-control" required>
+                    <input type="date" id="departure_date" name="departure_date" class="form-control"
+                        min="<?= date('Y-m-d') ?>" required>
+
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Điểm tập trung</label>
@@ -98,6 +100,18 @@
 </body>
 
 </html>
+
+<script>
+    const hald = () => {
+        const max_participants = document.getElementById('max_participants');
+        if(!is_numeric(max_participants) || max_participants>20){
+            alert('số ghế ko hợp lệ');
+            return;
+        }
+
+
+    }
+</script>
 <style>
     /* ==================== LỊCH KHỞI HÀNH - ĐẸP & CHUYÊN NGHIỆP ==================== */
     .departure-container {

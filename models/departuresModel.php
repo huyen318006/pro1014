@@ -117,7 +117,7 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
 
     public function getAllWithTourInfo()
     {
-        $sql = "SELECT 
+        $sql = "SELECT  
                     d.*,
                     COALESCE(t.name, CONCAT('Tour ID: ', d.tour_id)) AS tour_name,
                     DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted,
@@ -131,7 +131,8 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
     }
 
     ////////////////////////--------------phần model lấy cho booking controller-------////////////////////
-    function departureandbooking($id) {
+
+    public function departureandbooking($id) {
         $sql = "SELECT departures.*, tours.name AS tour_name, tours.price as tour_price, tours.image as tour_image
         FROM departures inner join tours on departures.tour_id=tours.id  
         WHERE departures.id=:id
@@ -142,6 +143,10 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
         return $stmt->fetch();
     }
 
+
+
+
+    
     //cập nhật số ghế khi mà đã đặt xong  booking
     public function updateSeats($departure_id, $quantity_booked)
     {

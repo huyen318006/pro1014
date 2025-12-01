@@ -190,14 +190,6 @@ class UserModel
 
 
     ///////////////////// phần phân quyền role cho account ////////////////
-    public function changeRole($id, $role)
-    {
-        $sql = "UPDATE users SET role=:role WHERE id=:id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
-        return $stmt->execute();
-    }
     public function lockUser($id)
     {
         $sql = "UPDATE users SET status = 0 WHERE id = :id";
