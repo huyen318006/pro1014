@@ -45,9 +45,7 @@
   <!-- Content -->
 
   <div class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <a href="<?= BASE_URL ?>?act=createAssignment" class="btn btn-success"><i class="fas fa-plus"></i> Thêm phân công</a>
-    </div>
+    <
     <div class="table-card">
       <div class="table-responsive">
         <table class="table table-hover align-middle">

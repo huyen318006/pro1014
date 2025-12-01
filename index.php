@@ -86,7 +86,6 @@ match ($act) {
 
   // Quản lý phân công hướng dẫn viên
   'listAssignments' => (new AssignmentController())->index(),
-  'createAssignment' => (new AssignmentController())->create(),
   'storeAssignment' => (new AssignmentController())->store(),
   'editAssignment' => (new AssignmentController())->edit(),
   'updateAssignment' => (new AssignmentController())->update(),
