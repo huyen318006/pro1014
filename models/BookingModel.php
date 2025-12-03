@@ -7,7 +7,7 @@ class BookingModel {
     }
 
 
-    //hiển thị trang chính tour 
+    //hiển thị trang chính của booking 
     public function getAllDepartures()
     {
         $sql = "SELECT 
@@ -27,6 +27,15 @@ class BookingModel {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //hàm lấy tour
+    public function getAllTours(){
+        $sql='SELECT * FROM tours';
+        $stmt=$this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
     //thêm đặt booking

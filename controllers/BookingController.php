@@ -8,6 +8,7 @@ class BookingController {
 
     public $assign;
 
+
     public function __construct(){
         $this->bookingModel= new BookingModel();
         $this->depaturesModel= new Departures();
@@ -18,6 +19,7 @@ class BookingController {
     //giao dienj booking
     function booking() {
         $departures = $this->bookingModel->getAllDepartures();
+        $TourModel=$this->bookingModel->getAllTours();
         require_once BASE_URL_VIEWS.'admin/booking/booking.php';
     }
 
