@@ -45,7 +45,6 @@
   <!-- Content -->
 
   <div class="content">
-    <
       <div class="table-card">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
