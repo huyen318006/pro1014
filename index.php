@@ -105,9 +105,7 @@ match ($act) {
   //Quản lí dịch vụ
   'services'                   => (new ServicesController())->index(),
   'servicesQuickCreate'        => (new ServicesController())->quickCreate(),      
-  'servicesQuickStore'         => (new ServicesController())->quickStore(),      
-  'servicesCreateByDeparture'  => (new ServicesController())->createByDeparture(),  
-  'servicesStoreByDeparture'   => (new ServicesController())->storeByDeparture(),
+  'servicesQuickStore'         => (new ServicesController())->quickStore(),       
   'servicesEdit'   => (new ServicesController())->edit(),
   'servicesUpdate' => (new ServicesController())->update(),
   'servicesDelete' => (new ServicesController())->delete(),

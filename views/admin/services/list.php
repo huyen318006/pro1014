@@ -84,17 +84,11 @@ $act = 'services';
         </div>
       </form>
 
-      <!-- Nút thêm mới -->
-      <div class="mb-3 text-end">
-        <?php if ($selectedTourId): ?>
-          <button type="button" class="btn btn-success btn-lg shadow" data-bs-toggle="modal" data-bs-target="#departureModal">
-            <i class="fas fa-plus"></i> Thêm dịch vụ mới
-          </button>
-        <?php else: ?>
-          <div class="alert alert-info d-inline-block">
-            <i class="fas fa-info-circle"></i> Vui lòng <strong>chọn Tour</strong> trước khi thêm dịch vụ.
-          </div>
-        <?php endif; ?>
+      <!-- Nút thêm mới – BỎ HOÀN TOÀN MODAL, CHỈ CÒN 1 NÚT DẪN THẲNG VÀO FORM -->
+      <div class="mb-4 text-end">
+          <a href="index.php?act=servicesQuickCreate" class="btn btn-success btn-lg px-5 shadow">
+              Thêm dịch vụ mới
+          </a>
       </div>
 
       <!-- Bảng danh sách -->
@@ -184,62 +178,6 @@ $act = 'services';
           <?php endif; ?>
         </div>
       </div>
-
-      <!-- Modal chọn lịch khởi hành -->
-      <?php if ($selectedTourId): ?>
-      <div class="modal fade" id="departureModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">
-                <i class="fas fa-calendar-alt me-2"></i> Chọn lịch khởi hành để thêm dịch vụ
-              </h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <?php
-              $departureModel = new Departures();
-              $departures = $departureModel->getAllDepartures($selectedTourId);
-              ?>
-              <?php if (empty($departures)): ?>
-                <div class="text-center py-5">
-                  <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
-                  <p class="text-muted fs-5">Tour này <strong>chưa có lịch khởi hành nào</strong>.</p>
-                  <a href="<?= BASE_URL ?>?act=DepartureAdmin" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-plus"></i> Tạo lịch khởi hành mới
-                  </a>
-                </div>
-              <?php else: ?>
-                <div class="row g-3">
-                  <?php foreach ($departures as $d): ?>
-                    <div class="col-md-6 col-lg-4">
-                      <a href="index.php?act=servicesCreateByDeparture&departure_id=<?= $d['id'] ?>"
-                         class="btn btn-outline-success w-100 p-4 text-start hover-shadow-lg"
-                         style="border-radius: 15px; height: 100%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div>
-                            <div class="fw-bold fs-5">
-                              <?= date('d/m/Y', strtotime($d['departure_date'])) ?>
-                            </div>
-                            <small class="text-muted">
-                              <?= htmlspecialchars($d['meeting_point'] ?? 'Chưa có điểm đón') ?>
-                            </small>
-                          </div>
-                          <i class="fas fa-arrow-right fs-3 text-success"></i>
-                        </div>
-                      </a>
-                    </div>
-                  <?php endforeach; ?>
-                </div>
-              <?php endif; ?>
-            </div>
-            <div class="modal-footer bg-light">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <?php endif; ?>
 
     </div>
   </div>
