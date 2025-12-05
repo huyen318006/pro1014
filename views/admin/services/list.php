@@ -50,103 +50,119 @@ $act = 'services';
     </div>
   </div>
 
-  <!-- NỘI DUNG CHÍNH -->
   <div class="content">
     <div class="container-fluid">
 
-      <!-- Tiêu đề + Nút thêm -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">
-          <i class="fas fa-concierge-bell"></i> Quản lý Dịch vụ đi kèm
-          <small class="text-muted d-block fs-6">Khách sạn • Xe đưa đón • Nhà hàng • Vé tham quan...</small>
-        </h2>
-      </div>
+      <h2 class="fw-bold text-primary mb-4">
+        Quản lý Dịch vụ đi kèm
+        <small class="text-muted d-block fs-6">Nhà hàng • Khách sạn • Xe đưa đón • Vé tham quan...</small>
+      </h2>
 
       <!-- Thông báo -->
-      <?php if (isset($_SESSION['success'])): ?>
+      <?php if (!empty($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show">
-          <?= $_SESSION['success'];
-          unset($_SESSION['success']); ?>
+          <?= $_SESSION['success']; unset($_SESSION['success']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
-      <?php if (isset($_SESSION['error'])): ?>
+      <?php if (!empty($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show">
-          <?= $_SESSION['error'];
-          unset($_SESSION['error']); ?>
+          <?= $_SESSION['error']; unset($_SESSION['error']); ?>
           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif; ?>
 
-      <!-- Bảng danh sách -->
-      <div class="table-card">
+      <!-- Form lọc theo Tour -->
+      <form method="post" class="mb-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-auto">
+            <label class="form-label fw-bold">Chọn Tour</label>
+            <select name="tour_id" class="form-select" onchange="this.form.submit()">
+              <option value="">-- Tất cả Tour --</option>
+              <?php foreach ($tours as $t): ?>
+                <option value="<?= $t['id'] ?>" <?= (isset($selectedTourId) && $selectedTourId == $t['id']) ? 'selected' : '' ?>>
+                  [<?= $t['code'] ?? 'T00' . $t['id'] ?>] <?= htmlspecialchars($t['name']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-filter"></i> Lọc
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Nút thêm mới -->
+      <div class="mb-3">
+        <a href="index.php?act=servicesCreate" class="btn btn-success">
+          <i class="fas fa-plus"></i> Thêm dịch vụ mới
+        </a>
+      </div>
+
+      <!-- Bảng danh sách dịch vụ -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white fw-bold">
+          Danh sách Dịch vụ đi kèm
+          <?php if ($selectedTourId): ?>
+            <span class="badge bg-light text-dark ms-2">
+              Tour: <?= htmlspecialchars($tours[array_search($selectedTourId, array_column($tours, 'id'))]['name'] ?? 'N/A') ?>
+            </span>
+          <?php endif; ?>
+        </div>
         <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-primary">
+          <?php if (empty($services)): ?>
+            <div class="text-center py-5 text-muted">
+              <i class="fas fa-inbox fa-3x mb-3"></i>
+              <p>Chưa có dịch vụ nào.<br>Nếu đã chọn Tour, có thể chưa có dịch vụ nào được thêm.</p>
+            </div>
+          <?php else: ?>
+            <table class="table table-hover mb-0">
+              <thead class="table-success">
                 <tr>
-                  <th width="5%">#ID</th>
-                  <th width="35%">Chuyến đi</th>
-                  <th width="30%">Dịch vụ</th>
-                  <th width="8%">Hành động</th>
+                  <th width="80">#ID</th>
+                  <th>Tên dịch vụ</th>
+                  <th>Đối tác</th>
+                  <th>Trạng thái</th>
+                  <th>Ghi chú</th>
+                  <th width="120">Hành động</th>
                 </tr>
               </thead>
-
               <tbody>
-                <?php if (!empty($services)): ?>
-                  <?php foreach ($services as $s): ?>
-                    <tr>
-                      <td class="fw-bold"><?= $s['id'] ?></td>
-
-                      <td>
-                        <?php if (!empty($s['tour_name'])): ?>
-                          <div class="fw-bold text-primary"><?= htmlspecialchars($s['tour_name']) ?></div>
-                          <small class="text-muted">
-                            <i class="fas fa-calendar"></i> <?= $s['departure_date_formatted'] ?? 'Chưa có ngày' ?>
-                            <?php if (!empty($s['meeting_point'])): ?>
-                              <br><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['meeting_point']) ?>
-                            <?php endif; ?>
-                          </small>
-                        <?php else: ?>
-                          <span class="text-danger fst-italic">Chưa gắn chuyến</span>
-                        <?php endif; ?>
-                      </td>
-
-                      <td>
-                        <a href="index.php?act=servicesCreate" class="btn btn-success btn-lg shadow">
-                          <i class="fas fa-plus-circle"></i>Dịch vụ
-                        </a>
-
-                      </td>
-
-                      <td>
-                        <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>"
-                          class="btn btn-sm btn-warning" title="Sửa">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </td>
-
-                    </tr>
-                  <?php endforeach; ?>
-
-                <?php else: ?>
+                <?php foreach ($services as $s): ?>
                   <tr>
-                    <td colspan="4" class="text-center py-5 text-muted">
-                      <i class="fas fa-inbox fa-3x mb-3"></i><br>
-                      Chưa có dịch vụ nào được thêm
+                    <td><strong>#<?= $s['id'] ?></strong></td>
+                    <td><strong><?= htmlspecialchars($s['service_name']) ?></strong></td>
+                    <td><?= htmlspecialchars($s['partner_name'] ?? '-') ?></td>
+                    <td>
+                      <?php
+                        $badge = $s['status'] == 'confirmed' ? 'success' : ($s['status'] == 'cancelled' ? 'danger' : 'warning');
+                        $text  = $s['status'] == 'confirmed' ? 'Đã xác nhận' : ($s['status'] == 'cancelled' ? 'Đã hủy' : 'Chờ xác nhận');
+                      ?>
+                      <span class="badge bg-<?= $badge ?>"><?= $text ?></span>
+                    </td>
+                    <td>
+                      <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>" class="btn btn-warning btn-sm" title="Sửa">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <a href="index.php?act=servicesDelete&id=<?= $s['id'] ?>" 
+                         class="btn btn-danger btn-sm" 
+                         onclick="return confirm('Xóa dịch vụ \"<?= htmlspecialchars($s['service_name']) ?>
+                         title="Xóa">
+                        <i class="fas fa-trash"></i>
+                      </a>
                     </td>
                   </tr>
-                <?php endif; ?>
+                <?php endforeach; ?>
               </tbody>
             </table>
-
-          </div>
+          <?php endif; ?>
         </div>
       </div>
 
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
