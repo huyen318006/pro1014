@@ -127,28 +127,48 @@ class ItineraryModel
     public function getItinerariesByDepartureId($departureId, $guideId = null)
     {
         if ($guideId !== null) {
-            // Lấy lịch trình kèm trạng thái checkpoint
+            // Lấy lịch trình kèm trạng thái checkpoint cho từng activity
             $sql = "SELECT i.*, 
                            t.name AS tour_name,
                            t.code AS tour_code,
                            t.image AS tour_image,
                            t.duration_days AS tour_duration,
                            d.departure_date,
-                           d.meeting_point,
-                           ic.checked_at,
-                           ic.notes AS checkpoint_notes,
-                           IF(ic.id IS NOT NULL, 1, 0) AS is_checked
+                           d.meeting_point
                     FROM `itineraries` i
                     INNER JOIN `departures` d ON i.tour_id = d.tour_id
                     LEFT JOIN `tours` t ON i.tour_id = t.id
-                    LEFT JOIN `itinerary_checkpoints` ic ON ic.itinerary_id = i.id 
-                        AND ic.departure_id = :departure_id 
-                        AND ic.guide_id = :guide_id
                     WHERE d.id = :departure_id
                     ORDER BY i.day_number ASC, i.title ASC";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
-            $stmt->bindParam(':guide_id', $guideId, PDO::PARAM_INT);
+            $stmt->execute();
+            $itineraries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Lấy tất cả checkpoints cho departure này
+            $checkpointSql = "SELECT itinerary_id, activity_index, checked_at, notes 
+                             FROM `itinerary_checkpoints`
+                             WHERE departure_id = :departure_id AND guide_id = :guide_id";
+            $checkpointStmt = $this->conn->prepare($checkpointSql);
+            $checkpointStmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
+            $checkpointStmt->bindParam(':guide_id', $guideId, PDO::PARAM_INT);
+            $checkpointStmt->execute();
+            $checkpoints = $checkpointStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Gắn checkpoints vào itineraries
+            foreach ($itineraries as &$itinerary) {
+                $itinerary['activity_checkpoints'] = [];
+                foreach ($checkpoints as $checkpoint) {
+                    if ($checkpoint['itinerary_id'] == $itinerary['id']) {
+                        $itinerary['activity_checkpoints'][$checkpoint['activity_index']] = [
+                            'checked_at' => $checkpoint['checked_at'],
+                            'notes' => $checkpoint['notes']
+                        ];
+                    }
+                }
+            }
+
+            return $itineraries;
         } else {
             // Lấy lịch trình không có checkpoint
             $sql = "SELECT i.*, 
@@ -221,15 +241,16 @@ class ItineraryModel
 
     /**
      * Đánh dấu checkpoint đã hoàn thành
+     * @param int $activityIndex - Index của activity (0 = cả ngày, 1+ = activity cụ thể)
      */
-    public function markCheckpoint($departureId, $itineraryId, $guideId, $notes = null)
+    public function markCheckpoint($departureId, $itineraryId, $guideId, $activityIndex = 0, $notes = null)
     {
         try {
             $checkedAt = date('Y-m-d H:i:s');
 
             $sql = "INSERT INTO `itinerary_checkpoints` 
-                    (departure_id, itinerary_id, guide_id, checked_at, notes)
-                    VALUES (:departure_id, :itinerary_id, :guide_id, :checked_at, :notes)
+                    (departure_id, itinerary_id, guide_id, activity_index, checked_at, notes)
+                    VALUES (:departure_id, :itinerary_id, :guide_id, :activity_index, :checked_at, :notes)
                     ON DUPLICATE KEY UPDATE 
                         checked_at = :checked_at,
                         notes = :notes";
@@ -238,6 +259,7 @@ class ItineraryModel
             $stmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
             $stmt->bindParam(':itinerary_id', $itineraryId, PDO::PARAM_INT);
             $stmt->bindParam(':guide_id', $guideId, PDO::PARAM_INT);
+            $stmt->bindParam(':activity_index', $activityIndex, PDO::PARAM_INT);
             $stmt->bindParam(':checked_at', $checkedAt, PDO::PARAM_STR);
             $stmt->bindParam(':notes', $notes, PDO::PARAM_STR);
 
@@ -254,19 +276,22 @@ class ItineraryModel
 
     /**
      * Bỏ đánh dấu checkpoint
+     * @param int $activityIndex - Index của activity (0 = cả ngày, 1+ = activity cụ thể)
      */
-    public function unmarkCheckpoint($departureId, $itineraryId, $guideId)
+    public function unmarkCheckpoint($departureId, $itineraryId, $guideId, $activityIndex = 0)
     {
         try {
             $sql = "DELETE FROM `itinerary_checkpoints` 
                     WHERE departure_id = :departure_id 
                       AND itinerary_id = :itinerary_id 
-                      AND guide_id = :guide_id";
+                      AND guide_id = :guide_id
+                      AND activity_index = :activity_index";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
             $stmt->bindParam(':itinerary_id', $itineraryId, PDO::PARAM_INT);
             $stmt->bindParam(':guide_id', $guideId, PDO::PARAM_INT);
+            $stmt->bindParam(':activity_index', $activityIndex, PDO::PARAM_INT);
 
             $result = $stmt->execute();
 

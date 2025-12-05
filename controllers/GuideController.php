@@ -138,6 +138,7 @@ class GuideController
 
         $departure_id = $input['departure_id'] ?? 0;
         $itinerary_id = $input['itinerary_id'] ?? 0;
+        $activity_index = $input['activity_index'] ?? 0; // Index của activity
         $action = $input['action'] ?? ''; // 'check' hoặc 'uncheck'
         $notes = $input['notes'] ?? null;
 
@@ -165,9 +166,9 @@ class GuideController
 
         // Thực hiện action
         if ($action === 'check') {
-            $result = $this->itineraryModel->markCheckpoint($departure_id, $itinerary_id, $guide_id, $notes);
+            $result = $this->itineraryModel->markCheckpoint($departure_id, $itinerary_id, $guide_id, $activity_index, $notes);
         } else {
-            $result = $this->itineraryModel->unmarkCheckpoint($departure_id, $itinerary_id, $guide_id);
+            $result = $this->itineraryModel->unmarkCheckpoint($departure_id, $itinerary_id, $guide_id, $activity_index);
         }
 
         echo json_encode($result);
