@@ -69,9 +69,6 @@
       <!-- Tiêu đề + Nút thêm -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0 text-primary"><i class="fas fa-file-contract"></i> Danh sách chính sách Tour</h3>
-        <a href="<?= BASE_URL ?>?act=policiesCreate" class="btn btn-add-policy">
-          <i class="fas fa-plus-circle"></i> Thêm chính sách mới
-        </a>
       </div>
 
           <div class="container py-5">
