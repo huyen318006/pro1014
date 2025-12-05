@@ -8,16 +8,15 @@ class Services {
         $this->conn = connectDB();
     }
 
-    // ================================
-    // 1. Lấy tất cả dịch vụ
-    // ================================
-    // models/Services.php → HÀM getAll() – ĐÃ FIX HOÀN TOÀN (copy đè nguyên hàm này)
-    public function getAll() {
+    // 1. LẤY TẤT CẢ DỊCH VỤ (dùng cho trang danh sách khi không lọc)
+    public function getAll()
+    {
         $sql = "SELECT 
                     s.*,
-                    COALESCE(t.name, CONCAT('Tour ID: ', d.tour_id)) AS tour_name,
+                    d.departure_date,
                     DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted,
-                    COALESCE(d.meeting_point, 'Chưa có điểm đón') AS meeting_point
+                    t.name AS tour_name,
+                    t.code AS tour_code
                 FROM services s
                 LEFT JOIN departures d ON s.departure_id = d.id
                 LEFT JOIN tours t ON d.tour_id = t.id
@@ -27,119 +26,69 @@ class Services {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // ================================
-    // 2. Lấy dịch vụ theo ID
-    // ================================
+
+    // 2. LẤY DỊCH VỤ THEO ID
     public function getServiceById($id)
     {
-        $sql = "SELECT * FROM services WHERE id = ?";
+        $sql = "SELECT s.*, d.tour_id, d.departure_date, t.name AS tour_name 
+                FROM services s
+                LEFT JOIN departures d ON s.departure_id = d.id
+                LEFT JOIN tours t ON d.tour_id = t.id
+                WHERE s.id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
-
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // ================================
-    // 3. Thêm dịch vụ
-    // ================================
-    public function create($departure_id, $service_name, $partner_name, $status, $note = null)
-{
-    // Chỉ chấp nhận các giá trị hợp lệ
-    $allowed = ['pending', 'confirmed', 'cancelled'];
-    $status = in_array($status, $allowed) ? $status : 'pending';
-
-    $sql = "INSERT INTO services 
-            (departure_id, service_name, partner_name, status, note) 
-            VALUES (?, ?, ?, ?, ?)";
-
-    $stmt = $this->conn->prepare($sql);
-    return $stmt->execute([
-        $departure_id,
-        $service_name,
-        $partner_name,
-        $status,
-        $note
-    ]);
-}
-
-    // ================================
-    // 4. Cập nhật dịch vụ
-    // ================================
-   public function update($id, $departure_id, $service_name, $partner_name, $status, $note = null)
+    // 3. HÀM QUAN TRỌNG: LẤY DỊCH VỤ THEO TOUR_ID (ĐÃ SỬA ĐÚNG 100%)
+    public function getServicesByTour($tour_id)
     {
-        // BẮT BUỘC PHẢI CÓ DÒNG NÀY – FIX LỖI "Data truncated for column 'status'"
+        $sql = "SELECT 
+                    s.*,
+                    d.departure_date,
+                    DATE_FORMAT(d.departure_date, '%d/%m/%Y') AS departure_date_formatted
+                FROM services s
+                JOIN departures d ON s.departure_id = d.id
+                WHERE d.tour_id = ?
+                ORDER BY d.departure_date DESC, s.id DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$tour_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 4. LẤY DỊCH VỤ THEO DEPARTURE_ID
+    public function getServicesByDeparture($departure_id)
+    {
+        $sql = "SELECT * FROM services WHERE departure_id = ? ORDER BY id DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$departure_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 5. THÊM DỊCH VỤ
+    public function create($departure_id, $service_name, $partner_name, $status = 'pending', $note = null)
+    {
+        $allowed = ['pending', 'confirmed', 'cancelled'];
+        $status = in_array($status, $allowed) ? $status : 'pending';
+
+        $sql = "INSERT INTO services (departure_id, service_name, partner_name, status, note) 
+                VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$departure_id, $service_name, $partner_name, $status, $note]);
+    }
+
+    // 6. CẬP NHẬT DỊCH VỤ
+    public function update($id, $departure_id, $service_name, $partner_name, $status = 'pending', $note = null)
+    {
         $allowed = ['pending', 'confirmed', 'cancelled'];
         $status = in_array($status, $allowed) ? $status : 'pending';
 
         $sql = "UPDATE services 
-                SET departure_id = ?, 
-                    service_name = ?, 
-                    partner_name = ?, 
-                    status = ?, 
-                    note = ?
+                SET departure_id = ?, service_name = ?, partner_name = ?, status = ?, note = ?, updated_at = NOW()
                 WHERE id = ?";
-
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([
-            $departure_id,
-            $service_name,
-            $partner_name,
-            $status,     // ← giờ đã an toàn 100%
-            $note,
-            $id
-        ]);
+        return $stmt->execute([$departure_id, $service_name, $partner_name, $status, $note, $id]);
     }
-
-    // ================================
-    // 5. Xóa dịch vụ
-    // ================================
-    public function delete($id)
-    {
-        $sql = "DELETE FROM services WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$id]);
-    }
-
-    // ================================
-    // 6. Lấy danh sách service của 1 departure
-    // ================================
-    public function getServicesByDeparture($departure_id)
-    {
-        $sql = "SELECT s.*
-                FROM services s
-                JOIN departure_services ds ON s.id = ds.service_id
-                WHERE ds.departure_id = ?";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$departure_id]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // ================================
-    // 7. Gắn dịch vụ vào departure
-    // ================================
-    public function addServiceToDeparture($departure_id, $service_id)
-    {
-        $sql = "INSERT INTO departure_services (departure_id, service_id)
-                VALUES (?, ?)";
-
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$departure_id, $service_id]);
-    }
-
-    // ================================
-    // 8. Xóa dịch vụ khỏi departure
-    // ================================
-    public function removeServiceFromDeparture($departure_id, $service_id)
-    {
-        $sql = "DELETE FROM departure_services
-                WHERE departure_id = ? AND service_id = ?";
-
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$departure_id, $service_id]);
-    }
-
 }
 ?>
-
