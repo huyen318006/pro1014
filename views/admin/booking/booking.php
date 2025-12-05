@@ -84,80 +84,6 @@
 
 
 
-        <style>
-            .departure-cards {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-
-            .departure-card {
-                width: 220px;
-                background: #fff;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s;
-            }
-
-            .departure-card:hover {
-                transform: translateY(-5px);
-            }
-
-            .card-image img {
-                width: 100%;
-                height: 140px;
-                object-fit: cover;
-            }
-
-            .card-content {
-                padding: 10px;
-                text-align: center;
-            }
-
-            .card-content h3 {
-                font-size: 1.1em;
-                margin: 5px 0;
-            }
-
-            .card-content p {
-                font-size: 0.9em;
-                margin: 3px 0;
-            }
-
-            .badge {
-                display: inline-block;
-                padding: 3px 6px;
-                border-radius: 4px;
-                font-size: 0.75em;
-                margin: 5px 0;
-            }
-
-            .badge-ready {
-                background-color: #28a745;
-                color: #fff;
-            }
-
-            .badge-planned {
-                background-color: #ffc107;
-                color: #fff;
-            }
-
-            .btn-book {
-                display: inline-block;
-                margin-top: 8px;
-                padding: 6px 10px;
-                background-color: #007bff;
-                color: #fff;
-                border-radius: 5px;
-                text-decoration: none;
-                font-size: 0.9em;
-            }
-
-            .btn-book:hover {
-                background-color: #0056b3;
-            }
-        </style>
 
 
 
@@ -168,3 +94,82 @@
 </body>
 
 </html>
+<style>
+    <style>
+    /* ================= CONTENT ONLY ================= */
+
+    :root {
+        --primary: #00bcd4;
+        --primary-dark: #006978;
+    }
+
+    /* PAGE CONTAINER */
+    .content .departure-container {
+        max-width: 1200px;
+    }
+
+    /* MAIN TITLE */
+    .content .title {
+        font-weight: 800;
+    }
+
+    /* TOUR GROUP TITLE */
+    .content h4.text-danger {
+        border-left: 5px solid var(--primary);
+        padding-left: 12px;
+        color: #222 !important;
+    }
+
+    /* CARD */
+    .content .card {
+        border-radius: 18px;
+        border: none;
+    }
+
+    .content .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    /* HOVER SCALE */
+    .content .hover-scale {
+        transition: 0.3s ease;
+    }
+
+    .content .hover-scale:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    /* TEXT */
+    .content .card-title {
+        font-weight: 600;
+    }
+
+    /* BADGE */
+    .content .badge {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .content .bg-success {
+        background: linear-gradient(135deg, #00c853, #2e7d32) !important;
+    }
+
+    /* BUTTON */
+    .content .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        border-radius: 14px;
+        padding: 10px;
+        font-weight: 600;
+        transition: .25s;
+    }
+
+    .content .btn-primary:hover {
+        background: linear-gradient(135deg, #00d5f1, #007688);
+        transform: scale(1.05);
+    }
+</style>
+
+</style>

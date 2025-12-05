@@ -107,182 +107,85 @@
 
 </html>
 <style>
-    /* ==================== LỊCH KHỞI HÀNH - ĐẸP & CHUYÊN NGHIỆP ==================== */
-    .departure-container {
-        max-width: 1200px;
-        margin: 30px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e0e6ed;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    <style>
+    /* ================= CONTENT ONLY ================= */
+
+    :root {
+        --primary: #00bcd4;
+        --primary-dark: #006978;
     }
 
-    .departure-container .title {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 700;
+    /* KHU CONTENT */
+    .content {
+        padding: 40px 20px;
+    }
+
+    /* TITLE */
+    .content h2 {
+        font-weight: 800;
         color: #2c3e50;
-        margin-bottom: 30px;
-        position: relative;
-        padding-bottom: 12px;
     }
 
-    .departure-container .title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, #3498db, #2980b9);
-        border-radius: 2px;
+    /* FORM CARD */
+    .content form {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
     }
 
-    /* Bảng */
-    .departure-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        font-size: 15.5px;
-        background: #fff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .departure-table thead {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: #ffffff;
-        text-transform: uppercase;
-        font-size: 14px;
-        letter-spacing: 0.8px;
-    }
-
-    .departure-table th {
-        padding: 18px 15px;
-        text-align: center;
+    /* LABEL */
+    .content .form-label {
         font-weight: 600;
-    }
-
-    .departure-table td {
-        padding: 16px 15px;
-        text-align: center;
-        vertical-align: middle;
-        border-bottom: 1px solid #eef2f7;
         color: #34495e;
     }
 
-    .departure-table tbody tr {
-        transition: all 0.3s ease;
+    /* INPUT / SELECT */
+    .content .form-control,
+    .content .form-select {
+        border-radius: 10px;
+        padding: 10px 14px;
+        border: 1px solid #dde6ee;
+        transition: 0.25s ease;
     }
 
-    .departure-table tbody tr:nth-child(even) {
-        background-color: #f8fbff;
+    /* FOCUS */
+    .content .form-control:focus,
+    .content .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.18);
     }
 
-    .departure-table tbody tr:hover {
-        background: linear-gradient(to right, #ebf3fd, #f0f7ff);
-        transform: scale(1.01);
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
-        z-index: 1;
-        position: relative;
-    }
-
-    /* Cột trạng thái "Chưa phân công" */
-    .departure-table td:contains('Chưa phân công') {
-        color: #e67e22 !important;
+    /* BUTTON */
+    .content .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        border-radius: 16px;
+        padding: 12px;
         font-weight: 600;
+        transition: 0.25s ease;
     }
 
-    /* Responsive cho mobile */
-    @media (max-width: 768px) {
-        .departure-container {
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .departure-container .title {
-            font-size: 24px;
-        }
-
-        .departure-table {
-            font-size: 14px;
-        }
-
-        .departure-table thead {
-            display: none;
-        }
-
-        .departure-table tbody tr {
-            display: block;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            background: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .departure-table td {
-            display: block;
-            text-align: right;
-            padding: 8px 0;
-            position: relative;
-            padding-left: 50%;
-            border: none;
-        }
-
-        .departure-table td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 15px;
-            width: 45%;
-            font-weight: 600;
-            color: #3498db;
-            text-align: left;
-        }
-
-        /* Container link */
-        a {
-            text-decoration: none;
-            /* bỏ gạch chân */
-            margin: 0 5px;
-            /* khoảng cách giữa các icon */
-            display: inline-block;
-        }
-
-        /* Icon chung */
-        a i.fas {
-            font-size: 18px;
-            /* kích thước icon */
-            color: #555;
-            /* màu mặc định */
-            transition: color 0.3s, transform 0.2s;
-            /* hiệu ứng khi hover */
-        }
-
-        /* Hover đổi màu và nhẹ phóng to */
-        a i.fas:hover {
-            color: #007bff;
-            /* đổi màu xanh khi hover */
-            transform: scale(1.2);
-            /* phóng to 20% */
-        }
-
-        /* Icon riêng biệt nếu muốn màu khác nhau */
-        a i.fa-edit {
-            color: #28a745;
-            /* màu xanh lá cho sửa */
-        }
-
-        a i.fa-trash {
-            color: #dc3545;
-            /* màu đỏ cho xóa */
-        }
-
+    .content .btn-primary:hover {
+        background: linear-gradient(135deg, #00d5f1, #007688);
+        transform: scale(1.04);
     }
+
+    /* MOBILE */
+    @media(max-width:768px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content form {
+            padding: 18px;
+        }
+
+        .content h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+    }
+</style>
+
 </style>

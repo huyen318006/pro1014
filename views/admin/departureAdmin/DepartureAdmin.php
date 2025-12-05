@@ -81,7 +81,7 @@
                         $end_date = date('Y-m-d', strtotime($start_date . ' + ' . ($day - 1) . ' days'));
 
 
-                    ?> 
+                        ?>
                         <tr>
                             <td><?= $departure['tour_name'] ?? '' ?></td>
                             <td><?= $departure['departure_date'] ?? '' ?></td>
@@ -129,110 +129,140 @@
 
 </html>
 <style>
-    /* ==================== LỊCH KHỞI HÀNH - ĐẸP & CHUYÊN NGHIỆP ==================== */
+    /* ================= ROOT ================= */
+    :root {
+        --main: #00acc1;
+        --dark: #007c91;
+    }
+
+    /* ================= CONTENT ================= */
+    .content {
+        padding: 30px 20px;
+        background: #f5f8fc;
+    }
+
+    /* ================= CARD ================= */
     .departure-container {
         max-width: 1200px;
-        margin: 30px auto;
-        background: #ffffff;
+        margin: auto;
+        background: #fff;
         padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e0e6ed;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, .08);
     }
 
-    .departure-container .title {
+    /* ================= TITLE ================= */
+    .title {
         text-align: center;
-        font-size: 28px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 30px;
+        font-weight: 800;
+        color: #222;
+        margin-bottom: 25px;
         position: relative;
-        padding-bottom: 12px;
     }
 
-    .departure-container .title::after {
+    .title::after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: -8px;
         left: 50%;
         transform: translateX(-50%);
         width: 80px;
         height: 4px;
-        background: linear-gradient(90deg, #3498db, #2980b9);
-        border-radius: 2px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--main), var(--dark));
     }
 
-    /* Bảng */
+    /* ================= TABLE ================= */
     .departure-table {
         width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        font-size: 15.5px;
-        background: #fff;
-        border-radius: 12px;
+        border-collapse: collapse;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, .05);
     }
 
+    /* HEADER */
     .departure-table thead {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: #ffffff;
-        text-transform: uppercase;
-        font-size: 14px;
-        letter-spacing: 0.8px;
+        background: linear-gradient(135deg, var(--main), var(--dark));
     }
 
     .departure-table th {
-        padding: 18px 15px;
+        color: #f7fbff;
+        /* chữ trắng dịu */
+        font-weight: 700;
+        letter-spacing: 0.4px;
         text-align: center;
-        font-weight: 600;
+        padding: 16px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
     }
 
+    /* BODY */
     .departure-table td {
-        padding: 16px 15px;
         text-align: center;
+        padding: 14px;
         vertical-align: middle;
-        border-bottom: 1px solid #eef2f7;
-        color: #34495e;
+        border-top: 1px solid #eef2f6;
     }
 
     .departure-table tbody tr {
-        transition: all 0.3s ease;
-    }
-
-    .departure-table tbody tr:nth-child(even) {
-        background-color: #f8fbff;
+        transition: .25s;
     }
 
     .departure-table tbody tr:hover {
-        background: linear-gradient(to right, #ebf3fd, #f0f7ff);
-        transform: scale(1.01);
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
-        z-index: 1;
-        position: relative;
+        background: #e9faff;
     }
 
-    /* Cột trạng thái "Chưa phân công" */
-    .departure-table td:contains('Chưa phân công') {
-        color: #e67e22 !important;
+    /* ================= STATUS ================= */
+    .departure-table td:nth-child(8) {
+        font-weight: 700;
+        color: #444;
+    }
+
+    /* ================= ICON ================= */
+    a {
+        text-decoration: none;
+    }
+
+    a i {
+        font-size: 17px;
+        margin: 0 4px;
+        transition: .2s;
+    }
+
+    a i:hover {
+        transform: scale(1.2);
+    }
+
+    /* edit */
+    .fa-edit {
+        color: #28a745;
+    }
+
+    /* delete */
+    .fa-trash {
+        color: #dc3545;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn-success {
+        border: none;
+        border-radius: 14px;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
         font-weight: 600;
+        transition: .25s;
     }
 
-    /* Responsive cho mobile */
-    @media (max-width: 768px) {
+    .btn-success:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #52d15d, #185e1f);
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:768px) {
+
         .departure-container {
-            margin: 15px;
             padding: 20px;
-            border-radius: 12px;
-        }
-
-        .departure-container .title {
-            font-size: 24px;
-        }
-
-        .departure-table {
-            font-size: 14px;
         }
 
         .departure-table thead {
@@ -241,69 +271,24 @@
 
         .departure-table tbody tr {
             display: block;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
+            margin-bottom: 14px;
+            border-radius: 12px;
             background: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .06);
         }
 
         .departure-table td {
-            display: block;
-            text-align: right;
-            padding: 8px 0;
-            position: relative;
-            padding-left: 50%;
+            display: flex;
+            justify-content: space-between;
             border: none;
+            padding: 8px 0;
         }
 
         .departure-table td::before {
             content: attr(data-label);
-            position: absolute;
-            left: 15px;
-            width: 45%;
             font-weight: 600;
-            color: #3498db;
-            text-align: left;
-        }
-
-        /* Container link */
-        a {
-            text-decoration: none;
-            /* bỏ gạch chân */
-            margin: 0 5px;
-            /* khoảng cách giữa các icon */
-            display: inline-block;
-        }
-
-        /* Icon chung */
-        a i.fas {
-            font-size: 18px;
-            /* kích thước icon */
-            color: #555;
-            /* màu mặc định */
-            transition: color 0.3s, transform 0.2s;
-            /* hiệu ứng khi hover */
-        }
-
-        /* Hover đổi màu và nhẹ phóng to */
-        a i.fas:hover {
-            color: #007bff;
-            /* đổi màu xanh khi hover */
-            transform: scale(1.2);
-            /* phóng to 20% */
-        }
-
-        /* Icon riêng biệt nếu muốn màu khác nhau */
-        a i.fa-edit {
-            color: #28a745;
-            /* màu xanh lá cho sửa */
-        }
-
-        a i.fa-trash {
-            color: #dc3545;
-            /* màu đỏ cho xóa */
+            color: var(--main);
         }
 
     }
