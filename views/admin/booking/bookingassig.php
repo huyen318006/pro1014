@@ -145,8 +145,113 @@
                 alert(`Chỉ còn ${max} chỗ trống! Vui lòng giảm số lượng vé.`);
             }
             // Không hiện alert "thành công" nữa → để PHP lo
-        }); 
+        });
     </script>
+
+    <style>
+        /* ===== CONTENT BACKGROUND ===== */
+        .content {
+            padding: 30px 15px;
+            background: #f4f7fb;
+        }
+
+        /* ===== FORM CARD ===== */
+        .content>div {
+            border-radius: 20px !important;
+            background: white !important;
+            padding: 26px !important;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        /* ===== TITLE ===== */
+        .content h3 {
+            font-weight: 700;
+            color: #00bcd4 !important;
+        }
+
+        .content h5 {
+            font-weight: 600;
+        }
+
+        /* ===== LABEL ===== */
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* ===== INPUT ===== */
+        .form-control,
+        .form-select,
+        textarea {
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            border: 1px solid #ddd;
+            transition: 0.25s;
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, .15);
+        }
+
+        /* ===== FIELD SPACING ===== */
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        /* ===== READONLY STYLE ===== */
+        input[readonly] {
+            background: #f7fafc !important;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* ===== INNER BOX (HDV SELECT) ===== */
+        .content .p-4.shadow.rounded.bg-white {
+            background: #f9fcfd !important;
+            border-radius: 16px !important;
+            border-left: 4px solid #00bcd4;
+            box-shadow: none !important;
+            margin-top: 20px;
+        }
+
+        /* ===== BUTTON MAIN ===== */
+        .btn-primary {
+            background: linear-gradient(135deg, #00bcd4, #006978);
+            border: none;
+            border-radius: 16px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: .4px;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: linear-gradient(135deg, #00d5f1, #007688);
+        }
+
+        /* ===== ALERT ERROR ===== */
+        .text-danger {
+            background: #ffe5e5;
+            border-left: 4px solid #dc3545;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* ===== SMOOTHER ANIMATION ===== */
+        .content * {
+            transition: .2s;
+        }
+    </style>
+
+
+
 
 </body>
 

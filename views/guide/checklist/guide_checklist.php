@@ -173,31 +173,129 @@
 
 </html>
 <style>
-    /* ===== BUTTON LƯU CHECKLIST ===== */
+    /* ROOT */
+    :root {
+        --primary: #00bcd4;
+        --primary-dark: #006978;
+        --bg-soft: #f6fafb;
+    }
+
+    /* BACKGROUND CONTENT */
+    body {
+        background: #f4f7fa;
+    }
+
+    /* CARD STYLE */
+    .card,
+    .checklist-card {
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* TITLE */
+    .page-title {
+        font-weight: 700;
+        color: #222;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .form-check {
+        background: var(--bg-soft);
+        border-radius: 10px;
+        padding: 10px 14px 10px 38px;
+        transition: 0.25s;
+        border: 1px solid #eef2f5;
+    }
+
+    .form-check:hover {
+        background: #eaf8fb;
+        transform: translateX(5px);
+    }
+
+    .form-check-input {
+        width: 1.2rem;
+        height: 1.2rem;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+    }
+
+    /* ===== TABLE (ĐIỂM DANH) ===== */
+    .table {
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .table th {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff !important;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 600;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background: #f6fbff;
+    }
+
+    /* ===== INPUT ===== */
+    .table input[type="number"],
+    .table input[type="text"] {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 6px 10px;
+        width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .table input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(0, 188, 212, .2);
+    }
+
+    /* CĂN GIỮA INPUT NUMBER */
+    .table input[type="number"] {
+        text-align: center;
+    }
+
+    /* ===== BUTTON CHECKLIST ===== */
     .btn-save-checklist {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.5rem 1.3rem;
+        padding: 0.55rem 1.4rem;
         font-size: 0.95rem;
         font-weight: 600;
         color: #fff;
         background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border-radius: 14px;
         border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 151, 167, 0.25);
+        transition: 0.3s;
     }
 
-    .btn-save-checklist i {
-        font-size: 1rem;
-    }
-
-    /* Hover hiệu ứng */
     .btn-save-checklist:hover {
-        background: linear-gradient(135deg, #00bcd4, #006978);
         transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 6px 16px rgba(0, 151, 167, 0.35);
+    }
+
+    /* ===== BUTTON SAVE ATTENDANCE ===== */
+    .btn-success {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        border: none;
+        border-radius: 14px;
+        padding: 0.5rem 1.6rem;
+        transition: 0.3s;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px) scale(1.06);
     }
 </style>
