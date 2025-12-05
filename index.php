@@ -30,6 +30,7 @@ require_once './models/IncidentReportModel.php';
 require_once './models/CategoryModel.php';
 require_once './models/PolicyModel.php';
 require_once './models/BookingModel.php';
+require_once './models/RollcallModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -90,6 +91,9 @@ match ($act) {
   'updateAssignment' => (new AssignmentController())->update(),
   'deleteAssignment' => (new AssignmentController())->delete(),
 
+
+
+
   //phần quản lí lịch trình tour của admin dành cho nhân viên
   'DepartureAdmin' => (new DepartureController())->DepartureAdmin(),
   //edit kịch trình tour
@@ -119,10 +123,16 @@ match ($act) {
   'block_user' => (new UsersController())->block_user(),
   //mở khóa tài khoản
   'open_user' => (new UsersController())->open_user(),
+
+
   //checklist cho admin và guide
   'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
   'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
   'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
+  //kiểm tra điểm danh
+  'saveAttendance' =>(new ChecklistController())->saveChecklistRollCall(),
+
+
   //báo cáo sự cố của admin và guide
   // Guide tạo báo cáo
   'incident' => (new IncidentReportController())->create(),

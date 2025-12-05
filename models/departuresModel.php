@@ -172,5 +172,17 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
             ]);
         }
     }
+
+
+    // Lấy tất cả lịch khởi hành theo ngày
+    public function getByTourAndDate($tour_id, $departure_date)
+    {
+        $sql = "SELECT * FROM departures WHERE tour_id = :tour_id AND departure_date = :departure_date";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':tour_id', $tour_id);
+        $stmt->bindParam(':departure_date', $departure_date);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

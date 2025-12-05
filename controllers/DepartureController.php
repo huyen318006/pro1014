@@ -64,6 +64,15 @@ class DepartureController {
         if($_SERVER['REQUEST_METHOD']=='POST'){
             $tour_id=$_POST['tour'];
             $departure_date= $_POST['departure_date'];
+            // Lấy tất cả lịch khởi hành theo ngày
+            // Kiểm tra lịch theo tour và ngày
+            $existingDeparture = $this->departures->getByTourAndDate($tour_id, $departure_date);
+
+            if (!empty($existingDeparture)) {
+                $_SESSION['error'] = "Tour đã có lịch khởi hành vào ngày $departure_date. Vui lòng chọn ngày khác.";
+                header("Location: " . BASE_URL . "?act=addDepartureAdmin");
+                exit;
+            }
             $meeting_point= $_POST['meeting_point'];
             $max_participants = $_POST['max_participants'];
             $note = $_POST['note'];

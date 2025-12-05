@@ -100,7 +100,35 @@ class BookingModel {
         $stmt->execute([':booking_id' => $booking_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+
+
+    //phần  kiểm tra phân công trc khi đặt tour
+    public function isGuideBusy($guide_id, $departure_date)
+    {
+        $sql = "SELECT d.*, b.guide_id 
+            FROM departures d
+            JOIN bookings b ON d.id = b.departure_id
+            WHERE b.guide_id = :guide_id 
+              AND d.departure_date = :departure_date";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':guide_id', $guide_id);
+        $stmt->bindParam(':departure_date', $departure_date);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // trả về 1 bản ghi nếu có
+    }
+
+    // =============================
+    // Lấy thông tin departure theo ID
+
+    // =============================
+    public function getById($departure_id)
+    {
+        $sql = "SELECT * FROM departures WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $departure_id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
     

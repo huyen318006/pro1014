@@ -46,6 +46,7 @@
     <!-- Content -->
     <div class="content d-flex justify-content-center mt-4">
 
+
         <div class="form-container col-md-6 col-lg-5 bg-white shadow-lg rounded-4 p-4">
             <h2 class="text-center text-primary fw-bold mb-4">
                 <i class="fas fa-plane-departure me-2"></i> Thêm Lịch Khởi Hành
@@ -70,6 +71,12 @@
                     <input type="date" id="departure_date" name="departure_date"
                         class="form-control shadow-sm"
                         min="<?= date('Y-m-d') ?>" required>
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div class="text-danger mt-2">
+                            <?= $_SESSION['error']; ?>
+                        </div>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
                 </div>
 
                 <div class="mb-3">
