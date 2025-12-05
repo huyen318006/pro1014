@@ -45,10 +45,7 @@
   <!-- Content -->
 
   <div class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <a href="<?= BASE_URL ?>?act=createAssignment" class="btn btn-success"><i class="fas fa-plus"></i> Thêm phân công</a>
-    </div>
-    <div class="table-card">
+      <div class="table-card">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead class="table-light">
@@ -87,11 +84,35 @@
                   </td>
                   <td><?= date('d/m/Y H:i', strtotime($a['assigned_at'])) ?></td>
                   <td>
-                    <div class="btn-action-group">
-                      <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                      <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
+                    <?php
+                    if ($a['departure_status'] !== 'ready') {
+                    ?>
+                      <div class="btn-action-group">
+                        <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
+                        <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
+                        <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
+                      </div>
+                    <?php
+                    } else { ?>
+                      <!-- Khi trạng thái là ready, dùng onclick alert -->
+                      <a href="javascript:void(0);"
+                        onclick="alert('Không thể sửa khi trạng thái tour đã Ready!');"
+                        class="btn btn-secondary btn-action">
+                        <i class="fas fa-edit text-light" title="Không thể sửa"></i>
+                      </a>
+
+                      <a href="javascript:void(0);"
+                        onclick="alert('Không thể xóa khi trạng thái tour đã Ready!');"
+                        class="btn btn-secondary btn-action">
+                        <i class="fas fa-trash text-light" title="Không thể xóa"></i>
+                      </a>
                       <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
-                    </div>
+
+
+                    <?php
+
+                    }
+                    ?>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -103,7 +124,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -61,6 +61,7 @@
                     <tr>
                         <th>Tên Tour</th>
                         <th>Ngày Khởi Hành</th>
+                        <th>Ngày kết thúc</th>
                         <th>Điểm Đón</th>
                         <th>Số Chỗ</th>
                         <th>Giá Tour</th>
@@ -72,9 +73,19 @@
 
                 <tbody>
                     <?php foreach ($departures as $departure): ?>
+                        <?php
+                        $day = $departure['duration_days']; // số ngày tour
+                        $start_date = $departure['departure_date']; // dạng YYYY-mm-dd
+
+                        // Ngày kết thúc = ngày khởi hành + (duration_days - 1)
+                        $end_date = date('Y-m-d', strtotime($start_date . ' + ' . ($day - 1) . ' days'));
+
+
+                    ?> 
                         <tr>
                             <td><?= $departure['tour_name'] ?? '' ?></td>
                             <td><?= $departure['departure_date'] ?? '' ?></td>
+                            <th><?= $end_date  ?></th>
                             <td><?= $departure['meeting_point'] ?? '' ?></td>
 
                             <td><?= $departure['max_participants'] ?? '' ?></td>

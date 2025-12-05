@@ -44,51 +44,63 @@
     </div>
 
     <!-- Content -->
-    <div class="content">
+    <div class="content d-flex justify-content-center mt-4">
 
-        <div class="form-container">
-            <h2>Thêm Lịch Khởi Hành</h2>
-            <form id="addDepartureForm" action="<?= BASE_URL . '?act=addDepartureForm' ?>" method="post">
+        <div class="form-container col-md-6 col-lg-5 bg-white shadow-lg rounded-4 p-4">
+            <h2 class="text-center text-primary fw-bold mb-4">
+                <i class="fas fa-plane-departure me-2"></i> Thêm Lịch Khởi Hành
+            </h2>
+
+            <form id="addDepartureForm"
+                action="<?= BASE_URL . '?act=addDepartureForm' ?>"
+                method="post"
+                onsubmit="return hanld()">
+
                 <div class="mb-3">
-                    <label for="tour" class="form-label fw-bold">Chọn Tour</label>
-                    <select id="tour_id" name="tour" class="form-select" required>
-                        <?php
-                        foreach ($getAllTours as $tour) {
-                        ?>
+                    <label class="form-label fw-bold">Chọn Tour</label>
+                    <select id="tour_id" name="tour" class="form-select shadow-sm" required>
+                        <?php foreach ($getAllTours as $tour): ?>
                             <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
-                        <?php
-                        }
-                        ?>
-
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="departure_date" class="form-label fw-bold">Ngày Khởi Hành</label>
-                    <input type="date" id="departure_date" name="departure_date" class="form-control" required>
+                    <label class="form-label fw-bold">Ngày Khởi Hành</label>
+                    <input type="date" id="departure_date" name="departure_date"
+                        class="form-control shadow-sm"
+                        min="<?= date('Y-m-d') ?>" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Điểm tập trung</label>
-                    <input type="text" name="meeting_point" class="form-control" required>
-
+                    <input type="text" name="meeting_point"
+                        class="form-control shadow-sm" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="max_participants" class="form-label fw-bold">Số Chỗ</label>
-                    <input type="number" id="max_participants" name="max_participants" class="form-control" min="1" required>
+                    <label class="form-label fw-bold">Số Chỗ</label>
+                    <input type="number" id="max_participants" name="max_participants"
+                        class="form-control shadow-sm"
+                        min="1" max="20" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="note" class="form-label fw-bold">Ghi Chú</label>
-                    <input type="text" id="note" name="note" class="form-control" placeholder="Ghi chú thêm (nếu có)">
+                    <label class="form-label fw-bold">Ghi Chú</label>
+                    <input type="text" id="note" name="note"
+                        class="form-control shadow-sm"
+                        placeholder="Ghi chú thêm (nếu có)">
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Thêm Lịch Khởi Hành</button>
+                <button type="submit"
+                    class="btn btn-primary w-100 fw-bold py-2 rounded-pill shadow">
+                    <i class="fas fa-plus-circle me-1"></i> Thêm Lịch Khởi Hành
+                </button>
             </form>
         </div>
 
-
     </div>
+
 
 
 
@@ -98,6 +110,24 @@
 </body>
 
 </html>
+
+<script>
+    const hanld = () => {
+        const max_participants = document.getElementById('max_participants').value;
+
+        // Ép kiểu sang số
+        const seat = Number(max_participants);
+
+        // Kiểm tra rỗng, không phải số, nhỏ hơn 1 hoặc lớn hơn 20
+        if (isNaN(seat) || seat < 1 || seat > 25) {
+            alert('Số ghế không hợp lệ! Chỉ được nhập từ 1 đến 25.');
+            return false; // chặn submit
+        }
+
+        return true; // cho submit
+    };
+</script>
+
 <style>
     /* ==================== LỊCH KHỞI HÀNH - ĐẸP & CHUYÊN NGHIỆP ==================== */
     .departure-container {
