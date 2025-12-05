@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Guide Dashboard | LOFT CITY</title>
@@ -10,8 +11,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
   <!-- CSS chung với admin -->
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/guide.css"> <!-- màu mới -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/guide.css"> <!-- màu mới -->
 
 </head>
 
@@ -25,12 +26,12 @@
 
     <h4>HƯỚNG DẪN VIÊN</h4>
 
-   <a href="<?= BASE_URL.'?act=guideDashboard' ?>"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-  <a href="<?= BASE_URL.'?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
-  <a href="<?= BASE_URL.'?act=MyTour' ?>" class="active"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
-  <a href="guideDiary.php"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
-  <a href="<?= BASE_URL.'?act=incident'?>"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
-  <a href="<?= BASE_URL.'?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+    <a href="<?= BASE_URL . '?act=guideDashboard' ?>" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="<?= BASE_URL . '?act=guideDepartures' ?>"><i class="fas fa-calendar-alt"></i> <span>Lịch khởi hành</span></a>
+    <a href="<?= BASE_URL . '?act=MyTour' ?>"><i class="fas fa-map-marked-alt"></i> <span>Tour được giao</span></a>
+    <a href="<?= BASE_URL . '?act=guideDiary' ?>"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
+    <a href="<?= BASE_URL . '?act=incident' ?>"><i class="fas fa-exclamation-triangle"></i> <span>Báo cáo sự cố</span></a>
+    <a href="<?= BASE_URL . '?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
 
   </div>
 
@@ -133,4 +134,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
