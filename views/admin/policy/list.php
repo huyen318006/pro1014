@@ -69,63 +69,59 @@
       <!-- Tiêu đề + Nút thêm -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0 text-primary"><i class="fas fa-file-contract"></i> Danh sách chính sách Tour</h3>
-        <a href="<?= BASE_URL ?>?act=policiesCreate" class="btn btn-add-policy">
-          <i class="fas fa-plus-circle"></i> Thêm chính sách mới
-        </a>
       </div>
 
-      <!-- Bảng dữ liệu -->
-      <div class="table-card">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle policy-table">
-            <thead class="table-dark">
-              <tr>
-                <th width="80">ID</th>
-                <th>Tour</th>
-                <th>Loại chính sách</th>
-                <th>Nội dung tóm tắt</th>
-                <th width="170" class="text-center">Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if (empty($policies)): ?>
-                <tr>
-                  <td colspan="5" class="text-center py-5 text-muted">
-                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-                    Chưa có chính sách nào
-                  </td>
-                </tr>
-              <?php else: ?>
-                <?php foreach ($policies as $p): ?>
-                  <tr>
-                    <td class="text-center fw-bold">#<?= $p['id'] ?></td>
-                    <td><strong><?= htmlspecialchars($p['tour_name'] ?? 'Chưa xác định') ?></strong></td>
-                    <td>
-                      <span class="badge policy-type-badge badge-chung">
-                        <?= htmlspecialchars($p['policy_type']) ?>
-                      </span>
-                    </td>
-                    <td class="content-preview">
-                      <?= htmlspecialchars(mb_substr(strip_tags($p['content']), 0, 100)) ?>...
-                    </td>
-                    <td class="text-center">
-                      <a href="<?= BASE_URL ?>?act=policiesEdit&id=<?= $p['id'] ?>"
-                        class="btn btn-policy-edit btn-sm" title="Sửa">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <a href="<?= BASE_URL ?>?act=policiesDelete&id=<?= $p['id'] ?>"
-                        class="btn btn-policy-delete btn-sm" title="Xóa"
-                        onclick="return confirm('Xóa chính sách này?\nHành động không thể hoàn tác!')">
-                        <i class="fas fa-trash-alt"></i>
-                      </a>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php endif; ?>
-            </tbody>
-          </table>
+          <div class="container py-5">
+        <div class="policy-box p-4 shadow rounded bg-white">
+            <h2 class="mb-4 text-primary"><i class="fas fa-scroll"></i> Chính Sách Tour Du Lịch</h2>
+
+            <h4 class="mt-4 text-dark">1. Chính sách đặt tour</h4>
+            <p>- Khách hàng cung cấp thông tin cá nhân chính xác khi đặt tour.<br>
+              - Xác nhận đặt tour qua email hoặc số điện thoại.<br>
+              - Giá tour có thể thay đổi tùy thời điểm.</p>
+
+            <h4 class="mt-4 text-dark">2. Chính sách thanh toán</h4>
+            <p>- Thanh toán qua chuyển khoản hoặc trực tiếp tại văn phòng.<br>
+              - Yêu cầu đặt cọc theo từng tour.<br>
+              - Phần còn lại cần thanh toán trước ngày khởi hành.</p>
+
+            <h4 class="mt-4 text-dark">3. Chính sách hủy tour & hoàn tiền</h4>
+            <p>- Hủy trước ≥10 ngày: hoàn 80% giá tour.<br>
+              - Hủy 5–9 ngày: hoàn 50%.<br>
+              - Hủy dưới 5 ngày: không hoàn tiền.<br>
+              - Nếu công ty hủy tour: hoàn tiền 100% hoặc đổi tour khác.</p>
+
+            <h4 class="mt-4 text-dark">4. Chính sách thay đổi dịch vụ</h4>
+            <p>- Cho phép thay đổi thông tin trước ngày khởi hành (có thể tính phí).<br>
+              - Dịch vụ như vé máy bay/khách sạn sẽ theo quy định từ nhà cung cấp.</p>
+
+            <h4 class="mt-4 text-dark">5. Chính sách dành cho trẻ em</h4>
+            <p>- Trẻ < 2 tuổi: miễn phí hoặc phí thấp theo tour.<br>
+              - Trẻ 2–11 tuổi: tính 50–75% giá tour.<br>
+              - Trẻ ≥ 12 tuổi: tính như người lớn.</p>
+
+            <h4 class="mt-4 text-dark">6. Khách sạn & lưu trú</h4>
+            <p>- Nhận phòng sau 14:00 theo quy định.<br>
+              - Phòng đơn phụ thu thêm.<br>
+              - Nếu hết phòng, khách sạn tương đương sẽ được bố trí.</p>
+
+            <h4 class="mt-4 text-dark">7. Phương tiện di chuyển</h4>
+            <p>- Xe du lịch đời mới, máy lạnh.<br>
+              - Tour có máy bay sẽ theo quy định vé của hãng.<br>
+              - Khách đến trễ giờ khởi hành tự chịu trách nhiệm.</p>
+
+            <h4 class="mt-4 text-dark">8. Bảo mật thông tin</h4>
+            <p>- Chúng tôi cam kết bảo mật thông tin khách hàng.<br>
+              - Không chia sẻ cho bên thứ ba ngoài đối tác cung cấp dịch vụ tour.<br>
+              - Dữ liệu chỉ được dùng phục vụ chuyến đi.</p>
+
+            <h4 class="mt-4 text-dark">9. Điều khoản chung</h4>
+            <p>- Việc đặt tour nghĩa là bạn đồng ý với các chính sách nêu trên.<br>
+              - Chính sách có thể thay đổi mà không cần báo trước.<br>
+              - Liên hệ hotline khi cần hỗ trợ.</p>
         </div>
-      </div>
+    </div>
+
 
     </div>
   </div>
