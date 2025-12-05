@@ -12,14 +12,10 @@ $act = 'services';
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>asset/css/trangchu.css">
-
-  <style>
-    .hover-shadow-lg:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-    }
-  </style>
 </head>
+<style>
+  .t { width: 150px; position: relative; right: -30px; }
+</style>
 <body>
 
   <!-- Sidebar -->
@@ -85,11 +81,6 @@ $act = 'services';
               <?php endforeach; ?>
             </select>
           </div>
-          <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">
-              <i class="fas fa-filter"></i> Lọc
-            </button>
-          </div>
         </div>
       </form>
 
@@ -117,9 +108,6 @@ $act = 'services';
                 if ($t['id'] == $selectedTourId) { $currentTour = $t; break; }
               }
             ?>
-            <span class="badge bg-light text-dark fs-6">
-              Tour: <?= htmlspecialchars($currentTour['name'] ?? 'Không xác định') ?>
-            </span>
           <?php endif; ?>
         </div>
 
@@ -143,28 +131,54 @@ $act = 'services';
                     <th width="70" class="text-center">#ID</th>
                     <th>Tên dịch vụ</th>
                     <th>Đối tác</th>
-                    <th width="130" class="text-center">Hành động</th>
+                    <th class="t">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($services as $s): ?>
-                    <tr>
-                      <td class="text-center fw-bold">#<?= $s['id'] ?></td>
-                      <td>
-                        <strong><?= htmlspecialchars($s['service_name']) ?></strong>
-                        <?php if (!empty($s['departure_date_formatted'])): ?>
-                          <br><small class="text-muted">Ngày khởi hành: <?= $s['departure_date_formatted'] ?></small>
-                        <?php endif; ?>
-                      </td>
-                      <td><?= htmlspecialchars($s['partner_name'] ?? '<em class="text-muted">Chưa có</em>') ?></td>
-                      <td class="text-center">
-                        <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>" class="btn btn-warning btn-sm" title="Sửa">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </td>
-                    </tr>
+                      <?php
+                      // Kiểm tra tour có trạng thái "ready" không
+                      $canEditDelete = true;
+                      if (!empty($s['tour_id'])) {
+                          $tour = (new TourModel())->getTourById($s['tour_id']);
+                          if ($tour && strtolower($tour['status'] ?? '') === 'ready') {
+                              $canEditDelete = false;
+                          }
+                      }
+                      ?>
+                      <tr>
+                          <td class="text-center fw-bold">#<?= $s['id'] ?></td>
+                          <td><strong><?= htmlspecialchars($s['service_name']) ?></strong></td>
+                          <td><?= htmlspecialchars($s['partner_name'] ?? '-') ?></td>
+                          <!-- <td>
+                              <?php if (!empty($s['tour_name'])): ?>
+                                  <small class="text-primary fw-bold"><?= htmlspecialchars($s['tour_name']) ?></small>
+                                  <?php if (!$canEditDelete): ?>
+                                      <span class="badge bg-danger ms-2">READY</span>
+                                  <?php endif; ?>
+                              <?php else: ?>
+                                  
+                              <?php endif; ?>
+                          </td> -->
+                          <td class="text-center">
+                              <?php if ($canEditDelete): ?>
+                                  <a href="index.php?act=servicesEdit&id=<?= $s['id'] ?>" class="btn btn-warning btn-sm" title="Sửa">
+                                      <i class="fas fa-edit"></i>
+                                  </a>
+                                  <a href="index.php?act=servicesDelete&id=<?= $s['id'] ?>" 
+                                    class="btn btn-danger btn-sm" title="Xóa"
+                                    onclick="return confirm('Xóa dịch vụ này thật nhé?')">
+                                      <i class="fas fa-trash"></i>
+                                  </a>
+                              <?php else: ?>
+                                  <button class="btn btn-secondary btn-sm" disabled title="Tour đang READY – không thể sửa/xóa">
+                                      <i class="fas fa-lock"></i> Khóa
+                                  </button>
+                              <?php endif; ?>
+                          </td>
+                      </tr>
                   <?php endforeach; ?>
-                </tbody>
+              </tbody>
               </table>
             </div>
           <?php endif; ?>

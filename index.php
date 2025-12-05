@@ -112,6 +112,7 @@ match ($act) {
   'servicesStoreByDeparture'   => (new ServicesController())->storeByDeparture(),
   'servicesEdit'   => (new ServicesController())->edit(),
   'servicesUpdate' => (new ServicesController())->update(),
+  'servicesDelete' => (new ServicesController())->delete(),
 
 
 

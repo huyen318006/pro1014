@@ -22,6 +22,31 @@ if (!$service) {
     <link rel="stylesheet" href="<?= BASE_URL ?>asset/css/trangchu.css">
 </head>
 <body>
+    <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo"><i class="fas fa-user-shield"></i></div>
+    <h4>ADMIN</h4>
+    <a href="index.php?act=home"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
+    <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
+    <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
+    <a href="?act=listAssignments"><i class="fas fa-user-secret"></i> <span>Phân công HDV</span></a>
+    <a href="index.php?act=services" class="active"><i class="fas fa-concierge-bell"></i> <span>Quản lý Dịch Vụ</span></a>
+    <a href="index.php?act=policies"><i class="fas fa-scroll"></i> <span>Quản lý Chính Sách</span></a>
+    <a href="?act=incidents"><i class="fas fa-exclamation-triangle"></i><span>Danh sách báo cáo</span></a>
+    <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
+    <a href="<?= BASE_URL . '?act=booking' ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
+    <a href="<?= BASE_URL . '?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h5><i class="fas fa-cogs"></i> Bảng điều khiển quản trị</h5>
+    <div class="user-info">
+      <i class="fas fa-user-circle"></i>
+      <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
+    </div>
+  </div>
     <div class="content">
         <div class="container-fluid py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -44,17 +69,6 @@ if (!$service) {
                 <div class="alert alert-danger alert-dismissible fade show">
                     <?= $_SESSION['error']; unset($_SESSION['error']); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-
-            <!-- Hiển thị thông tin tour + ngày -->
-            <?php if ($tour && $departure): ?>
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> 
-                    <strong>Thuộc tour:</strong> <?= htmlspecialchars($tour['name'] ?? 'N/A') ?>
-                    <?php if (!empty($tour['code'])) echo " <small>[" . htmlspecialchars($tour['code']) . "]</small>"; ?>
-                    — <strong>Ngày khởi hành:</strong> 
-                    <?= !empty($departure['departure_date']) ? date('d/m/Y', strtotime($departure['departure_date'])) : 'Chưa xác định' ?>
                 </div>
             <?php endif; ?>
 

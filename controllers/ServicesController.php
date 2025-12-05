@@ -211,6 +211,95 @@ class ServicesController {
         exit;
     }
 
-    // Có thể thêm update(), delete() sau nếu cần
+    // ================== XÓA DỊCH VỤ – CÓ KIỂM TRA TOUR READY ==================
+public function delete() {
+    $id = $_GET['id'] ?? 0;
+
+    if (!$id || !is_numeric($id)) {
+        $_SESSION['error'] = "ID dịch vụ không hợp lệ!";
+        header('Location: index.php?act=services');
+        exit;
+    }
+
+    // Lấy thông tin dịch vụ để kiểm tra
+    $service = $this->serviceModel->getServiceById($id);
+    if (!$service) {
+        $_SESSION['error'] = "Không tìm thấy dịch vụ!";
+        header('Location: index.php?act=services');
+        exit;
+    }
+
+    // Lấy departure → tour → kiểm tra trạng thái
+    $departure = $this->departureModel->getAllDepartures($service['departure_id']);
+    if ($departure && !empty($departure['tour_id'])) {
+        $tour = $this->modelTour->getTourById($departure['tour_id']);
+        if ($tour && strtolower($tour['status'] ?? '') === 'ready') {
+            $_SESSION['error'] = "Không thể xóa dịch vụ – Tour đang ở trạng thái READY!";
+            header('Location: index.php?act=services');
+            exit;
+        }
+    }
+
+    // XÓA THẬT
+    $result = $this->serviceModel->delete($id);
+
+    if ($result) {
+        $_SESSION['success'] = "Xóa dịch vụ thành công!";
+    } else {
+        $_SESSION['error'] = "Xóa dịch vụ thất bại!";
+    }
+
+    header('Location: index.php?act=services');
+    exit;
+}
+// ================== CẬP NHẬT DỊCH VỤ ==================
+public function update() {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?act=services');
+        exit;
+    }
+
+    $id           = $_POST['id'] ?? 0;
+    $service_name = trim($_POST['service_name'] ?? '');
+    $partner_name = trim($_POST['partner_name'] ?? '');
+    $status       = $_POST['status'] ?? 'pending';
+    $note         = trim($_POST['note'] ?? '');
+
+    if (!$id || empty($service_name)) {
+        $_SESSION['error'] = "Thông tin không hợp lệ!";
+        header("Location: index.php?act=servicesEdit&id=$id");
+        exit;
+    }
+
+    // KIỂM TRA TOUR CÓ READY KHÔNG
+    $service = $this->serviceModel->getServiceById($id);
+    if ($service) {
+        $departure = $this->departureModel->getAllDepartures($service['departure_id']);
+        if ($departure && !empty($departure['tour_id'])) {
+            $tour = $this->modelTour->getTourById($departure['tour_id']);
+            if ($tour && strtolower($tour['status'] ?? '') === 'ready') {
+                $_SESSION['error'] = "Không thể sửa – Tour đang ở trạng thái READY!";
+                header("Location: index.php?act=servicesEdit&id=$id");
+                exit;
+            }
+        }
+    }
+
+    // CẬP NHẬT THẬT
+    $result = $this->serviceModel->update(
+        $id,
+        $service_name,
+        $partner_name,
+        $status,
+        $note
+    );
+
+    $_SESSION[$result ? 'success' : 'error'] = $result 
+        ? "Cập nhật dịch vụ thành công!" 
+        : "Cập nhật thất bại!";
+
+    header('Location: index.php?act=services');
+    exit;
+}
 }
 ?>

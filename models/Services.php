@@ -79,16 +79,19 @@ class Services {
     }
 
     // 6. CẬP NHẬT DỊCH VỤ
-    public function update($id, $departure_id, $service_name, $partner_name, $status = 'pending', $note = null)
-    {
-        $allowed = ['pending', 'confirmed', 'cancelled'];
-        $status = in_array($status, $allowed) ? $status : 'pending';
+    public function update($id, $service_name, $partner_name) {
+    $sql = "UPDATE services 
+            SET service_name = ?, 
+                partner_name = ?
+            WHERE id = ?";
 
-        $sql = "UPDATE services 
-                SET departure_id = ?, service_name = ?, partner_name = ?, status = ?, note = ?, updated_at = NOW()
-                WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$departure_id, $service_name, $partner_name, $status, $note, $id]);
-    }
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$service_name, $partner_name, $id]);
+}
+    public function delete($id) {
+    $sql = "DELETE FROM services WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$id]);
+}
 }
 ?>
