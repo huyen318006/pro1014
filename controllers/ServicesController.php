@@ -1,125 +1,172 @@
 <?php
 class ServicesController {
     private $serviceModel;
-    private $departureModel;
+    private $modelTour;
 
     public function __construct() {
-        $this->serviceModel   = new Services();
-        $this->departureModel = new Departures();
+        $this->serviceModel = new Services();
+        $this->modelTour    = new TourModel();
     }
 
+    // =====================================================
+    // 1. Danh sách dịch vụ + Lọc theo Tour
+    // =====================================================
     public function index() {
-        $services = $this->serviceModel->getAll();
-        require_once BASE_URL_VIEWS . 'admin/services/list.php';   // ĐÚNG
+        $tours = $this->modelTour->getAllTours();
+
+        $selectedTourId = $_POST['tour_id'] ?? null;
+        $services = [];
+
+        if ($selectedTourId) {
+            $services = $this->serviceModel->getByTourId($selectedTourId);
+        } else {
+            $services = $this->serviceModel->getAll();
+        }
+
+        require_once BASE_URL_VIEWS . 'admin/services/list.php';
     }
 
-    public function create() {
-        $departures = $this->departureModel->getAllWithTourInfo();
-        require_once BASE_URL_VIEWS . 'admin/services/add.php';    // ĐÚNG
+    // =====================================================
+    // 2. Trang thêm dịch vụ nhanh
+    // =====================================================
+    public function quickCreate() {
+        $tours = $this->modelTour->getAllTours();
+        require_once BASE_URL_VIEWS . 'admin/services/quick_create.php';
     }
 
+    // =====================================================
+    // 3. Lưu dịch vụ nhanh
+    // =====================================================
+    public function quickStore() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?act=services');
+            exit;
+        }
+
+        $tour_id  = $_POST['tour_id'] ?? null;
+        $services = $_POST['services'] ?? [];
+
+        if (!$tour_id || empty($services)) {
+            $_SESSION['error'] = "Vui lòng chọn tour và nhập ít nhất 1 dịch vụ!";
+            header('Location: index.php?act=servicesQuickCreate');
+            exit;
+        }
+
+        $tour_ids = is_array($tour_id) ? $tour_id : [$tour_id];
+        $total = 0;
+
+        foreach ($services as $name) {
+            $name = trim($name);
+            if ($name === '') continue;
+
+            foreach ($tour_ids as $tid) {
+                $tid = (int)$tid;
+                if ($tid <= 0) continue;
+
+                $this->serviceModel->createByTour(
+                    $tid,
+                    $name,
+                    $name,
+                    'confirmed',
+                    "Dịch vụ chung cho tour ID #$tid"
+                );
+
+                $total++;
+            }
+        }
+
+        $_SESSION['success'] = "Đã thêm $total dịch vụ!";
+        header('Location: index.php?act=services');
+        exit;
+    }
+
+    // =====================================================
+    // 4. Trang sửa dịch vụ
+    // =====================================================
     public function edit() {
         $id = $_GET['id'] ?? 0;
+
         if (!$id) {
-            $_SESSION['error'] = "ID không hợp lệ!";
-            header('Location: index.php?act=services'); exit;
+            $_SESSION['error'] = "ID dịch vụ không hợp lệ!";
+            header('Location: index.php?act=services');
+            exit;
         }
 
-        $service    = $this->serviceModel->getServiceById($id);
-        $departures = $this->departureModel->getAllWithTourInfo();
-
+        $service = $this->serviceModel->getServiceById($id);
         if (!$service) {
             $_SESSION['error'] = "Không tìm thấy dịch vụ!";
-            header('Location: index.php?act=services'); exit;
+            header('Location: index.php?act=services');
+            exit;
         }
 
-        require_once BASE_URL_VIEWS . 'admin/services/edit.php';   // ĐÚNG
+        $tours = $this->modelTour->getAllTours();
+        $GLOBALS['service'] = $service;
+
+        require_once BASE_URL_VIEWS . 'admin/services/edit.php';
     }
 
-    // store(), update(), delete() giữ nguyên như trước (đã gửi)
-    public function store() {
-    // Kiểm tra phương thức POST
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $_SESSION['error'] = "Phương thức không hợp lệ!";
-        header('Location: index.php?act=servicesCreate'); 
+    // =====================================================
+    // 5. Lưu cập nhật dịch vụ
+    // =====================================================
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?act=services');
+            exit;
+        }
+
+        $id           = $_POST['id'] ?? 0;
+        $service_name = trim($_POST['service_name'] ?? '');
+        $partner_name = trim($_POST['partner_name'] ?? '');
+        $status       = $_POST['status'] ?? 'pending';
+        $note         = trim($_POST['note'] ?? '');
+
+        if (!$id || empty($service_name)) {
+            $_SESSION['error'] = "Thông tin không hợp lệ!";
+            header("Location: index.php?act=servicesEdit&id=$id");
+            exit;
+        }
+
+        $result = $this->serviceModel->update(
+            $id,
+            $service_name,
+            $partner_name,
+            $status,
+            $note
+        );
+
+        $_SESSION[$result ? 'success' : 'error'] =
+            $result ? "Cập nhật thành công!" : "Cập nhật thất bại!";
+
+        header('Location: index.php?act=services');
         exit;
     }
 
-    // Kiểm tra CSRF token
-    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-        $_SESSION['error'] = "Lỗi bảo mật!";
-        header('Location: index.php?act=servicesCreate'); 
-        exit;
-    }
-
-    // Lấy dữ liệu từ form
-    $departure_id = trim($_POST['departure_id'] ?? '');
-    $service_name = trim($_POST['service_name'] ?? '');
-    $partner_name = trim($_POST['partner_name'] ?? '');
-    $status       = $_POST['status'] ?? 'pending';
-    $note         = trim($_POST['note'] ?? '');
-
-    // Kiểm tra dữ liệu bắt buộc
-    if (empty($departure_id) || empty($service_name) || empty($partner_name)) {
-        $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
-        $_SESSION['old'] = $_POST;
-        header('Location: index.php?act=servicesCreate'); 
-        exit;
-    }
-
-    // Thêm dịch vụ
-    $result = $this->serviceModel->create($departure_id, $service_name, $partner_name, $status, $note);
-    $_SESSION[$result ? 'success' : 'error'] = $result ? "Thêm thành công!" : "Thêm thất bại!";
-    header('Location: index.php?act=services'); 
-    exit;
-}
-
-public function update() {
-    // Kiểm tra phương thức POST
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $_SESSION['error'] = "Phương thức không hợp lệ!";
-        header('Location: index.php?act=services'); 
-        exit;
-    }
-
-    // Kiểm tra CSRF token
-    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-        $_SESSION['error'] = "Lỗi bảo mật!";
-        $id = $_POST['id'] ?? 0;
-        header("Location: index.php?act=servicesEdit&id=$id"); 
-        exit;
-    }
-
-    // Lấy dữ liệu từ form
-    $id           = $_POST['id'] ?? 0;
-    $departure_id = trim($_POST['departure_id'] ?? '');
-    $service_name = trim($_POST['service_name'] ?? '');
-    $partner_name = trim($_POST['partner_name'] ?? '');
-    $status       = $_POST['status'] ?? 'pending';
-    $note         = trim($_POST['note'] ?? '');
-
-    // Kiểm tra dữ liệu bắt buộc
-    if (!$id || empty($departure_id) || empty($service_name) || empty($partner_name)) {
-        $_SESSION['error'] = "Dữ liệu không hợp lệ!";
-        $_SESSION['old'] = $_POST;
-        header("Location: index.php?act=servicesEdit&id=$id"); 
-        exit;
-    }
-
-    // Cập nhật dịch vụ
-    $result = $this->serviceModel->update($id, $departure_id, $service_name, $partner_name, $status, $note);
-    $_SESSION[$result ? 'success' : 'error'] = $result ? "Cập nhật thành công!" : "Cập nhật thất bại!";
-    header('Location: index.php?act=services'); 
-    exit;
-}
-
+    // =====================================================
+    // 6. Xóa dịch vụ
+    // =====================================================
     public function delete() {
         $id = $_GET['id'] ?? 0;
-        if ($id) {
-            $this->serviceModel->delete($id);
-            $_SESSION['success'] = "Xóa thành công!";
+
+        if (!$id) {
+            $_SESSION['error'] = "ID không hợp lệ!";
+            header('Location: index.php?act=services');
+            exit;
         }
-        header('Location: index.php?act=services'); exit;
+
+        $service = $this->serviceModel->getServiceById($id);
+        if (!$service) {
+            $_SESSION['error'] = "Không tìm thấy dịch vụ!";
+            header('Location: index.php?act=services');
+            exit;
+        }
+
+        $result = $this->serviceModel->delete($id);
+
+        $_SESSION[$result ? 'success' : 'error'] =
+            $result ? "Đã xóa dịch vụ!" : "Xóa thất bại!";
+
+        header('Location: index.php?act=services');
+        exit;
     }
 }
 ?>

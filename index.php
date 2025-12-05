@@ -103,12 +103,13 @@ match ($act) {
   'addDepartureForm' => (new DepartureController())->addDepartureForm(),
 
   //Quản lí dịch vụ
-  'services' => (new ServicesController())->index(),
-  'servicesCreate' => (new ServicesController())->create(),
-  'servicesStore' => (new ServicesController())->store(),
-  'servicesEdit' => (new ServicesController())->edit(),
+  'services'                   => (new ServicesController())->index(),
+  'servicesQuickCreate'        => (new ServicesController())->quickCreate(),      
+  'servicesQuickStore'         => (new ServicesController())->quickStore(),       
+  'servicesEdit'   => (new ServicesController())->edit(),
   'servicesUpdate' => (new ServicesController())->update(),
   'servicesDelete' => (new ServicesController())->delete(),
+
 
 
   ////////////Phần quản lí tài khoản////////////
