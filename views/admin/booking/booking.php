@@ -94,81 +94,103 @@
 </body>
 
 </html>
-
-    <style>
-    /* ================= CONTENT ONLY ================= */
-
-    :root {
-        --primary: #00bcd4;
-        --primary-dark: #006978;
+<style>
+    /* ====== Vùng content ====== */
+    .content {
+        margin-left: 230px;
+        padding: 30px;
+        background: #f5f7fa;
+        min-height: 100vh;
     }
 
-    /* PAGE CONTAINER */
-    .content .departure-container {
-        max-width: 1200px;
-    }
-
-    /* MAIN TITLE */
+    /* ====== Tiêu đề ====== */
     .content .title {
-        font-weight: 800;
-    }
-
-    /* TOUR GROUP TITLE */
-    .content h4.text-danger {
-        border-left: 5px solid var(--primary);
+        font-weight: 700;
+        font-size: 28px;
+        color: #006978;
+        border-left: 4px solid #006978;
         padding-left: 12px;
-        color: #222 !important;
     }
 
-    /* CARD */
-    .content .card {
-        border-radius: 18px;
-        border: none;
+    /* ====== Card của từng lịch khởi hành ====== */
+    .hover-scale {
+        transition: all 0.25s ease;
+        border: 1px solid #e1e1e1;
     }
 
-    .content .card-img-top {
-        height: 200px;
+    .hover-scale:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Ảnh tour */
+    .card-img-top {
+        height: 170px;
         object-fit: cover;
+        border-radius: 10px 10px 0 0;
     }
 
-    /* HOVER SCALE */
-    .content .hover-scale {
-        transition: 0.3s ease;
-    }
-
-    .content .hover-scale:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
-    }
-
-    /* TEXT */
-    .content .card-title {
+    /* Tiêu đề trong card */
+    .card-title {
+        font-size: 18px;
         font-weight: 600;
+        color: #003c46;
     }
 
-    /* BADGE */
-    .content .badge {
-        font-size: 0.75rem;
-        padding: 6px 10px;
+    /* Badge ngày tháng */
+    .badge.border {
+        font-size: 13px;
+        background: #e6f9fb !important;
+        border: 1px solid #c6e8ec !important;
+        color: #004b56 !important;
     }
 
-    .content .bg-success {
-        background: linear-gradient(135deg, #00c853, #2e7d32) !important;
+    /* Badge trạng thái ("Sẵn sàng") */
+    .bg-success {
+        background: #28a745 !important;
     }
 
-    /* BUTTON */
-    .content .btn-primary {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    .bg-secondary {
+        background: #6c757d !important;
+    }
+
+    /* Giá tour */
+    .card-body p.fw-bold {
+        font-size: 18px;
+        color: #006978;
+    }
+
+    /* Nút đặt tour */
+    .btn-primary {
+        background: #006978;
         border: none;
-        border-radius: 14px;
         padding: 10px;
+        font-size: 15px;
         font-weight: 600;
-        transition: .25s;
+        border-radius: 8px;
     }
 
-    .content .btn-primary:hover {
-        background: linear-gradient(135deg, #00d5f1, #007688);
-        transform: scale(1.05);
+    .btn-primary:hover {
+        background: #0097A7;
+        transform: translateY(-2px);
+    }
+
+    /* Khi list "Không có lịch nào" */
+    .no-schedule {
+        font-size: 18px;
+        color: #555;
+        padding: 20px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .content {
+            margin-left: 0;
+            padding: 20px;
+        }
+
+        .card-img-top {
+            height: 150px;
+        }
     }
 </style>
-
