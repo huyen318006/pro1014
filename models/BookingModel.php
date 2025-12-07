@@ -39,7 +39,7 @@ class BookingModel {
     }
 
     //thêm đặt booking
-    public function addbooking($departure_id, $customer_email, $customer_name, $customer_phone, $quantity, $note, $guide_id)
+    public function addbooking($departure_id, $customer_email, $customer_name, $customer_phone, $quantity, $note)
     {
         // Thêm booking
         $sql = 'INSERT INTO bookings(departure_id, customer_email, customer_name, customer_phone, quantity, note, created_at) 
@@ -53,21 +53,6 @@ class BookingModel {
         $stmt->bindParam(':note', $note, PDO::PARAM_STR);
         $stmt->execute();
 
-        // Lấy ID booking vừa tạo
-        $booking_id = $this->conn->lastInsertId();
-
-        // Bước 2: Nếu có chọn guide → thêm luôn vào assignments
-        if ($guide_id && $guide_id > 0) {
-            $sql2 = "INSERT INTO assignments (departure_id, booking_id, guide_id) VALUES (?, ?, ?)";
-            $stmt2 = $this->conn->prepare($sql2);
-            $stmt2->execute([$departure_id, $booking_id, $guide_id]);
-        }
-
-
-        
-
-        // Trả về ID booking vừa tạo
-        return $booking_id;
         
     }
 
@@ -129,6 +114,9 @@ class BookingModel {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+    
 }
 
     

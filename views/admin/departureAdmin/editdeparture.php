@@ -109,11 +109,7 @@
 
     <style>
     /* ================= CONTENT ONLY ================= */
-
-    :root {
-        --primary: #00bcd4;
-        --primary-dark: #006978;
-    }
+    /* Use global color variables from asset/css/trangchu.css - removed local overrides */
 
     /* KHU CONTENT */
     .content {

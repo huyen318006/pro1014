@@ -8,7 +8,7 @@ class Departures {
         $this->conn = connectDB();
     }
 
-    //truy vấn các TOUR của guide dựa vào guide_id
+    //truy vấn các TOUR của guide dựa vào guide_id(hiển thị bên phần quản trị của guide)
    public function getDeparturesByGuide($guide_id)
     {
     $sql= "SELECT departures.*, tours.name AS tour_name 
@@ -102,7 +102,7 @@ public function delete_DepartureAdmin($id_DepartureAdmin) {
     return $stmt->execute();
 }
 //add form
-public function addDeparture($tour_id, $departure_date, $meeting_point, $max_participants, $note){
+public function addDeparture($tour_id, $departure_date, $meeting_point, $max_participants, $note, $guide_id) {
 
   $sql= "INSERT INTO departures (tour_id,departure_date,max_participants,meeting_point,note) VALUES (:tour_id,:departure_date,:max_participants,:meeting_point,:note)";
   $stmt = $this->conn->prepare($sql);
@@ -112,7 +112,16 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
         $stmt->bindParam(':meeting_point', $meeting_point);
         $stmt->bindParam(':max_participants', $max_participants);
         $stmt->bindParam(':note', $note);
-        return $stmt->execute();
+        $stmt->execute();
+        // Lấy ID của departure vừa thêm
+        $departure_id = $this->conn->lastInsertId();
+
+        // Thêm vào bảng assignments
+        $sqlAssign = "INSERT INTO assignments (departure_id, guide_id) VALUES (:departure_id, :guide_id)";
+        $stmtAssign = $this->conn->prepare($sqlAssign);
+        $stmtAssign->bindParam(':departure_id', $departure_id);
+        $stmtAssign->bindParam(':guide_id', $guide_id);
+        $stmtAssign->execute();
     }
 
     public function getAllWithTourInfo()
@@ -174,7 +183,7 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
     }
 
 
-    // Lấy tất cả lịch khởi hành theo ngày
+    // Lấy tất cả lịch khởi hành theo ngày để kiểm tra trùng
     public function getByTourAndDate($tour_id, $departure_date)
     {
         $sql = "SELECT * FROM departures WHERE tour_id = :tour_id AND departure_date = :departure_date";
@@ -184,5 +193,80 @@ public function addDeparture($tour_id, $departure_date, $meeting_point, $max_par
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+  
+   
+// Kiểm tra guide có đang được phân công tour nào không
+public function isGuideAssigned($guide_id) {
+    $sql = "SELECT COUNT(*) as count FROM assignments WHERE guide_id = :guide_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':guide_id', $guide_id);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['count'] > 0;
+
+    //đến đây là đã kiểm tra bản ghi dựa theo id của guide nếu có trả về true ko có trả về false
+}
+
+// Kiểm tra guide có đang đi tour (departure_date <= hôm nay) không
+public function isGuideOnActiveTour($guide_id) {
+    $sql = "SELECT COUNT(*) as count 
+            FROM assignments a
+            JOIN departures d ON a.departure_id = d.id
+            WHERE a.guide_id = :guide_id 
+            AND d.departure_date <= CURDATE()";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':guide_id', $guide_id);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['count'] > 0;
+}
+
+// Lấy chi tiết tour mà guide đang được phân công
+public function getGuideAssignedTours($guide_id) {
+    $sql = "SELECT d.*, t.name as tour_name, a.id as assignment_id
+            FROM assignments a
+            JOIN departures d ON a.departure_id = d.id
+            JOIN tours t ON d.tour_id = t.id
+            WHERE a.guide_id = :guide_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':guide_id', $guide_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+        // Kiểm tra guide có rảnh để nhận phân công cho khoảng thời gian bắt đầu từ $start_date
+        // và kéo dài $duration_days (số ngày). Trả về true nếu không có xung đột,
+        // ngược lại trả về false.
+        public function isGuideAvailable($guide_id, $start_date, $duration_days = 1)
+        {
+            // Tính ngày kết thúc đề xuất
+            $daysToAdd = max(0, intval($duration_days) - 1);
+            $proposed_start = date('Y-m-d', strtotime($start_date));
+            $proposed_end = date('Y-m-d', strtotime($proposed_start . " +{$daysToAdd} days"));
+
+            $sql = "SELECT COUNT(*) as cnt
+                    FROM assignments a
+                    JOIN departures d ON a.departure_id = d.id
+                    JOIN tours t ON d.tour_id = t.id
+                    WHERE a.guide_id = :guide_id
+                      AND NOT (
+                          :proposed_end < d.departure_date
+                          OR :proposed_start > DATE_ADD(d.departure_date, INTERVAL (t.duration_days - 1) DAY)
+                      )";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':guide_id', $guide_id, PDO::PARAM_INT);
+            $stmt->bindParam(':proposed_start', $proposed_start);
+            $stmt->bindParam(':proposed_end', $proposed_end);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return ($row && intval($row['cnt']) === 0);
+        }
+
+
+
+
 }
 ?>
