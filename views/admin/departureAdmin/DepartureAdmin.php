@@ -44,252 +44,190 @@
     </div>
 
     <!-- Content -->
-    <div class="content">
+    <!-- Content -->
+    <div class="content p-3 p-md-4" style="background: #f8fcfe; min-height: 100vh;">
+        <div class="container-fluid">
 
-        <!-- Nút thêm lịch khởi hành -->
-        <div class="mb-3 text-end">
-            <a href="<?= BASE_URL . '?act=addDepartureAdmin' ?>" class="btn btn-success">
-                <i class="fas fa-plus"></i> Thêm Lịch Khởi Hành
-            </a>
+            <!-- Header + Nút thêm -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold text-cyan mb-1">
+                        <i class="fas fa-plane-departure me-3"></i>Lịch Khởi Hành
+                    </h2>
+                    <small class="text-muted">Tổng cộng: <?= count($departures) ?> lịch đang hoạt động</small>
+                </div>
+                <a href="<?= BASE_URL . '?act=addDepartureAdmin' ?>"
+                    class="btn btn-cyan shadow-lg rounded-pill px-4 py-3 fw-bold">
+                    <i class="fas fa-plus-circle me-2"></i>Thêm Lịch Mới
+                </a>
+            </div>
+
+            <!-- Danh sách dạng Card dọc đẹp -->
+            <div class="row g-3">
+                <?php foreach ($departures as $d): ?>
+                    <?php
+                    $start = new DateTime($d['departure_date']);
+                    $end   = clone $start;
+                    $end->modify('+' . ($d['duration_days'] - 1) . ' days');
+                    $startFmt = $start->format('d/m/Y');
+                    $endFmt   = $end->format('d/m/Y');
+                    ?>
+
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden hover-lift">
+                            <div class="card-body p-4">
+                                <div class="row align-items-center g-3">
+
+                                    <!-- Tên tour -->
+                                    <div class="col-lg-3 col-md-4">
+                                        <h5 class="fw-bold text-cyan mb-1">
+                                            <?= htmlspecialchars($d['tour_name']) ?>
+                                        </h5>
+                                        <small class="text-muted">
+                                            <i class="fas fa-map-marked-alt me-1"></i>
+                                            <?= htmlspecialchars($d['meeting_point']) ?>
+                                        </small>
+                                    </div>
+
+                                    <!-- Ngày khởi hành + kết thúc -->
+                                    <div class="col-lg-2 col-md-3 text-center">
+                                        <div class="badge bg-primary text-white rounded-pill px-4 py-2 fw-bold">
+                                            <?= $startFmt ?>
+                                        </div>
+                                        <div class="mt-2 text-muted small">→ <?= $endFmt ?></div>
+                                    </div>
+
+                                    <!-- Số chỗ -->
+                                    <div class="col-lg-1 col-md-2 text-center">
+                                        <div class="fw-bold text-danger fs-4"><?= $d['max_participants'] ?></div>
+                                        <small class="text-muted">chỗ</small>
+                                    </div>
+
+                                    <!-- Giá tour -->
+                                    <div class="col-lg-2 col-md-3 text-end">
+                                        <div class="fw-bold text-success fs-5">
+                                            <?= number_format($d['tour_price'], 0, ',', '.') ?>đ
+                                        </div>
+                                    </div>
+
+                                    <!-- Ghi chú -->
+                                    <div class="col-lg-2 col-6">
+                                        <small class="text-muted">
+                                            <?= $d['note'] ? htmlspecialchars(mb_substr($d['note'], 0, 40)) . '...' : '<em>Không có ghi chú</em>' ?>
+                                        </small>
+                                    </div>
+
+                                    <!-- Trạng thái + Action -->
+                                    <div class="col-lg-2 col-md-4 text-end">
+                                        <?php if ($d['status'] == 'ready'): ?>
+                                            <span class="badge bg-success rounded-pill px-4 py-2 fw-bold">Ready</span>
+                                        <?php elseif ($d['status'] == 'cancelled'): ?>
+                                            <span class="badge bg-danger rounded-pill px-4 py-2 fw-bold">Hủy</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning text-dark rounded-pill px-4 py-2 fw-bold">Chờ</span>
+                                        <?php endif; ?>
+
+                                        <div class="mt-2 d-inline-block">
+                                            <?php if ($d['status'] !== 'ready'): ?>
+                                                <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $d['id'] ?>"
+                                                    class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $d['id'] ?>"
+                                                    onclick="return confirm('Xóa lịch này vĩnh viễn?')"
+                                                    class="btn btn-sm btn-outline-danger rounded-circle" title="Xóa">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted small">
+                                                    <i class="fas fa-lock"></i> Đã khởi hành
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+
+                <!-- Khi không có dữ liệu -->
+                <?php if (empty($departures)): ?>
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-calendar-times fa-5x text-muted mb-4 opacity-50"></i>
+                        <h4 class="text-muted">Chưa có lịch khởi hành nào</h4>
+                        <a href="<?= BASE_URL . '?act=addDepartureAdmin' ?>" class="btn btn-cyan btn-lg rounded-pill px-5 mt-3">
+                            <i class="fas fa-plus me-2"></i> Tạo lịch đầu tiên
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+
         </div>
-
-        <div class="departure-container">
-            <h2 class="title">📅 Lịch Khởi Hành</h2>
-
-            <table class="departure-table">
-                <thead>
-                    <tr>
-                        <th>Tên Tour</th>
-                        <th>Ngày Khởi Hành</th>
-                        <th>Ngày kết thúc</th>
-                        <th>Điểm Đón</th>
-                        <th>Số Chỗ</th>
-                        <th>Giá Tour</th>
-                        <th>Ghi Chú</th>
-                        <th>Trạng thái</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php foreach ($departures as $departure): ?>
-                        <?php
-                        $day = $departure['duration_days']; // số ngày tour
-                        $start_date = $departure['departure_date']; // dạng YYYY-mm-dd
-
-                        // Ngày kết thúc = ngày khởi hành + (duration_days - 1)
-                        $end_date = date('Y-m-d', strtotime($start_date . ' + ' . ($day - 1) . ' days'));
-
-
-                        ?>
-                        <tr>
-                            <td><?= $departure['tour_name'] ?? '' ?></td>
-                            <td><?= $departure['departure_date'] ?? '' ?></td>
-                            <th><?= $end_date  ?></th>
-                            <td><?= $departure['meeting_point'] ?? '' ?></td>
-
-                            <td><?= $departure['max_participants'] ?? '' ?></td>
-                            <td><?= number_format($departure['tour_price'] ?? 0, 0, ',', '.') . ' VND' ?></td>
-                            <td><?= $departure['note'] ?></td>
-                            <td><?= $departure['status'] ?></td>
-                            <!-- Phầm kiểm tra trạng thái  xem nếu trạng thái danh sách lịch trình nếu đã sẵn sàng xuất phát  thì ko thể xóa -->
-                            <td>
-                                <?php if ($departure['status'] !== 'ready'): ?>
-                                    <a href="<?= BASE_URL . '?act=editDepartureAdmin&id=' . $departure['id'] ?>">
-                                        <i class="fas fa-edit" title="Sửa lịch khởi hành"></i>
-                                    </a>
-                                    <a href="<?= BASE_URL . '?act=deleteDepartureAdmin&id=' . $departure['id'] ?>"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa lịch khởi hành này không?')">
-                                        <i class="fas fa-trash" title="Xóa"></i>
-                                    </a>
-                                <?php else: ?>
-                                    <!-- Khi trạng thái là ready, dùng onclick alert -->
-                                    <a href="javascript:void(0);" onclick="alert('Không thể sửa khi trạng thái tour đã  Ready!');">
-                                        <i class="fas fa-edit text-secondary" title="Không thể sửa"></i>
-                                    </a>
-                                    <a href="javascript:void(0);" onclick="alert('Không thể xóa khi trạng thái tour đã Ready!');">
-                                        <i class="fas fa-trash text-secondary" title="Không thể xóa"></i>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-
-
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
     </div>
-
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+
+
+
 <style>
-    /* ================= ROOT ================= */
     :root {
-        --main: #00acc1;
-        --dark: #007c91;
+        --cyan: #00bcd4;
+        --cyan-dark: #0097a7;
     }
 
-    /* ================= CONTENT ================= */
-    .content {
-        padding: 30px 20px;
-        background: #f5f8fc;
+    .text-cyan {
+        color: var(--cyan) !important;
     }
 
-    /* ================= CARD ================= */
-    .departure-container {
-        max-width: 1200px;
-        margin: auto;
-        background: #fff;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, .08);
+    .bg-cyan {
+        background-color: var(--cyan) !important;
     }
 
-    /* ================= TITLE ================= */
-    .title {
-        text-align: center;
-        font-weight: 800;
-        color: #222;
-        margin-bottom: 25px;
-        position: relative;
-    }
-
-    .title::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, var(--main), var(--dark));
-    }
-
-    /* ================= TABLE ================= */
-    .departure-table {
-        width: 100%;
-        border-collapse: collapse;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, .05);
-    }
-
-    /* HEADER */
-    .departure-table thead {
-        background: linear-gradient(135deg, var(--main), var(--dark));
-    }
-
-    .departure-table th {
-        color: #f7fbff;
-        /* chữ trắng dịu */
-        font-weight: 700;
-        letter-spacing: 0.4px;
-        text-align: center;
-        padding: 16px;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
-    }
-
-    /* BODY */
-    .departure-table td {
-        text-align: center;
-        padding: 14px;
-        vertical-align: middle;
-        border-top: 1px solid #eef2f6;
-    }
-
-    .departure-table tbody tr {
-        transition: .25s;
-    }
-
-    .departure-table tbody tr:hover {
-        background: #e9faff;
-    }
-
-    /* ================= STATUS ================= */
-    .departure-table td:nth-child(8) {
-        font-weight: 700;
-        color: #444;
-    }
-
-    /* ================= ICON ================= */
-    a {
-        text-decoration: none;
-    }
-
-    a i {
-        font-size: 17px;
-        margin: 0 4px;
-        transition: .2s;
-    }
-
-    a i:hover {
-        transform: scale(1.2);
-    }
-
-    /* edit */
-    .fa-edit {
-        color: #28a745;
-    }
-
-    /* delete */
-    .fa-trash {
-        color: #dc3545;
-    }
-
-    /* ================= BUTTON ================= */
-    .btn-success {
+    .btn-cyan {
+        background: linear-gradient(135deg, #00bcd4, #0097a7);
         border: none;
-        border-radius: 14px;
-        padding: 10px 16px;
-        background: linear-gradient(135deg, #4caf50, #2e7d32);
-        font-weight: 600;
-        transition: .25s;
+        color: white !important;
     }
 
-    .btn-success:hover {
-        transform: translateY(-2px);
-        background: linear-gradient(135deg, #52d15d, #185e1f);
+    .btn-cyan:hover {
+        background: linear-gradient(135deg, #00acc1, #00838f);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 188, 212, 0.3) !important;
     }
 
-    /* ================= RESPONSIVE ================= */
-    @media(max-width:768px) {
+    .card {
+        transition: all 0.3s ease;
+        border-left: 5px solid var(--cyan) !important;
+    }
 
-        .departure-container {
-            padding: 20px;
+    .hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 188, 212, 0.15) !important;
+    }
+
+    .badge {
+        font-size: 0.95rem !important;
+    }
+
+    /* Responsive siêu đẹp */
+    @media (max-width: 768px) {
+        .row>div>.card .row>div {
+            text-align: center !important;
         }
 
-        .departure-table thead {
-            display: none;
+        .row>div>.card .row>div:last-child {
+            margin-top: 1rem;
         }
 
-        .departure-table tbody tr {
-            display: block;
-            margin-bottom: 14px;
-            border-radius: 12px;
-            background: #fff;
-            padding: 16px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, .06);
+        .btn-sm {
+            width: 40px;
+            height: 40px;
         }
-
-        .departure-table td {
-            display: flex;
-            justify-content: space-between;
-            border: none;
-            padding: 8px 0;
-        }
-
-        .departure-table td::before {
-            content: attr(data-label);
-            font-weight: 600;
-            color: var(--main);
-        }
-
     }
 </style>

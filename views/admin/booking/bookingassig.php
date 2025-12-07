@@ -46,90 +46,117 @@
     </div>
 
     <!-- Main Content -->
-    <div class="content">
+    <!-- Main Content -->
+    <div class="content p-4 p-md-5" style="background: linear-gradient(135deg, #f8fdff 0%, #f0f9ff 100%); min-height: 100vh;">
+        <div class="container-fluid">
 
-        <!-- FORM ĐẶT TOUR -->
-        <div class="p-4 shadow rounded bg-white mb-5" style="max-width: 650px; margin: auto;">
-            <h3 class="text-primary mb-4"><i class="fas fa-ticket-alt"></i> Đặt Tour</h3>
+            <!-- Card chính - Form đặt tour -->
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-7 col-md-8 col-12">
 
-            <form action="<?= BASE_URL . '?act=addbooking' ?>" method="POST">
+                    <div class="card border-0 shadow-xl rounded-4 overflow-hidden">
+                        <!-- Header card gradient -->
+                        <div class="card-header text-white text-center py-5 position-relative overflow-hidden"
+                            style="background: linear-gradient(135deg, #00bcd4, #0097a7);">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+                                <i class="fas fa-globe-americas position-absolute top-50 start-50 translate-middle fs-1"></i>
+                            </div>
+                            <h3 class="fw-bold mb-0 position-relative">
+                                <i class="fas fa-ticket-alt me-3"></i>
+                                Đặt Tour Du Lịch
+                            </h3>
+                            <p class="mb-0 mt-2 opacity-90">Vui lòng điền đầy đủ thông tin để hoàn tất đặt chỗ</p>
+                        </div>
 
-                <h5 class="text-secondary mb-3">Thông tin Tour</h5>
+                        <div class="card-body p-4 p-lg-5">
 
-                <div class="mb-3">
-                    <label class="form-label">Tên tour</label>
-                    <input type="text" class="form-control" value="<?= $departuer['tour_name'] ?>" readonly>
+                            <!-- Thông tin Tour (readonly) -->
+                            <div class="bg-light-subtle rounded-4 p-4 mb-4 border-start border-5 border-primary">
+                                <h5 class="text-primary fw-bold mb-4">
+                                    <i class="fas fa-info-circle me-2"></i>Thông tin Tour
+                                </h5>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-secondary">Tên tour</label>
+                                        <input type="text" class="form-control form-control-lg bg-white"
+                                            value="<?= $departuer['tour_name'] ?>" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-secondary">Giá tour</label>
+                                        <input type="text" class="form-control form-control-lg bg-white text-success fw-bold"
+                                            value="<?= number_format($departuer['tour_price'], 0, ',', '.') ?> ₫" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-secondary">Ngày khởi hành</label>
+                                        <input type="text" class="form-control form-control-lg bg-white"
+                                            value="<?= date('d/m/Y', strtotime($departuer['departure_date'])) ?>" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-secondary">Số ghế còn lại</label>
+                                        <input type="text" id="max_participants" class="form-control form-control-lg bg-white text-danger fw-bold"
+                                            value="<?= $departuer['max_participants'] ?>" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form thông tin khách hàng -->
+                            <form action="<?= BASE_URL . '?act=addbooking' ?>" method="POST" class="needs-validation" novalidate>
+
+                                <input type="hidden" name="departure_id" value="<?= $departuer['id'] ?>">
+
+                                <h5 class="text-primary fw-bold mb-4">
+                                    <i class="fas fa-user-circle me-2"></i>Thông tin khách hàng
+                                </h5>
+
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Họ tên <span class="text-danger">*</span></label>
+                                        <input type="text" name="customer_name" class="form-control form-control-lg" required>
+                                        <div class="invalid-feedback">Vui lòng nhập họ tên</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                                        <input type="text" name="customer_phone" class="form-control form-control-lg" required>
+                                        <div class="invalid-feedback">Vui lòng nhập số điện thoại</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                                        <input type="email" name="customer_email" class="form-control form-control-lg" required>
+                                        <div class="invalid-feedback">Email không hợp lệ</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Số lượng vé <span class="text-danger">*</span></label>
+                                        <input type="number" id="quantity" name="quantity" min="1"
+                                            max="<?= $departuer['max_participants'] ?>"
+                                            class="form-control form-control-lg" required>
+                                        <div class="invalid-feedback">Vui lòng chọn số lượng hợp lệ</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">Ghi chú (nếu có)</label>
+                                        <textarea name="note" class="form-control" rows="3"
+                                            placeholder="Yêu cầu đặc biệt, trẻ em, người lớn tuổi..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Nút submit -->
+                                <div class="d-grid mt-5">
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-lg fw-bold py-3 fs-5">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Xác nhận đặt tour ngay
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Giá tour</label>
-                    <input type="text" class="form-control" value="<?= $departuer['tour_price'] ?>" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Ngày khởi hành</label>
-                    <input type="text" class="form-control" value="<?= $departuer['departure_date'] ?>" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Số ghế còn lại</label>
-                    <input type="text" id="max_participants" class="form-control" value="<?= $departuer['max_participants'] ?>" readonly>
-                </div>
-
-                <input type="hidden" name="departure_id" value="<?= $departuer['id'] ?>">
-
-                <hr>
-
-                <h5 class="text-secondary mb-3">Thông tin khách hàng</h5>
-
-                <div class="mb-3">
-                    <label class="form-label">Họ tên</label>
-                    <input type="text" name="customer_name" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Số điện thoại</label>
-                    <input type="text" name="customer_phone" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="customer_email" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Số lượng vé</label>
-                    <input type="number" id="quantity" name="quantity" min="1" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú</label>
-                    <textarea name="note" class="form-control" rows="3"></textarea>
-                </div>
-
-
-                <!-- Phân công hướng dẫn viên -->
-                <div class="p-4 shadow rounded bg-white mb-5" style="max-width: 650px; margin: auto;">
-                    <h3 class="text-primary mb-4"><i class="fas fa-user-secret"></i> Phân công Hướng dẫn viên</h3>
-
-                    <?php if (isset($_SESSION['error'])): ?>
-                        <p class="text-danger fw-bold"><?= $_SESSION['error'] ?></p>
-                        <?php unset($_SESSION['error']); ?>
-                    <?php endif; ?>
-
-                    <select name="guide_id" class="form-select" required>
-                        <option value="">-- Chọn hướng dẫn viên --</option>
-                        <?php foreach ($guides as $g): ?>
-                            <option value="<?= $g['id'] ?>"><?= $g['fullname'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <button class="btn btn-primary w-100">Đặt tour</button>
-
-            </form>
+            </div>
         </div>
-
     </div>
 
     <!-- JS -->
@@ -148,111 +175,77 @@
         });
     </script>
 
-    <style>
-        /* ===== CONTENT BACKGROUND ===== */
-        .content {
-            padding: 30px 15px;
-            background: #f4f7fb;
-        }
-
-        /* ===== FORM CARD ===== */
-        .content>div {
-            border-radius: 20px !important;
-            background: white !important;
-            padding: 26px !important;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
-        }
-
-        /* ===== TITLE ===== */
-        .content h3 {
-            font-weight: 700;
-            color: #00bcd4 !important;
-        }
-
-        .content h5 {
-            font-weight: 600;
-        }
-
-        /* ===== LABEL ===== */
-        .form-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #444;
-        }
-
-        /* ===== INPUT ===== */
-        .form-control,
-        .form-select,
-        textarea {
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 0.9rem;
-            border: 1px solid #ddd;
-            transition: 0.25s;
-        }
-
-        .form-control:focus,
-        .form-select:focus,
-        textarea:focus {
-            border-color: #00bcd4;
-            box-shadow: 0 0 0 2px rgba(0, 188, 212, .15);
-        }
-
-        /* ===== FIELD SPACING ===== */
-        .mb-3 {
-            margin-bottom: 1rem !important;
-        }
-
-        /* ===== READONLY STYLE ===== */
-        input[readonly] {
-            background: #f7fafc !important;
-            color: #555;
-            font-weight: 500;
-        }
-
-        /* ===== INNER BOX (HDV SELECT) ===== */
-        .content .p-4.shadow.rounded.bg-white {
-            background: #f9fcfd !important;
-            border-radius: 16px !important;
-            border-left: 4px solid #00bcd4;
-            box-shadow: none !important;
-            margin-top: 20px;
-        }
-
-        /* ===== BUTTON MAIN ===== */
-        .btn-primary {
-            background: linear-gradient(135deg, #00bcd4, #006978);
-            border: none;
-            border-radius: 16px;
-            padding: 12px;
-            font-weight: 600;
-            letter-spacing: .4px;
-            transition: 0.3s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.03);
-            background: linear-gradient(135deg, #00d5f1, #007688);
-        }
-
-        /* ===== ALERT ERROR ===== */
-        .text-danger {
-            background: #ffe5e5;
-            border-left: 4px solid #dc3545;
-            padding: 8px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        /* ===== SMOOTHER ANIMATION ===== */
-        .content * {
-            transition: .2s;
-        }
-    </style>
-
-
-
 
 </body>
 
 </html>
+
+<style>
+    :root {
+        --primary: #00bcd4;
+        --primary-dark: #0097a7;
+    }
+
+    .text-primary {
+        color: var(--primary) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary) !important;
+    }
+
+    .card {
+        box-shadow: 0 15px 35px rgba(0, 188, 212, 0.15) !important;
+        transition: all 0.4s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0, 188, 212, 0.25) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+        border: none !important;
+        font-weight: 600;
+        transition: all 0.4s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 15px 35px rgba(0, 188, 212, 0.4) !important;
+    }
+
+    .form-control,
+    textarea {
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        font-size: 1rem;
+        border: 1.5px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus,
+    textarea:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.15) !important;
+        background-color: #fff !important;
+    }
+
+    input[readonly] {
+        background-color: #f8fdff !important;
+        color: #2c3e50 !important;
+        font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .content {
+            padding: 1rem !important;
+        }
+
+        .card-body {
+            padding: 1.5rem !important;
+        }
+    }
+</style>
