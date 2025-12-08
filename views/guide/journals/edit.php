@@ -96,7 +96,7 @@ body { display: flex; min-height: 100vh; }
         </div>
 
         <div class="mb-3">
-            <label for="incident" class="form-label">Sự cố / Ghi chú</label>
+            <label for="incident" class="form-label">Sự cố / Ghi chúu</label>
             <textarea name="incident" id="incident" class="form-control" rows="3"><?= htmlspecialchars($journal['incident'] ?? '') ?></textarea>
         </div>
 
