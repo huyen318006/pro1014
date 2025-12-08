@@ -93,6 +93,10 @@ class GuideController
         // Lấy lịch trình với checkpoint status
         $itineraries = $this->itineraryModel->getItinerariesByDepartureId($departure_id, $guide_id);
 
+        // Lấy danh sách khách (điểm danh) cho departure này
+        $rollcallModel = new RollcallModel();
+        $getkhachhang = $rollcallModel->Getboking($departure_id);
+
         // Tính toán ngày hiện tại trong tour
         $currentDate = date('Y-m-d');
         $departureDate = $departureInfo['departure_date'];
