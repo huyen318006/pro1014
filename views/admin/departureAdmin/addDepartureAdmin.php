@@ -44,63 +44,119 @@
     </div>
 
     <!-- Content -->
-    <div class="content d-flex justify-content-center mt-4">
+    <!-- Content -->
+    <div class="content p-4 p-md-5">
+        <div class="container-fluid">
 
-        <div class="form-container col-md-6 col-lg-5 bg-white shadow-lg rounded-4 p-4">
-            <h2 class="text-center text-primary fw-bold mb-4">
-                <i class="fas fa-plane-departure me-2"></i> Thêm Lịch Khởi Hành
-            </h2>
+            <!-- Page Title -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-primary mb-0">
+                    <i class="fas fa-plane-departure me-2"></i> Thêm Lịch Khởi Hành Mới
+                </h3>
+                <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
+                </a>
+            </div>
 
-            <form id="addDepartureForm"
-                action="<?= BASE_URL . '?act=addDepartureForm' ?>"
-                method="post"
-                onsubmit="return hanld()">
+            <!-- Card Form Hiện Đại -->
+            <div class="row justify-content-center">
+                <div class="col-xl-8 col-lg-9 col-md-10">
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Chọn Tour</label>
-                    <select id="tour_id" name="tour" class="form-select shadow-sm" required>
-                        <?php foreach ($getAllTours as $tour): ?>
-                            <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="card-header bg-gradient-primary text-white py-4">
+                            <h4 class="mb-0 text-center text-white">
+                                <i class="fas fa-calendar-plus me-2"></i>
+                                Tạo lịch khởi hành mới
+                            </h4>
+                        </div>
+
+                        <div class="card-body p-4 p-lg-5">
+
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Lỗi!</strong> <?= $_SESSION['error'] ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                <?php unset($_SESSION['error']); ?>
+                            <?php endif; ?>
+
+                            <form id="addDepartureForm" action="<?= BASE_URL . '?act=addDepartureForm' ?>" method="post"onsubmit="return hanld()">
+
+                                <div class="row g-4">
+                                    <!-- Cột 1 -->
+                                    <div class="col-lg-6">
+                                        <label class="form-label fw-bold text-dark">Chọn Tour <span class="text-danger">*</span></label>
+                                        <select id="tour_id" name="tour" class="form-select form-select-lg shadow-sm" required>
+                                            <option value="">-- Chọn tour du lịch --</option>
+                                            <?php foreach ($getAllTours as $tour): ?>
+                                                <option value="<?= $tour['id'] ?>"><?= htmlspecialchars($tour['name']) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label class="form-label fw-bold text-dark">Ngày Khởi Hành <span class="text-danger">*</span></label>
+                                        <input type="date" id="departure_date" name="departure_date"
+                                            class="form-control form-control-lg shadow-sm"
+                                            min="<?= date('Y-m-d') ?>" required>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label class="form-label fw-bold text-dark">Điểm Tập Trung <span class="text-danger">*</span></label>
+                                        <input type="text" name="meeting_point"
+                                            class="form-control form-control-lg shadow-sm"
+                                            placeholder="VD: Sân bay Tân Sơn Nhất - Cổng D3" required>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label class="form-label fw-bold text-dark">Số Chỗ Tối Đa <span class="text-danger">*</span></label>
+                                        <input type="number" id="max_participants" name="max_participants"
+                                            class="form-control form-control-lg shadow-sm"
+                                            min="1" max="50" placeholder="Tối đa 30" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark">Ghi Chú (nếu có)</label>
+                                        <textarea name="note" rows="3" class="form-control shadow-sm"
+                                            placeholder="Ví dụ: Xe đưa đón tận nơi, tặng nước suối..."></textarea>
+                                    </div>
+
+                                    <!-- Phân công HDV -->
+                                    <div class="col-12">
+                                        <div class="border rounded-3 p-4 bg-light-subtle">
+                                            <h5 class="text-primary mb-3">
+                                                <i class="fas fa-user-secret me-2"></i> Phân công Hướng dẫn viên
+                                            </h5>
+                                            <select name="guide_id" class="form-select form-select-lg shadow-sm" required>
+                                                <option value="">-- Chọn hướng dẫn viên chính --</option>
+                                                <?php foreach ($guides as $g): ?>
+                                                    <option value="<?= $g['id'] ?>">
+                                                        <?= htmlspecialchars($g['fullname']) ?>
+                                                        <?php if (!empty($g['phone'])) echo ' - ' . $g['phone']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Nút submit -->
+                                    <div class="col-12 text-center mt-4">
+                                        <button type="submit"
+                                            class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg fw-bold">
+                                            <i class="fas fa-plus-circle me-2"></i>
+                                            Tạo Lịch Khởi Hành Ngay
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Ngày Khởi Hành</label>
-                    <input type="date" id="departure_date" name="departure_date"
-                        class="form-control shadow-sm"
-                        min="<?= date('Y-m-d') ?>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Điểm tập trung</label>
-                    <input type="text" name="meeting_point"
-                        class="form-control shadow-sm" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Số Chỗ</label>
-                    <input type="number" id="max_participants" name="max_participants"
-                        class="form-control shadow-sm"
-                        min="1" max="20" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Ghi Chú</label>
-                    <input type="text" id="note" name="note"
-                        class="form-control shadow-sm"
-                        placeholder="Ghi chú thêm (nếu có)">
-                </div>
-
-                <button type="submit"
-                    class="btn btn-primary w-100 fw-bold py-2 rounded-pill shadow">
-                    <i class="fas fa-plus-circle me-1"></i> Thêm Lịch Khởi Hành
-                </button>
-            </form>
+            </div>
         </div>
-
     </div>
-
 
 
 
@@ -119,8 +175,8 @@
         const seat = Number(max_participants);
 
         // Kiểm tra rỗng, không phải số, nhỏ hơn 1 hoặc lớn hơn 20
-        if (isNaN(seat) || seat < 1 || seat > 25) {
-            alert('Số ghế không hợp lệ! Chỉ được nhập từ 1 đến 25.');
+        if (isNaN(seat) || seat < 1 || seat > 30) {
+            alert('Số ghế không hợp lệ! Chỉ được nhập từ 1 đến 30.');
             return false; // chặn submit
         }
 
@@ -129,182 +185,39 @@
 </script>
 
 <style>
-    /* ==================== LỊCH KHỞI HÀNH - ĐẸP & CHUYÊN NGHIỆP ==================== */
-    .departure-container {
-        max-width: 1200px;
-        margin: 30px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e0e6ed;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3) !important;
     }
 
-    .departure-container .title {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        position: relative;
-        padding-bottom: 12px;
-    }
-
-    .departure-container .title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, #3498db, #2980b9);
-        border-radius: 2px;
-    }
-
-    /* Bảng */
-    .departure-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        font-size: 15.5px;
-        background: #fff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .departure-table thead {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: #ffffff;
-        text-transform: uppercase;
-        font-size: 14px;
-        letter-spacing: 0.8px;
-    }
-
-    .departure-table th {
-        padding: 18px 15px;
-        text-align: center;
-        font-weight: 600;
-    }
-
-    .departure-table td {
-        padding: 16px 15px;
-        text-align: center;
-        vertical-align: middle;
-        border-bottom: 1px solid #eef2f7;
-        color: #34495e;
-    }
-
-    .departure-table tbody tr {
+    .card {
         transition: all 0.3s ease;
     }
 
-    .departure-table tbody tr:nth-child(even) {
-        background-color: #f8fbff;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .departure-table tbody tr:hover {
-        background: linear-gradient(to right, #ebf3fd, #f0f7ff);
-        transform: scale(1.01);
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
-        z-index: 1;
-        position: relative;
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, .15);
     }
 
-    /* Cột trạng thái "Chưa phân công" */
-    .departure-table td:contains('Chưa phân công') {
-        color: #e67e22 !important;
-        font-weight: 600;
+    /* Làm đẹp placeholder */
+    ::placeholder {
+        color: #adb5bd !important;
+        opacity: 1;
     }
 
-    /* Responsive cho mobile */
+    /* Responsive tốt hơn */
     @media (max-width: 768px) {
-        .departure-container {
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
+        .content {
+            padding: 1rem !important;
         }
 
-        .departure-container .title {
-            font-size: 24px;
+        .card-body {
+            padding: 1.5rem !important;
         }
-
-        .departure-table {
-            font-size: 14px;
-        }
-
-        .departure-table thead {
-            display: none;
-        }
-
-        .departure-table tbody tr {
-            display: block;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            background: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .departure-table td {
-            display: block;
-            text-align: right;
-            padding: 8px 0;
-            position: relative;
-            padding-left: 50%;
-            border: none;
-        }
-
-        .departure-table td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 15px;
-            width: 45%;
-            font-weight: 600;
-            color: #3498db;
-            text-align: left;
-        }
-
-        /* Container link */
-        a {
-            text-decoration: none;
-            /* bỏ gạch chân */
-            margin: 0 5px;
-            /* khoảng cách giữa các icon */
-            display: inline-block;
-        }
-
-        /* Icon chung */
-        a i.fas {
-            font-size: 18px;
-            /* kích thước icon */
-            color: #555;
-            /* màu mặc định */
-            transition: color 0.3s, transform 0.2s;
-            /* hiệu ứng khi hover */
-        }
-
-        /* Hover đổi màu và nhẹ phóng to */
-        a i.fas:hover {
-            color: #007bff;
-            /* đổi màu xanh khi hover */
-            transform: scale(1.2);
-            /* phóng to 20% */
-        }
-
-        /* Icon riêng biệt nếu muốn màu khác nhau */
-        a i.fa-edit {
-            color: #28a745;
-            /* màu xanh lá cho sửa */
-        }
-
-        a i.fa-trash {
-            color: #dc3545;
-            /* màu đỏ cho xóa */
-        }
-
     }
 </style>

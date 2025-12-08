@@ -47,12 +47,27 @@
             <span>Admin <?= htmlspecialchars($_SESSION['user']['fullname'] ?? '') ?></span>
         </div>
     </div>
-    <div class="content">
-        <div class="departure-container">
-            <h2 class="title mb-4">Booking</h2>
+    <!-- Main Content -->
+    <!-- Content -->
+    <div class="content p-4" style="background: linear-gradient(135deg, #f8fdff 0%, #f0f9ff 100%); min-height: 100vh;">
+        <div class="container-fluid">
+
+            <!-- Tiêu đề chính -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary mb-3">
+                    <i class="fas fa-ticket-alt me-3"></i>Đặt Tour Du Lịch
+                </h2>
+                <p class="text-muted fs-5">Chọn lịch khởi hành phù hợp cho khách hàng</p>
+            </div>
+
+            <!-- Danh sách tour theo nhóm - giữ nguyên PHP 100% -->
             <?php foreach ($TourModel as $t): ?>
-                <h4 class="text-danger fw-bold mt-5 mb-3"><?= htmlspecialchars($t['name']) ?></h4>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                <h4 class="text-primary fw-bold mt-5 mb-4 d-flex align-items-center gap-3">
+                    <i class="fas fa-route text-cyan"></i>
+                    <?= htmlspecialchars($t['name']) ?>
+                </h4>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
                     <?php $hasTour = false; ?>
                     <?php foreach ($departures as $d):
                         if ($d['tour_id'] != $t['id']) continue;
@@ -61,110 +76,141 @@
                         $end_date = date('Y-m-d', strtotime($d['departure_date'] . ' + ' . ($d['duration_days'] - 1) . ' days'));
                     ?>
                         <div class="col">
-                            <div class="card h-100 shadow-sm rounded-3 hover-scale">
-                                <img src="<?= BASE_URL . 'uploads/' . basename($d['image'] ?? 'default-tour.jpg') ?>" class="card-img-top" alt="<?= $d['tour_name'] ?>">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><?= $d['tour_name'] ?></h5>
-                                    <p class="mb-1"><span class="badge bg-light text-dark border">📅 <?= date('d/m/Y', strtotime($d['departure_date'])) ?></span></p>
-                                    <p class="mb-1"><span class="badge bg-light text-dark border">⏳ <?= date('d/m/Y', strtotime($end_date)) ?></span></p>
-                                    <p class="mb-1">📍 <?= $d['meeting_point'] ?></p>
-                                    <p class="fw-bold"><?= number_format($d['tour_price'], 0, ',', '.') ?> VND</p>
-                                    <span class="badge <?= $d['status'] == 'planned' ? 'bg-success' : 'bg-secondary' ?> rounded-pill mb-2"><?= $d['status'] == 'planned' ? 'Sẵn sàng' : 'Hết chỗ' ?></span>
-                                    <a href="<?= BASE_URL . '?act=bookingassig&id=' . $d['id'] ?>" class="btn btn-primary mt-auto w-100">Đặt tour</a>
+                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden tour-card">
+                                <!-- Ảnh tour -->
+                                <div class="position-relative">
+                                    <img src="<?= BASE_URL . 'uploads/' . basename($d['image'] ?? 'default-tour.jpg') ?>"
+                                        class="card-img-top"
+                                        alt="<?= htmlspecialchars($d['tour_name']) ?>"
+                                        style="height: 160px; object-fit: cover;">
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                        <span class="badge bg-success text-white px-3 py-2 rounded-pill shadow-sm">
+                                            Sẵn sàng
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <h6 class="card-title fw-bold text-primary mb-2">
+                                        <?= htmlspecialchars($d['tour_name']) ?>
+                                    </h6>
+
+                                    <div class="small text-muted mb-3">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fas fa-calendar-alt text-cyan"></i>
+                                            <span><?= date('d/m/Y', strtotime($d['departure_date'])) ?></span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fas fa-calendar-check text-success"></i>
+                                            <span><?= date('d/m/Y', strtotime($end_date)) ?></span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 text-truncate">
+                                            <i class="fas fa-map-marker-alt text-danger"></i>
+                                            <span><?= htmlspecialchars($d['meeting_point']) ?></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-end mb-3">
+                                            <div>
+                                                <div class="text-success fw-bold fs-5">
+                                                    <?= number_format($d['tour_price'], 0, ',', '.') ?>đ
+                                                </div>
+                                                <small class="text-muted">Còn <?= $d['max_participants'] ?> chỗ</small>
+                                            </div>
+                                        </div>
+
+                                        <a href="<?= BASE_URL . '?act=bookingassig&id=' . $d['id'] ?>"
+                                            class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">
+                                            Đặt tour
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
+
                     <?php if (!$hasTour): ?>
-                        <div class="w-100 text-center py-4" style="font-size:18px; color:#555;">Không có lịch nào</div>
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <p class="text-muted fs-5">Không có lịch khởi hành nào khả dụng</p>
+                                        <a href="<?= BASE_URL ?>?act=DepartureAdmin" class="btn btn-outline-primary rounded-pill px-5 mt-3">
+                                            Xem tất cả lịch
+                                        </a>
+                        </div>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
+
         </div>
-
-
-
-        <style>
-            .departure-cards {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-
-            .departure-card {
-                width: 220px;
-                background: #fff;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s;
-            }
-
-            .departure-card:hover {
-                transform: translateY(-5px);
-            }
-
-            .card-image img {
-                width: 100%;
-                height: 140px;
-                object-fit: cover;
-            }
-
-            .card-content {
-                padding: 10px;
-                text-align: center;
-            }
-
-            .card-content h3 {
-                font-size: 1.1em;
-                margin: 5px 0;
-            }
-
-            .card-content p {
-                font-size: 0.9em;
-                margin: 3px 0;
-            }
-
-            .badge {
-                display: inline-block;
-                padding: 3px 6px;
-                border-radius: 4px;
-                font-size: 0.75em;
-                margin: 5px 0;
-            }
-
-            .badge-ready {
-                background-color: #28a745;
-                color: #fff;
-            }
-
-            .badge-planned {
-                background-color: #ffc107;
-                color: #fff;
-            }
-
-            .btn-book {
-                display: inline-block;
-                margin-top: 8px;
-                padding: 6px 10px;
-                background-color: #007bff;
-                color: #fff;
-                border-radius: 5px;
-                text-decoration: none;
-                font-size: 0.9em;
-            }
-
-            .btn-book:hover {
-                background-color: #0056b3;
-            }
-        </style>
-
-
-
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+<style>
+    :root {
+        --cyan: #00bcd4;
+        --cyan-dark: #0097a7;
+    }
+
+    .text-cyan {
+        color: var(--cyan) !important;
+    }
+
+    .text-primary {
+        color: var(--cyan) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)) !important;
+        border: none !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 188, 212, 0.35) !important;
+    }
+
+    .tour-card {
+        transition: all 0.35s ease;
+        border: 1px solid #e8f5f9 !important;
+    }
+
+    .tour-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 188, 212, 0.18) !important;
+        border-color: var(--cyan) !important;
+    }
+
+    .tour-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .card-img-top {
+        transition: transform 0.4s ease;
+    }
+
+    .badge {
+        font-size: 0.8rem !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .content {
+            padding: 1rem !important;
+        }
+
+        .card-body {
+            padding: 1rem !important;
+        }
+
+        h6.card-title {
+            font-size: 1rem;
+        }
+    }
+</style>

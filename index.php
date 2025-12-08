@@ -18,6 +18,9 @@ require_once './controllers/ChecklistController.php';
 require_once './controllers/IncidentReportController.php';
 require_once './controllers/PolicyController.php';
 require_once './controllers/BookingController.php';
+require_once './controllers/JournalController.php';
+require_once './controllers/AdminJournalController.php';
+
 
 // Require toàn bộ file Models
 require_once './models/UserModel.php';
@@ -30,10 +33,12 @@ require_once './models/IncidentReportModel.php';
 require_once './models/CategoryModel.php';
 require_once './models/PolicyModel.php';
 require_once './models/BookingModel.php';
+require_once './models/RollcallModel.php';
+require_once './models/Journals.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
-
+$guideId = $_SESSION['user']['id'] ?? 0;
 
 
 // Để bảo bảo tính chất chỉ gọi 1 hàm Controller để xử lý request thì mình sử dụng match
@@ -90,6 +95,9 @@ match ($act) {
   'updateAssignment' => (new AssignmentController())->update(),
   'deleteAssignment' => (new AssignmentController())->delete(),
 
+
+
+
   //phần quản lí lịch trình tour của admin dành cho nhân viên
   'DepartureAdmin' => (new DepartureController())->DepartureAdmin(),
   //edit kịch trình tour
@@ -120,10 +128,16 @@ match ($act) {
   'block_user' => (new UsersController())->block_user(),
   //mở khóa tài khoản
   'open_user' => (new UsersController())->open_user(),
+
+
   //checklist cho admin và guide
   'showChecklistForGuide' => (new ChecklistController())->showChecklistForGuide(),
   'saveChecklistForGuide' => (new ChecklistController())->saveChecklistForGuide(),
   'showChecklistForAdmin' => (new ChecklistController())->showChecklistForAdmin(),
+  //kiểm tra điểm danh
+  'saveAttendance' =>(new ChecklistController())->saveChecklistRollCall(),
+
+
   //báo cáo sự cố của admin và guide
   // Guide tạo báo cáo
   'incident' => (new IncidentReportController())->create(),
@@ -163,6 +177,17 @@ match ($act) {
   'booking' => (new BookingController())->booking(),
   'bookingassig' => (new BookingController())->bookingassig(),
   'addbooking' => (new BookingController())->addbooking(),
+
+// Journals - Hướng dẫn viên
+'guideJournals'        => (new JournalController())->index(), // danh sách nhật ký
+'guideJournalsCreate'  => (new JournalController())->create(), // form thêm mới
+'guideJournalsStore'   => (new JournalController())->store(),  // xử lý thêm mới
+'guideJournalsEdit'    => (new JournalController())->edit($_GET['id'] ?? 0),   // form sửa
+'guideJournalsUpdate'  => (new JournalController())->update($_GET['id'] ?? 0), // xử lý update
+'guideJournalsDelete'  => (new JournalController())->delete($_GET['id'] ?? 0), // xóa nhật ký
+// Journals - Admin
+'adminJournals'      => (new AdminJournalController())->index(),       // danh sách nhật ký admin
+'adminJournalsShow'  => (new AdminJournalController())->show($_GET['id'] ?? 0), // xem chi tiết nhật ký
 
   // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
   default => (new UsersController())->Login(),
