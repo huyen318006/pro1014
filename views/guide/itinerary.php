@@ -159,6 +159,78 @@
                                     </div>
                                 <?php endif; ?>
 
+                                    <!-- ========================= -->
+                                    <!--      ĐIỂM DANH KHÁCH      -->
+                                    <!-- ========================= -->
+
+                                    <h5 class="mt-4 mb-3">
+                                        <i class="fa-solid fa-users"></i> Điểm danh khách
+                                    </h5>
+
+                                    <?php
+                                    // Use controller-provided $getkhachhang when available; fall back to empty array
+                                    $attendanceList = isset($getkhachhang) && is_array($getkhachhang) ? $getkhachhang : [];
+                                    ?>
+
+                                    <form method="POST" action="<?= BASE_URL ?>?act=saveAttendance">
+                                        <input type="hidden" name="departure_id" value="<?= $departure_id ?>">
+
+                                        <table class="table table-bordered align-middle">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tên khách</th>
+                                                    <th>SĐT</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Có mặt</th>
+                                                    <th>Vắng</th>
+                                                    <th>Trễ</th>
+                                                    <th>Ghi chú</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <?php if (!empty($attendanceList)): ?>
+                                                    <?php foreach ($attendanceList as $index => $kh): ?>
+                                                        <tr>
+                                                            <td><?= $index + 1 ?></td>
+                                                            <td><?= htmlspecialchars($kh['customer_name']) ?></td>
+                                                            <td><?= htmlspecialchars($kh['customer_phone']) ?></td>
+                                                            <td><?= $kh['quantity'] ?></td>
+
+                                                            <td>
+                                                                <input type="number" name="form_present[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người có mặt">
+                                                            </td>
+
+                                                            <td>
+                                                                <input type="number" name="form_absent[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người vắng">
+                                                            </td>
+
+                                                            <td>
+                                                                <input type="number" name="form_late[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người trễ">
+                                                            </td>
+
+                                                            <td>
+                                                                <input type="text" name="form_note[]" placeholder="Ghi chú...">
+                                                            </td>
+                                                        </tr>
+
+                                                        <input type="hidden" name="form_departure_id[]" value="<?= $kh['departure_id'] ?>">
+                                                        <input type="hidden" name="form_booking_id[]" value="<?= $kh['id'] ?>">
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <tr><td colspan="8" class="text-center text-danger">Không có dữ liệu khách hàng.</td></tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="text-end">
+                                            <button class="btn btn-success mt-3">
+                                                <i class="fa-solid fa-save"></i> Lưu điểm danh
+                                            </button>
+                                        </div>
+                                    </form>
+
                                 <!-- Notes -->
                                 <?php if (!empty($itinerary['notes'])): ?>
                                     <div class="alert alert-info mb-0">
@@ -328,3 +400,4 @@
 </body>
 
 </html>
+

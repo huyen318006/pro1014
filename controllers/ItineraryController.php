@@ -3,10 +3,12 @@
 class ItineraryController
 {
     public $modelItinerary;
+    public $rollcall;
 
     public function __construct()
     {
         $this->modelItinerary = new ItineraryModel();
+        $this->rollcall = new RollcallModel();
     }
 
     /////////////////////////////////////////        phần hiển thị danh sách lịch trình      /////////////////////////////////////////
@@ -187,6 +189,13 @@ class ItineraryController
             $modelTour = new TourModel();
             $tour = $modelTour->getTourById($firstItinerary['tour_id']);
         }
+
+        //truyền hàm điểm danh
+        // đoạn điểm danh - (tiến hùng)//
+      if($_GET['departure_id']){
+        $departure_id = $_GET['departure_id'];
+        $getkhachhang = $this->rollcall->Getboking($departure_id);
+      }
 
         require_once BASE_URL_VIEWS . 'admin/itinerary/detail.php';
     }

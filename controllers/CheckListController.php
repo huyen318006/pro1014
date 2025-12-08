@@ -101,7 +101,15 @@ class ChecklistController {
                 $this->rollcall->saveCall($departure_id, $booking_id, $present, $absent, $late, $note);
             }
 
-            header("Location: ?act=MyTour");
+            // Thông báo thành công và chuyển về trang itinerary để HDV thấy kết quả
+            $_SESSION['success_attendance'] = 'Đã lưu điểm danh thành công.';
+            // Nếu có departure_id, redirect về trang itinerary của chuyến đó
+            $firstDeparture = (int)($form_departure_ids[0] ?? 0);
+            if ($firstDeparture) {
+                header('Location: ?act=guideItinerary&departure_id=' . $firstDeparture);
+            } else {
+                header("Location: ?act=MyTour");
+            }
         }
     }
 }
