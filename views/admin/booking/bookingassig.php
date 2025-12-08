@@ -182,8 +182,8 @@
 
 <style>
     :root {
-        --primary: #00bcd4;
-        --primary-dark: #0097a7;
+        --primary: #00CED1;
+        --primary-dark: #20B2AA;
     }
 
     .text-primary {
