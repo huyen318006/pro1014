@@ -85,10 +85,42 @@
                         </div>
                         <div class="card-body text-center">
                             <?php if (!empty($tour['image'])): ?>
-                                <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
-                                    class="img-fluid rounded shadow-sm"
-                                    alt="<?= $tour['name'] ?>"
-                                    style="max-height: 400px; width: 100%; object-fit: cover;">
+                                <!-- Ảnh chính -->
+                                <div class="main-tour-image">
+                                    <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
+                                        class="img-fluid rounded shadow-sm"
+                                        alt="<?= $tour['name'] ?>"
+                                        style="max-height: 400px; width: 100%; object-fit: cover;">
+                                </div>
+
+                                <!-- Gallery ảnh liên quan -->
+                                <div class="tour-gallery p-2 bg-light border-top mt-3 rounded-bottom">
+                                    <div class="row g-2">
+                                        <div class="col-4">
+                                            <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
+                                                alt="Tour image 1"
+                                                class="img-fluid rounded shadow-sm"
+                                                style="object-fit: cover; height: 80px; width: 100%; cursor: pointer;"
+                                                onclick="changeTourMainImage(this.src)">
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex align-items-center justify-content-center bg-secondary rounded shadow-sm text-white"
+                                                style="height: 80px; font-size: 0.85rem;">
+                                                <i class="fas fa-images"></i>
+                                                <span class="ms-1">Thêm ảnh</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex align-items-center justify-content-center bg-secondary rounded shadow-sm text-white"
+                                                style="height: 80px; font-size: 0.85rem;">
+                                                <i class="fas fa-camera"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted d-block mt-2 text-center">
+                                        <i class="fas fa-info-circle"></i> Click vào ảnh để xem lớn hơn
+                                    </small>
+                                </div>
                             <?php else: ?>
                                 <div class="bg-light p-5 rounded">
                                     <i class="fas fa-image fa-5x text-muted"></i>
@@ -211,10 +243,37 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Mô tả Tour -->
+                    <?php if (!empty($tour['destination'])): ?>
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-map-marker-alt text-info"></i> Mô Tả Tour</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="p-3 bg-light rounded border border-info">
+                                    <p class="mb-0 text-dark" style="line-height: 1.8;">
+                                        <i class="fas fa-location-dot text-info me-2"></i>
+                                        <?= nl2br(htmlspecialchars($tour['destination'])) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function changeTourMainImage(src) {
+            const mainImg = document.querySelector('.main-tour-image img');
+            if (mainImg) {
+                mainImg.src = src;
+            }
+        }
+    </script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

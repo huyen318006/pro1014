@@ -54,6 +54,19 @@ class ItineraryModel
                        t.name AS tour_name,
                        t.code AS tour_code,
                        t.image AS tour_image,
+                       t.destination AS tour_destination,
+                       (SELECT u.fullname FROM departures d 
+                        LEFT JOIN assignments a ON d.id = a.departure_id 
+                        LEFT JOIN users u ON a.guide_id = u.id 
+                        WHERE d.tour_id = i.tour_id LIMIT 1) AS guide_name,
+                       (SELECT u.email FROM departures d 
+                        LEFT JOIN assignments a ON d.id = a.departure_id 
+                        LEFT JOIN users u ON a.guide_id = u.id 
+                        WHERE d.tour_id = i.tour_id LIMIT 1) AS guide_email,
+                       (SELECT u.phone FROM departures d 
+                        LEFT JOIN assignments a ON d.id = a.departure_id 
+                        LEFT JOIN users u ON a.guide_id = u.id 
+                        WHERE d.tour_id = i.tour_id LIMIT 1) AS guide_phone,
                        EXISTS (
                            SELECT 1 FROM departures d 
                            WHERE d.tour_id = i.tour_id AND d.status = 'ready'
@@ -132,12 +145,18 @@ class ItineraryModel
                            t.name AS tour_name,
                            t.code AS tour_code,
                            t.image AS tour_image,
+                           t.destination AS tour_destination,
                            t.duration_days AS tour_duration,
                            d.departure_date,
-                           d.meeting_point
+                           d.meeting_point,
+                           u.fullname AS guide_name,
+                           u.email AS guide_email,
+                           u.phone AS guide_phone
                     FROM `itineraries` i
                     INNER JOIN `departures` d ON i.tour_id = d.tour_id
                     LEFT JOIN `tours` t ON i.tour_id = t.id
+                    LEFT JOIN `assignments` a ON d.id = a.departure_id
+                    LEFT JOIN `users` u ON a.guide_id = u.id
                     WHERE d.id = :departure_id
                     ORDER BY i.day_number ASC, i.title ASC";
             $stmt = $this->conn->prepare($sql);
@@ -175,12 +194,18 @@ class ItineraryModel
                            t.name AS tour_name,
                            t.code AS tour_code,
                            t.image AS tour_image,
+                           t.destination AS tour_destination,
                            t.duration_days AS tour_duration,
                            d.departure_date,
-                           d.meeting_point
+                           d.meeting_point,
+                           u.fullname AS guide_name,
+                           u.email AS guide_email,
+                           u.phone AS guide_phone
                     FROM `itineraries` i
                     INNER JOIN `departures` d ON i.tour_id = d.tour_id
                     LEFT JOIN `tours` t ON i.tour_id = t.id
+                    LEFT JOIN `assignments` a ON d.id = a.departure_id
+                    LEFT JOIN `users` u ON a.guide_id = u.id
                     WHERE d.id = :departure_id
                     ORDER BY i.day_number ASC, i.title ASC";
             $stmt = $this->conn->prepare($sql);

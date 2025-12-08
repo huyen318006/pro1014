@@ -87,12 +87,19 @@
                                         placeholder="VD: Đà Nẵng - Hội An 3 ngày" required>
                                 </div>
 
-                                <!-- Địa điểm -->
+                                <!-- Mô tả Tour -->
                                 <div class="form-group mb-3">
-                                    <label for="destination" class="form-label">Địa điểm <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="destination" name="destination"
-                                        value="<?= $destination ?? '' ?>"
-                                        placeholder="VD: Đà Nẵng" required>
+                                    <label for="destination" class="form-label">
+                                        <i class="fas fa-map-marker-alt text-info"></i> Mô tả Tour
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control" id="destination" name="destination"
+                                        rows="4"
+                                        placeholder="VD: Khám phá vẻ đẹp của Đà Nẵng với bãi biển Mỹ Khê, cầu Rồng, Bà Nà Hills..."
+                                        required><?= $destination ?? '' ?></textarea>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle"></i> Mô tả chi tiết về điểm đến và các hoạt động của tour
+                                    </small>
                                 </div>
                             </div>
 

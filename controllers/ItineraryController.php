@@ -188,6 +188,48 @@ class ItineraryController
             $tour = $modelTour->getTourById($firstItinerary['tour_id']);
         }
 
+        // Lấy checkpoint data từ departure đầu tiên (nếu có)
+        $checkpointData = [];
+        $departureModel = new Departures();
+        $departures = $departureModel->getByTourAndDate($tourId, date('Y-m-d')); // Lấy departures của tour
+
+        if (empty($departures)) {
+            // Nếu không có departure hôm nay, lấy tất cả departures của tour
+            $sql = "SELECT d.id, d.departure_date, u.fullname as guide_name 
+                    FROM departures d 
+                    LEFT JOIN assignments a ON d.id = a.departure_id 
+                    LEFT JOIN users u ON a.guide_id = u.id 
+                    WHERE d.tour_id = :tour_id 
+                    ORDER BY d.departure_date DESC LIMIT 1";
+            $stmt = $this->modelItinerary->conn->prepare($sql);
+            $stmt->bindParam(':tour_id', $tourId, PDO::PARAM_INT);
+            $stmt->execute();
+            $latestDeparture = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($latestDeparture) {
+                $departure_id = $latestDeparture['id'];
+                // Lấy checkpoint data cho departure này
+                foreach ($itineraries as &$itinerary) {
+                    $sql = "SELECT activity_index, checked_at, notes 
+                            FROM itinerary_checkpoints 
+                            WHERE departure_id = :departure_id AND itinerary_id = :itinerary_id";
+                    $stmt = $this->modelItinerary->conn->prepare($sql);
+                    $stmt->bindParam(':departure_id', $departure_id, PDO::PARAM_INT);
+                    $stmt->bindParam(':itinerary_id', $itinerary['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $checkpoints = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $itinerary['activity_checkpoints'] = [];
+                    foreach ($checkpoints as $checkpoint) {
+                        $itinerary['activity_checkpoints'][$checkpoint['activity_index']] = [
+                            'checked_at' => $checkpoint['checked_at'],
+                            'notes' => $checkpoint['notes']
+                        ];
+                    }
+                }
+            }
+        }
+
         require_once BASE_URL_VIEWS . 'admin/itinerary/detail.php';
     }
 

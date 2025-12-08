@@ -76,6 +76,129 @@
             </div>
         </div>
 
+        <!-- Tour Details Section (Image, Description, Guide Info) -->
+        <?php if (!empty($itineraries)): ?>
+            <div class="row mb-4">
+                <!-- Tour Image -->
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0"><i class="fas fa-image"></i> Ảnh Tour</h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <?php
+                            $tourImage = $itineraries[0]['tour_image'] ?? '';
+                            $imagePath = !empty($tourImage) ? BASE_URL . 'uploads/' . basename($tourImage) : BASE_URL . 'asset/img/default-tour.jpg';
+                            ?>
+                            <img src="<?= $imagePath ?>"
+                                alt="<?= htmlspecialchars($departureInfo['tour_name'] ?? 'Tour') ?>"
+                                class="img-fluid w-100"
+                                style="object-fit: cover; height: 250px;">
+                        </div>
+
+                        <!-- Gallery ảnh liên quan -->
+                        <div class="tour-gallery p-2 bg-light border-top">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <img src="<?= $imagePath ?>"
+                                        alt="Tour image 1"
+                                        class="img-fluid rounded shadow-sm"
+                                        style="object-fit: cover; height: 60px; width: 100%; cursor: pointer;"
+                                        onclick="changeMainImage(this.src)">
+                                </div>
+                                <div class="col-4">
+                                    <div class="d-flex align-items-center justify-content-center bg-secondary rounded shadow-sm text-white"
+                                        style="height: 60px; font-size: 0.75rem;">
+                                        <i class="fas fa-images"></i>
+                                        <span class="ms-1">Thêm ảnh</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="d-flex align-items-center justify-content-center bg-secondary rounded shadow-sm text-white"
+                                        style="height: 60px; font-size: 0.75rem;">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function changeMainImage(src) {
+                                const mainImg = document.querySelector('.col-md-4 .card-body img');
+                                if (mainImg) {
+                                    mainImg.src = src;
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+
+                <!-- Tour Description & Guide Info -->
+                <div class="col-md-8">
+                    <div class="row h-100">
+                        <!-- Tour Description -->
+                        <div class="col-12 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="fas fa-map-marker-alt"></i> Điểm Đến</h6>
+                                </div>
+                                <div class="card-body">
+                                    <?php
+                                    $tourDestination = $itineraries[0]['tour_destination'] ?? 'Chưa có thông tin điểm đến';
+                                    ?>
+                                    <p class="mb-0 text-muted">
+                                        <i class="fas fa-location-dot text-info me-2"></i>
+                                        <?= nl2br(htmlspecialchars($tourDestination)) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guide Information -->
+                        <div class="col-12">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0"><i class="fas fa-user-tie"></i> Hướng Dẫn Viên</h6>
+                                </div>
+                                <div class="card-body">
+                                    <?php
+                                    $guideName = $itineraries[0]['guide_name'] ?? 'Chưa phân công';
+                                    $guideEmail = $itineraries[0]['guide_email'] ?? '';
+                                    $guidePhone = $itineraries[0]['guide_phone'] ?? '';
+                                    ?>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div>
+                                            <i class="fas fa-user text-success me-2"></i>
+                                            <strong>Tên:</strong> <?= htmlspecialchars($guideName) ?>
+                                        </div>
+                                        <?php if (!empty($guideEmail)): ?>
+                                            <div>
+                                                <i class="fas fa-envelope text-success me-2"></i>
+                                                <strong>Email:</strong>
+                                                <a href="mailto:<?= htmlspecialchars($guideEmail) ?>" class="text-decoration-none">
+                                                    <?= htmlspecialchars($guideEmail) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if (!empty($guidePhone)): ?>
+                                            <div>
+                                                <i class="fas fa-phone text-success me-2"></i>
+                                                <strong>Số điện thoại:</strong>
+                                                <a href="tel:<?= htmlspecialchars($guidePhone) ?>" class="text-decoration-none">
+                                                    <?= htmlspecialchars($guidePhone) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+
         <!-- Itinerary List -->
         <?php if (!empty($itineraries)): ?>
             <div class="row">

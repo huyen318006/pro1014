@@ -66,6 +66,48 @@
                 </div>
             </div>
 
+            <!-- Overall Progress Card -->
+            <?php
+            // Calculate overall progress
+            $totalCheckpoints = 0;
+            $completedCheckpoints = 0;
+            foreach ($itineraries as $itinerary) {
+                $activities = array_filter(array_map('trim', explode("\n", $itinerary['activities'] ?? '')));
+                $activityCheckpoints = $itinerary['activity_checkpoints'] ?? [];
+                $totalCheckpoints += count($activities);
+                foreach ($activityCheckpoints as $idx => $checkpoint) {
+                    if ($idx > 0) $completedCheckpoints++;
+                }
+            }
+            $overallProgress = $totalCheckpoints > 0 ? round(($completedCheckpoints / $totalCheckpoints) * 100) : 0;
+            ?>
+            <?php if ($totalCheckpoints > 0): ?>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">
+                                <i class="fas fa-tasks text-primary me-2"></i>Tiến Độ Tổng Quan
+                            </h6>
+                            <span class="badge bg-primary">
+                                <?= $completedCheckpoints ?>/<?= $totalCheckpoints ?> hoạt động
+                            </span>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                style="width: <?= $overallProgress ?>%;"
+                                aria-valuenow="<?= $overallProgress ?>"
+                                aria-valuemin="0"
+                                aria-valuemax="100">
+                                <?= $overallProgress ?>%
+                            </div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-info-circle"></i> Tiến độ hoàn thành các hoạt động của hướng dẫn viên
+                        </small>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="row g-4">
                 <!-- Thông tin tour -->
                 <div class="col-lg-4">
@@ -95,20 +137,48 @@
                                     <span class="fw-bold"><?= htmlspecialchars($tour['name']) ?></span>
                                 </div>
                                 <div class="mb-3">
-                                    <small class="text-muted d-block">Điểm đến</small>
-                                    <span><?= htmlspecialchars($tour['destination']) ?></span>
-                                </div>
-                                <div class="mb-3">
                                     <small class="text-muted d-block">Thời lượng</small>
                                     <span><?= htmlspecialchars($tour['duration_days']) ?> ngày</span>
                                 </div>
-                                <?php if (!empty($tour['image'])): ?>
-                                    <div class="mt-4">
-                                        <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
-                                            class="img-fluid rounded shadow-sm w-100"
-                                            alt="<?= htmlspecialchars($tour['name']) ?>"
-                                            style="max-height: 280px; object-fit: cover;">
-                                    </div>
+
+                                <!-- Thông tin hướng dẫn viên -->
+                                <?php if (!empty($itineraries)): ?>
+                                    <?php
+                                    $guideName = $itineraries[0]['guide_name'] ?? '';
+                                    $guideEmail = $itineraries[0]['guide_email'] ?? '';
+                                    $guidePhone = $itineraries[0]['guide_phone'] ?? '';
+                                    ?>
+                                    <?php if (!empty($guideName)): ?>
+                                        <div class="mt-4 p-3 bg-light rounded border">
+                                            <h6 class="text-success mb-3">
+                                                <i class="fas fa-user-tie me-2"></i>Hướng Dẫn Viên
+                                            </h6>
+                                            <div class="d-flex flex-column gap-2">
+                                                <div>
+                                                    <i class="fas fa-user text-success me-2"></i>
+                                                    <strong>Tên:</strong> <?= htmlspecialchars($guideName) ?>
+                                                </div>
+                                                <?php if (!empty($guideEmail)): ?>
+                                                    <div>
+                                                        <i class="fas fa-envelope text-success me-2"></i>
+                                                        <strong>Email:</strong>
+                                                        <a href="mailto:<?= htmlspecialchars($guideEmail) ?>" class="text-decoration-none">
+                                                            <?= htmlspecialchars($guideEmail) ?>
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <?php if (!empty($guidePhone)): ?>
+                                                    <div>
+                                                        <i class="fas fa-phone text-success me-2"></i>
+                                                        <strong>SĐT:</strong>
+                                                        <a href="tel:<?= htmlspecialchars($guidePhone) ?>" class="text-decoration-none">
+                                                            <?= htmlspecialchars($guidePhone) ?>
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <p class="text-muted mb-0">Không tìm thấy thông tin tour tương ứng.</p>
@@ -157,11 +227,77 @@
                                         <?php endif; ?>
                                     </div>
 
+                                    <?php
+                                    // Parse activities
+                                    $activities = array_filter(array_map('trim', explode("\n", $itinerary['activities'] ?? '')));
+                                    $activityCheckpoints = $itinerary['activity_checkpoints'] ?? [];
+
+                                    // Count checked activities
+                                    $checkedCount = 0;
+                                    foreach ($activityCheckpoints as $idx => $checkpoint) {
+                                        if ($idx > 0) $checkedCount++; // Skip index 0 (whole day)
+                                    }
+                                    $totalActivities = count($activities);
+                                    $progressPercent = $totalActivities > 0 ? round(($checkedCount / $totalActivities) * 100) : 0;
+                                    ?>
+
                                     <div class="mb-3">
-                                        <h6 class="text-success mb-2">
-                                            <i class="fas fa-list-check me-2"></i>Hoạt động trong ngày
-                                        </h6>
-                                        <p class="mb-0" style="white-space: pre-line;"><?= nl2br(htmlspecialchars($itinerary['activities'])) ?></p>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="text-success mb-0">
+                                                <i class="fas fa-list-check me-2"></i>Hoạt động trong ngày
+                                            </h6>
+                                            <?php if ($totalActivities > 0): ?>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-check-circle text-success"></i>
+                                                    <?= $checkedCount ?>/<?= $totalActivities ?> hoàn thành
+                                                </small>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <?php if ($totalActivities > 0): ?>
+                                            <!-- Progress bar -->
+                                            <div class="progress mb-3" style="height: 20px;">
+                                                <div class="progress-bar bg-success" role="progressbar"
+                                                    style="width: <?= $progressPercent ?>%;"
+                                                    aria-valuenow="<?= $progressPercent ?>"
+                                                    aria-valuemin="0"
+                                                    aria-valuemax="100">
+                                                    <?= $progressPercent ?>%
+                                                </div>
+                                            </div>
+
+                                            <!-- Activity checkboxes (read-only) -->
+                                            <div class="list-group list-group-flush">
+                                                <?php foreach ($activities as $activityIndex => $activity):
+                                                    $realIndex = $activityIndex + 1;
+                                                    $isChecked = isset($activityCheckpoints[$realIndex]);
+                                                    $checkedAt = $isChecked ? $activityCheckpoints[$realIndex]['checked_at'] : null;
+                                                ?>
+                                                    <div class="list-group-item px-0 py-2 border-0">
+                                                        <div class="form-check d-flex align-items-start">
+                                                            <input class="form-check-input me-3 mt-1"
+                                                                type="checkbox"
+                                                                <?= $isChecked ? 'checked' : '' ?>
+                                                                disabled
+                                                                style="width: 1.25rem; height: 1.25rem;">
+                                                            <label class="form-check-label flex-grow-1">
+                                                                <span class="<?= $isChecked ? 'text-decoration-line-through text-muted' : '' ?>">
+                                                                    <i class="fas fa-chevron-right text-primary me-2"></i><?= htmlspecialchars($activity) ?>
+                                                                </span>
+                                                                <?php if ($isChecked && $checkedAt): ?>
+                                                                    <br><small class="text-success">
+                                                                        <i class="fas fa-check-circle"></i>
+                                                                        Hoàn thành: <?= date('d/m/Y H:i', strtotime($checkedAt)) ?>
+                                                                    </small>
+                                                                <?php endif; ?>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <p class="mb-0 text-muted">Chưa có hoạt động nào</p>
+                                        <?php endif; ?>
                                     </div>
 
                                     <?php if (!empty($itinerary['notes'])): ?>
