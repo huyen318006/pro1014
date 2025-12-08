@@ -112,8 +112,8 @@ match ($act) {
 
   //Quản lí dịch vụ
   'services'                   => (new ServicesController())->index(),
-  'servicesQuickCreate'        => (new ServicesController())->quickCreate(),      
-  'servicesQuickStore'         => (new ServicesController())->quickStore(),       
+  'servicesQuickCreate'        => (new ServicesController())->quickCreate(),
+  'servicesQuickStore'         => (new ServicesController())->quickStore(),
   'servicesEdit'   => (new ServicesController())->edit(),
   'servicesUpdate' => (new ServicesController())->update(),
   'servicesDelete' => (new ServicesController())->delete(),
@@ -149,13 +149,17 @@ match ($act) {
   'incidentReportsDelete' => (new IncidentReportController())->delete(),
 
   //bắt đầu routr của guide
-  
+
   //TRANG DASHBOARD CỦA GUIDE
   'guideDashboard' => (new GuideController())->guideDashboard(),
   //trang lịch khởi hành của guide
   'guideDepartures' => (new GuideController())->guideDepartures(),
   //TRANG TOUR ĐƯỢC GIAO CỦA GUIDE
   'MyTour' => (new GuideController())->MyTour(),
+  //TRANG XEM LỊCH TRÌNH TOUR CỦA GUIDE
+  'guideItinerary' => (new GuideController())->guideItinerary(),
+  //AJAX UPDATE CHECKPOINT
+  'updateCheckpoint' => (new GuideController())->updateCheckpoint(),
   //Về phần status 
   'updateStatus' => (new AssignmentController())->updateStatus(),
 
