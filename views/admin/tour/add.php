@@ -94,6 +94,14 @@
                                         value="<?= $destination ?? '' ?>"
                                         placeholder="VD: Đà Nẵng" required>
                                 </div>
+
+                                <!-- Mô tả Tour -->
+                                <div class="form-group mb-3">
+                                    <label for="description" class="form-label">Mô tả Tour</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5"
+                                        placeholder="Nhập mô tả chi tiết về tour..."><?= $description ?? '' ?></textarea>
+                                    <small class="form-text text-muted">Mô tả chi tiết về tour, điểm đến, hoạt động...</small>
+                                </div>
                             </div>
 
                             <!-- Cột phải -->
@@ -134,10 +142,19 @@
                                         value="<?= $duration_days ?? '' ?>"
                                         placeholder="VD: 3" min="1" required>
                                 </div>
-                                <!-- Hình ảnh -->
+                                <!-- Hình ảnh chính -->
                                 <div class="form-group mb-3">
-                                    <label for="image" class="form-label">Hình ảnh <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" id="image" name="image" required>
+                                    <label for="image" class="form-label">Hình ảnh chính <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                                    <small class="form-text text-muted">Hình ảnh đại diện cho tour</small>
+                                </div>
+
+                                <!-- Ảnh phụ -->
+                                <div class="form-group mb-3">
+                                    <label for="additional_images" class="form-label">Ảnh phụ</label>
+                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]" 
+                                        accept="image/*" multiple>
+                                    <small class="form-text text-muted">Có thể chọn nhiều ảnh (giữ Ctrl/Cmd khi chọn)</small>
                                 </div>
                             </div>
                         </div>

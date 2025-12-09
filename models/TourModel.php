@@ -52,4 +52,44 @@ class TourModel
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute();
     }
+
+    // Lấy tất cả ảnh phụ của tour
+    public function getTourImages($tourId)
+    {
+        $sql = "SELECT * FROM `tour_images` WHERE tour_id = :tour_id ORDER BY display_order ASC, id ASC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':tour_id', $tourId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Thêm ảnh phụ cho tour
+    public function addTourImage($tourId, $imagePath, $displayOrder = 0)
+    {
+        $sql = "INSERT INTO `tour_images` (tour_id, image_path, display_order) VALUES (:tour_id, :image_path, :display_order)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':tour_id', $tourId, PDO::PARAM_INT);
+        $stmt->bindParam(':image_path', $imagePath, PDO::PARAM_STR);
+        $stmt->bindParam(':display_order', $displayOrder, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Xóa ảnh phụ
+    public function deleteTourImage($imageId)
+    {
+        $sql = "DELETE FROM `tour_images` WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $imageId, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Cập nhật mô tả tour
+    public function updateTourDescription($tourId, $description)
+    {
+        $sql = "UPDATE `tours` SET description = :description WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $tourId, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }

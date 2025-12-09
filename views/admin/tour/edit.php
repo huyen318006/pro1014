@@ -102,6 +102,14 @@
                                         value="<?= $destination ?? '' ?>"
                                         placeholder="VD: Đà Nẵng" required>
                                 </div>
+
+                                <!-- Mô tả Tour -->
+                                <div class="form-group mb-3">
+                                    <label for="description" class="form-label">Mô tả Tour</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5"
+                                        placeholder="Nhập mô tả chi tiết về tour..."><?= htmlspecialchars($tour['description'] ?? '') ?></textarea>
+                                    <small class="form-text text-muted">Mô tả chi tiết về tour, điểm đến, hoạt động...</small>
+                                </div>
                             </div>
 
                             <!-- Cột phải -->
@@ -147,9 +155,9 @@
                                         value="<?= $duration_days ?? '' ?>"
                                         placeholder="VD: 3" min="1" required>
                                 </div>
-                                <!-- Hình ảnh -->
+                                <!-- Hình ảnh chính -->
                                 <div class="form-group mb-3">
-                                    <label for="image" class="form-label">Hình ảnh</label>
+                                    <label for="image" class="form-label">Hình ảnh chính</label>
                                     <?php if (!empty($tour['image'])): ?>
                                         <div class="mb-2">
                                             <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
@@ -159,8 +167,41 @@
                                             <p class="text-muted small mt-1">Hình ảnh hiện tại</p>
                                         </div>
                                     <?php endif; ?>
-                                    <input type="file" class="form-control" id="image" name="image">
+                                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
                                     <small class="form-text text-muted">Để trống nếu không muốn thay đổi hình ảnh</small>
+                                </div>
+
+                                <!-- Ảnh phụ hiện tại -->
+                                <?php 
+                                $modelTour = new TourModel();
+                                $tourImages = $modelTour->getTourImages($tour['id']);
+                                if (!empty($tourImages)): 
+                                ?>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Ảnh phụ hiện tại</label>
+                                    <div class="row g-2">
+                                        <?php foreach ($tourImages as $img): ?>
+                                            <div class="col-4 position-relative">
+                                                <img src="<?= BASE_URL . 'uploads/' . basename($img['image_path']) ?>"
+                                                    class="img-thumbnail"
+                                                    style="width: 100%; height: 100px; object-fit: cover;">
+                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                    onclick="deleteImage(<?= $img['id'] ?>)"
+                                                    style="padding: 2px 6px; font-size: 12px;">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+
+                                <!-- Thêm ảnh phụ mới -->
+                                <div class="form-group mb-3">
+                                    <label for="additional_images" class="form-label">Thêm ảnh phụ mới</label>
+                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]" 
+                                        accept="image/*" multiple>
+                                    <small class="form-text text-muted">Có thể chọn nhiều ảnh (giữ Ctrl/Cmd khi chọn)</small>
                                 </div>
                             </div>
                         </div>
@@ -182,6 +223,13 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function deleteImage(imageId) {
+            if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                window.location.href = '<?= BASE_URL ?>?act=deleteTourImage&id=' + imageId + '&tour_id=<?= $tour['id'] ?>';
+            }
+        }
+    </script>
 </body>
 
 </html>
