@@ -82,6 +82,8 @@
                 <?php foreach ($itineraries as $index => $itinerary):
                     $dayNumber = $itinerary['day_number'];
                     $isCurrent = ($dayNumber == $currentDayNumber);
+                    $isPast = ($dayNumber < $currentDayNumber);
+                    $isFuture = ($dayNumber > $currentDayNumber);
 
                     // Parse activities
                     $activities = array_filter(array_map('trim', explode("\n", $itinerary['activities'] ?? '')));
@@ -95,8 +97,13 @@
 
                     $isCompleted = ($checkedCount == count($activities) && count($activities) > 0);
                     $cardClass = 'border-start border-2 ';
-                    $cardClass .= $isCompleted ? 'border-success' : ($isCurrent ? 'border-warning' : 'border-secondary');
-                    $badgeClass = $isCompleted ? 'bg-success' : ($isCurrent ? 'bg-warning text-dark' : 'bg-secondary');
+                    if ($isFuture) {
+                        $cardClass .= 'border-secondary opacity-75'; // Ngày tương lai - mờ đi
+                    } else {
+                        $cardClass .= $isCompleted ? 'border-success' : ($isCurrent ? 'border-warning' : 'border-info');
+                    }
+                    
+                    $badgeClass = $isCompleted ? 'bg-success' : ($isCurrent ? 'bg-warning text-dark' : ($isFuture ? 'bg-secondary' : 'bg-info'));
                 ?>
                     <div class="col-12 mb-3">
                         <div class="card <?= $cardClass ?> shadow-sm" data-day="<?= $dayNumber ?>">
@@ -107,8 +114,10 @@
                                         <span class="badge <?= $badgeClass ?> mb-2">
                                             <?php if ($isCurrent): ?>
                                                 <i class="fas fa-star"></i> Hôm nay - Ngày <?= $dayNumber ?>
+                                            <?php elseif ($isPast): ?>
+                                                <i class="fas fa-check-circle"></i> Đã qua - Ngày <?= $dayNumber ?>
                                             <?php else: ?>
-                                                Ngày <?= $dayNumber ?>
+                                                <i class="fas fa-clock"></i> Sắp tới - Ngày <?= $dayNumber ?>
                                             <?php endif; ?>
                                         </span>
                                         <h5 class="card-title"><?= htmlspecialchars($itinerary['title']) ?></h5>
@@ -117,6 +126,11 @@
                                                 <i class="fas fa-check-circle text-success"></i>
                                                 <span class="day-progress"><?= $checkedCount ?>/<?= count($activities) ?></span> hoạt động hoàn thành
                                             </small>
+                                        <?php endif; ?>
+                                        <?php if ($isFuture): ?>
+                                            <div class="alert alert-info py-2 px-3 mt-2 mb-0">
+                                                <small><i class="fas fa-info-circle"></i> Chưa thể check. Vui lòng đợi đến ngày này.</small>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -140,8 +154,9 @@
                                                             data-departure-id="<?= $departure_id ?>"
                                                             data-activity-index="<?= $realIndex ?>"
                                                             <?= $isChecked ? 'checked' : '' ?>
-                                                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-                                                        <label class="form-check-label flex-grow-1" for="activity_<?= $itinerary['id'] ?>_<?= $realIndex ?>" style="cursor: pointer;">
+                                                            <?= $isFuture ? 'disabled' : '' ?>
+                                                            style="width: 1.25rem; height: 1.25rem; <?= $isFuture ? 'cursor: not-allowed;' : 'cursor: pointer;' ?>">
+                                                        <label class="form-check-label flex-grow-1" for="activity_<?= $itinerary['id'] ?>_<?= $realIndex ?>" style="<?= $isFuture ? 'cursor: not-allowed; opacity: 0.6;' : 'cursor: pointer;' ?>">
                                                             <span class="<?= $isChecked ? 'text-decoration-line-through text-muted' : '' ?>">
                                                                 <i class="fas fa-chevron-right text-primary me-2"></i><?= htmlspecialchars($activity) ?>
                                                             </span>
@@ -149,6 +164,11 @@
                                                                 <br><small class="text-success">
                                                                     <i class="fas fa-check-circle"></i>
                                                                     Hoàn thành: <?= date('d/m/Y H:i', strtotime($checkedAt)) ?>
+                                                                </small>
+                                                            <?php elseif ($isFuture): ?>
+                                                                <br><small class="text-muted">
+                                                                    <i class="fas fa-lock"></i>
+                                                                    Chưa đến ngày này
                                                                 </small>
                                                             <?php endif; ?>
                                                         </label>

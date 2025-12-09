@@ -303,4 +303,131 @@ class ItineraryModel
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
+
+    /**
+     * Lấy danh sách HDV đã được phân công cho tour
+     */
+    public function getAssignedGuidesByTourId($tourId)
+    {
+        $sql = "SELECT DISTINCT 
+                    u.id,
+                    u.fullname,
+                    u.email,
+                    u.phone,
+                    d.departure_date,
+                    d.status AS departure_status,
+                    a.assigned_at
+                FROM `assignments` a
+                INNER JOIN `users` u ON a.guide_id = u.id
+                INNER JOIN `departures` d ON a.departure_id = d.id
+                WHERE d.tour_id = :tour_id
+                  AND u.role = 'guide'
+                ORDER BY d.departure_date DESC, a.assigned_at DESC";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':tour_id', $tourId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Admin: Lấy tất cả checkpoints của HDV cho một departure
+     */
+    public function getCheckpointsForAdmin($departureId)
+    {
+        // Lấy thông tin departure và tour
+        $sql = "SELECT d.*, t.name AS tour_name, t.code AS tour_code
+                FROM `departures` d
+                LEFT JOIN `tours` t ON d.tour_id = t.id
+                WHERE d.id = :departure_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
+        $stmt->execute();
+        $departureInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Lấy lịch trình
+        $itineraries = $this->getItinerariesByTourId($departureInfo['tour_id']);
+
+        // Lấy tất cả checkpoints của departure này (tất cả HDV)
+        $checkpointSql = "SELECT ic.*, u.fullname AS guide_name, i.title AS itinerary_title, i.day_number
+                         FROM `itinerary_checkpoints` ic
+                         INNER JOIN `users` u ON ic.guide_id = u.id
+                         INNER JOIN `itineraries` i ON ic.itinerary_id = i.id
+                         WHERE ic.departure_id = :departure_id
+                         ORDER BY u.id, i.day_number, ic.activity_index";
+        $checkpointStmt = $this->conn->prepare($checkpointSql);
+        $checkpointStmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
+        $checkpointStmt->execute();
+        $checkpoints = $checkpointStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Nhóm checkpoints theo guide
+        $checkpointsByGuide = [];
+        foreach ($checkpoints as $checkpoint) {
+            $guideId = $checkpoint['guide_id'];
+            if (!isset($checkpointsByGuide[$guideId])) {
+                $checkpointsByGuide[$guideId] = [
+                    'guide_name' => $checkpoint['guide_name'],
+                    'checkpoints' => []
+                ];
+            }
+            $checkpointsByGuide[$guideId]['checkpoints'][] = $checkpoint;
+        }
+
+        return [
+            'departure_info' => $departureInfo,
+            'itineraries' => $itineraries,
+            'checkpoints_by_guide' => $checkpointsByGuide
+        ];
+    }
+
+    /**
+     * Admin: Lấy chi tiết checkpoint của một HDV cụ thể cho departure
+     */
+    public function getGuideCheckpointDetails($departureId, $guideId)
+    {
+        // Lấy thông tin departure và tour
+        $sql = "SELECT d.*, t.name AS tour_name, t.code AS tour_code, t.duration_days,
+                       u.fullname AS guide_name, u.email AS guide_email, u.phone AS guide_phone
+                FROM `departures` d
+                LEFT JOIN `tours` t ON d.tour_id = t.id
+                LEFT JOIN `assignments` a ON d.id = a.departure_id
+                LEFT JOIN `users` u ON a.guide_id = u.id
+                WHERE d.id = :departure_id AND u.id = :guide_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':departure_id', $departureId, PDO::PARAM_INT);
+        $stmt->bindParam(':guide_id', $guideId, PDO::PARAM_INT);
+        $stmt->execute();
+        $info = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$info) {
+            return null;
+        }
+
+        // Lấy lịch trình với checkpoints của HDV này
+        $itineraries = $this->getItinerariesByDepartureId($departureId, $guideId);
+
+        // Tính thống kê
+        $totalActivities = 0;
+        $completedActivities = 0;
+
+        foreach ($itineraries as &$itinerary) {
+            $activities = array_filter(array_map('trim', explode("\n", $itinerary['activities'] ?? '')));
+            $totalActivities += count($activities);
+            
+            $activityCheckpoints = $itinerary['activity_checkpoints'] ?? [];
+            foreach ($activityCheckpoints as $idx => $checkpoint) {
+                if ($idx > 0) { // Skip index 0 (whole day marker)
+                    $completedActivities++;
+                }
+            }
+        }
+
+        return [
+            'info' => $info,
+            'itineraries' => $itineraries,
+            'total_activities' => $totalActivities,
+            'completed_activities' => $completedActivities,
+            'progress_percent' => $totalActivities > 0 ? round(($completedActivities / $totalActivities) * 100) : 0
+        ];
+    }
 }

@@ -190,14 +190,51 @@ class ItineraryController
             $tour = $modelTour->getTourById($firstItinerary['tour_id']);
         }
 
+        // Lấy danh sách HDV đã phân công
+        $assignedGuides = $this->modelItinerary->getAssignedGuidesByTourId($tourId);
+
         //truyền hàm điểm danh
         // đoạn điểm danh - (tiến hùng)//
-      if($_GET['departure_id']){
+      if(!empty($_GET['departure_id'])){
         $departure_id = $_GET['departure_id'];
         $getkhachhang = $this->rollcall->Getboking($departure_id);
       }
 
         require_once BASE_URL_VIEWS . 'admin/itinerary/detail.php';
+    }
+
+    /////////////////////////////////////////        Admin xem checkpoint của HDV      /////////////////////////////////////////
+    public function adminViewCheckpoints($departureId)
+    {
+        $data = $this->modelItinerary->getCheckpointsForAdmin($departureId);
+        
+        if (!$data['departure_info']) {
+            $_SESSION['error'] = 'Không tìm thấy thông tin chuyến đi';
+            header('Location: ' . BASE_URL . '?act=listAssignments');
+            exit();
+        }
+
+        $departureInfo = $data['departure_info'];
+        $itineraries = $data['itineraries'];
+        $checkpointsByGuide = $data['checkpoints_by_guide'];
+
+        require_once BASE_URL_VIEWS . 'admin/itinerary/checkpoints.php';
+    }
+
+    /////////////////////////////////////////        Admin xem chi tiết checkpoint của một HDV      /////////////////////////////////////////
+    public function adminViewGuideCheckpoint($departureId, $guideId)
+    {
+        $data = $this->modelItinerary->getGuideCheckpointDetails($departureId, $guideId);
+        
+        if (!$data) {
+            $_SESSION['error'] = 'Không tìm thấy thông tin';
+            header('Location: ' . BASE_URL . '?act=listAssignments');
+            exit();
+        }
+
+        extract($data);
+
+        require_once BASE_URL_VIEWS . 'admin/itinerary/guide_checkpoint_detail.php';
     }
 
     /////////////////////////////////////////        phần sửa lịch trình      ////////////////////////////////////////

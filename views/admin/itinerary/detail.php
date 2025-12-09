@@ -69,7 +69,7 @@
             <div class="row g-4">
                 <!-- Thông tin tour -->
                 <div class="col-lg-4">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm mb-4">
                         <div class="card-header bg-white d-flex align-items-center justify-content-between">
                             <h5 class="mb-0"><i class="fas fa-plane-departure text-primary me-2"></i>Thông tin tour</h5>
                             <?php if (!empty($tour['status'])): ?>
@@ -102,16 +102,63 @@
                                     <small class="text-muted d-block">Thời lượng</small>
                                     <span><?= htmlspecialchars($tour['duration_days']) ?> ngày</span>
                                 </div>
-                                <?php if (!empty($tour['image'])): ?>
-                                    <div class="mt-4">
-                                        <img src="<?= BASE_URL . 'uploads/' . basename($tour['image']) ?>"
-                                            class="img-fluid rounded shadow-sm w-100"
-                                            alt="<?= htmlspecialchars($tour['name']) ?>"
-                                            style="max-height: 280px; object-fit: cover;">
-                                    </div>
-                                <?php endif; ?>
                             <?php else: ?>
                                 <p class="text-muted mb-0">Không tìm thấy thông tin tour tương ứng.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Danh sách HDV đã phân công -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-user-tie text-success me-2"></i>HDV đã phân công</h5>
+                        </div>
+                        <div class="card-body">
+                            <?php if (!empty($assignedGuides)): ?>
+                                <div class="list-group list-group-flush">
+                                    <?php foreach ($assignedGuides as $guide): ?>
+                                        <div class="list-group-item px-0 py-3">
+                                            <div class="d-flex align-items-start">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" 
+                                                         style="width: 40px; height: 40px;">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-1"><?= htmlspecialchars($guide['fullname']) ?></h6>
+                                                    <small class="text-muted d-block">
+                                                        <i class="fas fa-envelope me-1"></i><?= htmlspecialchars($guide['email']) ?>
+                                                    </small>
+                                                    <?php if (!empty($guide['phone'])): ?>
+                                                        <small class="text-muted d-block">
+                                                            <i class="fas fa-phone me-1"></i><?= htmlspecialchars($guide['phone']) ?>
+                                                        </small>
+                                                    <?php endif; ?>
+                                                    <small class="text-muted d-block mt-1">
+                                                        <i class="fas fa-calendar-check me-1"></i>
+                                                        Ngày khởi hành: <?= date('d/m/Y', strtotime($guide['departure_date'])) ?>
+                                                    </small>
+                                                    <?php
+                                                    $departureStatusLabels = [
+                                                        'ready' => ['label' => 'Sẵn sàng', 'class' => 'bg-success'],
+                                                        'pending' => ['label' => 'Chờ xử lý', 'class' => 'bg-warning text-dark'],
+                                                        'completed' => ['label' => 'Hoàn thành', 'class' => 'bg-info'],
+                                                        'cancelled' => ['label' => 'Đã hủy', 'class' => 'bg-danger']
+                                                    ];
+                                                    $depStatus = $departureStatusLabels[$guide['departure_status']] ?? ['label' => ucfirst($guide['departure_status']), 'class' => 'bg-secondary'];
+                                                    ?>
+                                                    <span class="badge <?= $depStatus['class'] ?> mt-2"><?= $depStatus['label'] ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted mb-0 text-center py-3">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Chưa có HDV nào được phân công cho tour này.
+                                </p>
                             <?php endif; ?>
                         </div>
                     </div>

@@ -31,6 +31,7 @@ class TourController
     public function detailTour($id)
     {
         $tour = $this->modelTour->getTourById($id);
+        $tourImages = $this->modelTour->getTourImages($id);
         require_once BASE_URL_VIEWS . 'admin/tour/detail.php';
     }
 
@@ -42,6 +43,7 @@ class TourController
             $code = $_POST['code'];
             $name = $_POST['name'];
             $destination = $_POST['destination'];
+            $description = $_POST['description'] ?? '';
             $category_id = $_POST['category_id'];
             $status = $_POST['status'];
             $price = $_POST['price'];
@@ -49,18 +51,44 @@ class TourController
             
             $image = $_FILES['image'];
             
-            // Upload file ảnh
+            // Upload file ảnh chính
             $from = $image['tmp_name'];
             $targetFolder = PATH_ROOT . 'uploads/';
             $to = $targetFolder . basename($image['name']); // Ghép thư mục lưu trữ + tên file
             move_uploaded_file($from, $to);
 
-            // Lưu dữ liệu vào trong database
+            // Lưu dữ liệu tour vào database
             $result = $this->modelTour->addTour($code, $name, $destination, $category_id, $status, $price, $duration_days, $to);
             
             if ($result) {
+                // Lấy ID của tour vừa thêm
+                $tourId = $this->modelTour->conn->lastInsertId();
+                
+                // Cập nhật mô tả nếu có
+                if (!empty($description)) {
+                    $this->modelTour->updateTourDescription($tourId, $description);
+                }
+                
+                // Upload ảnh phụ nếu có
+                if (!empty($_FILES['additional_images']['name'][0])) {
+                    $additionalImages = $_FILES['additional_images'];
+                    $totalImages = count($additionalImages['name']);
+                    
+                    for ($i = 0; $i < $totalImages; $i++) {
+                        if (!empty($additionalImages['name'][$i])) {
+                            $from = $additionalImages['tmp_name'][$i];
+                            $imageName = time() . '_' . $i . '_' . basename($additionalImages['name'][$i]);
+                            $to = $targetFolder . $imageName;
+                            
+                            if (move_uploaded_file($from, $to)) {
+                                $this->modelTour->addTourImage($tourId, $to, $i);
+                            }
+                        }
+                    }
+                }
+                
                 $_SESSION['success'] = 'Thêm tour thành công';
-                header('Location: ' . BASE_URL . '?act=listTours'); // Chuyển hướng đến trang danh sách tour
+                header('Location: ' . BASE_URL . '?act=listTours');
                 exit();   
             } else {
                 $_SESSION['error'] = 'Thêm tour thất bại';
@@ -106,6 +134,7 @@ class TourController
                 $code = $_POST['code'];
                 $name = $_POST['name'];
                 $destination = $_POST['destination'];
+                $description = $_POST['description'] ?? '';
                 $category_id = $_POST['category_id'];
                 $status = $_POST['status'];
                 $price = $_POST['price'];
@@ -125,6 +154,28 @@ class TourController
                 $result = $this->modelTour->updateTour($id, $code, $name, $destination, $category_id, $status, $price, $duration_days, $imagePath);
 
                 if ($result) {
+                    // Cập nhật mô tả
+                    $this->modelTour->updateTourDescription($id, $description);
+                    
+                    // Upload ảnh phụ mới nếu có
+                    if (!empty($_FILES['additional_images']['name'][0])) {
+                        $additionalImages = $_FILES['additional_images'];
+                        $totalImages = count($additionalImages['name']);
+                        $targetFolder = PATH_ROOT . 'uploads/';
+                        
+                        for ($i = 0; $i < $totalImages; $i++) {
+                            if (!empty($additionalImages['name'][$i])) {
+                                $from = $additionalImages['tmp_name'][$i];
+                                $imageName = time() . '_' . $i . '_' . basename($additionalImages['name'][$i]);
+                                $to = $targetFolder . $imageName;
+                                
+                                if (move_uploaded_file($from, $to)) {
+                                    $this->modelTour->addTourImage($id, $to, $i);
+                                }
+                            }
+                        }
+                    }
+                    
                     $_SESSION['success'] = 'Cập nhật tour thành công';
                     header('Location: ' . BASE_URL . '?act=listTours');
                     exit();
@@ -151,5 +202,38 @@ class TourController
         }
         header('Location: ' . BASE_URL . '?act=listTours');
         exit();
+    }
+
+    /////////////////////////////////////////        phần xoá ảnh phụ của tour      /////////////////////////////////////////
+    public function deleteTourImage()
+    {
+        if (isset($_GET['id']) && isset($_GET['tour_id'])) {
+            $imageId = $_GET['id'];
+            $tourId = $_GET['tour_id'];
+            
+            // Lấy thông tin ảnh để xóa file
+            $images = $this->modelTour->getTourImages($tourId);
+            foreach ($images as $img) {
+                if ($img['id'] == $imageId) {
+                    // Xóa file vật lý
+                    if (file_exists($img['image_path'])) {
+                        unlink($img['image_path']);
+                    }
+                    break;
+                }
+            }
+            
+            // Xóa record trong database
+            $result = $this->modelTour->deleteTourImage($imageId);
+            
+            if ($result) {
+                $_SESSION['success'] = 'Xoá ảnh thành công';
+            } else {
+                $_SESSION['error'] = 'Xoá ảnh thất bại';
+            }
+            
+            header('Location: ' . BASE_URL . '?act=editTourForm&id=' . $tourId);
+            exit();
+        }
     }
 }

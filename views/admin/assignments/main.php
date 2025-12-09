@@ -88,9 +88,10 @@
                     if ($a['departure_status'] !== 'ready') {
                     ?>
                       <div class="btn-action-group">
-                        <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action"><i class="fas fa-edit"></i></a>
-                        <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
-                        <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
+                        <a href="<?= BASE_URL ?>?act=editAssignment&id=<?= $a['id'] ?>" class="btn btn-primary btn-action" title="Sửa"><i class="fas fa-edit"></i></a>
+                        <a href="<?= BASE_URL ?>?act=deleteAssignment&id=<?= $a['id'] ?>" class="btn btn-danger btn-action" title="Xóa" onclick="return confirm('Xóa phân công này?')"><i class="fas fa-trash"></i></a>
+                        <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action" title="Checklist cũ"><i class="fas fa-clipboard-check"></i></a>
+                        <a href="<?= BASE_URL ?>?act=adminViewGuideCheckpoint&departure_id=<?= $a['departure_id'] ?>&guide_id=<?= $a['guide_id'] ?>" class="btn btn-success btn-action" title="Xem checkpoint HDV"><i class="fas fa-tasks"></i></a>
                       </div>
                     <?php
                     } else { ?>
@@ -106,7 +107,8 @@
                         class="btn btn-secondary btn-action">
                         <i class="fas fa-trash text-light" title="Không thể xóa"></i>
                       </a>
-                      <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action"><i class="fas fa-clipboard-check"></i></a>
+                      <a href="<?= BASE_URL ?>?act=showChecklistForAdmin&departure_id=<?= $a['departure_id'] ?>" class="btn btn-info btn-action" title="Checklist cũ"><i class="fas fa-clipboard-check"></i></a>
+                      <a href="<?= BASE_URL ?>?act=adminViewGuideCheckpoint&departure_id=<?= $a['departure_id'] ?>&guide_id=<?= $a['guide_id'] ?>" class="btn btn-success btn-action" title="Xem checkpoint HDV"><i class="fas fa-tasks"></i></a>
 
 
                     <?php

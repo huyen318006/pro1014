@@ -78,10 +78,10 @@
             <div class="row">
                 <!-- Cột trái - Hình ảnh -->
                 <div class="col-lg-5">
-                    <!-- Hình ảnh Tour -->
+                    <!-- Hình ảnh Tour chính -->
                     <div class="card shadow-sm mb-4">
                         <div class="card-header bg-white">
-                            <h5 class="mb-0"><i class="fas fa-image text-primary"></i> Hình ảnh Tour</h5>
+                            <h5 class="mb-0"><i class="fas fa-image text-primary"></i> Hình ảnh chính</h5>
                         </div>
                         <div class="card-body text-center">
                             <?php if (!empty($tour['image'])): ?>
@@ -97,6 +97,28 @@
                             <?php endif; ?>
                         </div>
                     </div>
+
+                    <!-- Ảnh phụ -->
+                    <?php if (!empty($tourImages) && count($tourImages) > 0): ?>
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-images text-success"></i> Thư viện ảnh (<?= count($tourImages) ?>)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <?php foreach ($tourImages as $img): ?>
+                                    <div class="col-6">
+                                        <img src="<?= BASE_URL . 'uploads/' . basename($img['image_path']) ?>"
+                                            class="img-fluid rounded shadow-sm"
+                                            alt="Tour image"
+                                            style="height: 150px; width: 100%; object-fit: cover; cursor: pointer;"
+                                            onclick="viewImage(this.src)">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Cột phải - Thông tin chi tiết -->
@@ -213,10 +235,53 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Mô tả Tour -->
+            <?php if (!empty($tour['description'])): ?>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-file-alt text-info"></i> Mô tả Tour</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="tour-description" style="line-height: 1.8;">
+                                <?= nl2br(htmlspecialchars($tour['description'])) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
         </div>
     </div>
+
+    <!-- Modal xem ảnh phóng to -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xem ảnh</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid" alt="Tour image">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Hàm xem ảnh phóng to
+        function viewImage(src) {
+            document.getElementById('modalImage').src = src;
+            var modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            modal.show();
+        }
+    </script>
 </body>
 
 </html>

@@ -78,6 +78,8 @@ match ($act) {
 
   'deleteTour' => (new TourController())->deleteTour($_GET['id'] ?? 0),
 
+  'deleteTourImage' => (new TourController())->deleteTourImage(),
+
   // Quản lý lịch trình
   'listItinerary' => (new ItineraryController())->listItinerary(),
 
@@ -88,6 +90,10 @@ match ($act) {
   'deleteItinerary' => (new ItineraryController())->deleteItinerary($_GET['id'] ?? 0),
 
   'detailItinerary' => (new ItineraryController())->detailItinerary($_GET['tour_id'] ?? 0),
+
+  // Admin xem checkpoint của HDV
+  'adminViewCheckpoints' => (new ItineraryController())->adminViewCheckpoints($_GET['departure_id'] ?? 0),
+  'adminViewGuideCheckpoint' => (new ItineraryController())->adminViewGuideCheckpoint($_GET['departure_id'] ?? 0, $_GET['guide_id'] ?? 0),
 
   // Quản lý phân công hướng dẫn viên
   'listAssignments' => (new AssignmentController())->index(),
