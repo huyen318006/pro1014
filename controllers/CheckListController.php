@@ -61,6 +61,9 @@ class ChecklistController {
     // Lấy checklist + tên HDV + tên tour
     $checklistItems = $this->model->getChecklistFullForAdmin($departureId);
 
+    // Lấy dữ liệu điểm danh (nếu có) để hiển thị cho admin
+    $rollcallEntries = $this->rollcall->getRollcallByDeparture($departureId);
+
     require_once BASE_URL_VIEWS . 'admin/checklist/admin_checklist.php';
 }
 

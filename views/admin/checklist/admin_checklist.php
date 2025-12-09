@@ -45,33 +45,38 @@
 <table class="table table-bordered mt-3">
     <thead class="table-success">
         <tr>
-            <th>Nhân viên</th>
-            <th>Chức vụ</th>
-            <th>Trạng thái điểm danh</th>
+            <th>#</th>
+            <th>Tên khách</th>
+            <th>SĐT</th>
+            <th>Số lượng</th>
+            <th>Có mặt</th>
+            <th>Vắng</th>
+            <th>Trễ</th>
+            <th>Ghi chú</th>
             <th>Thời gian điểm danh</th>
         </tr>
     </thead>
 
     <tbody>
-        <tr>
-            <td>Nguyễn Văn A</td>
-            <td>Lái xe</td>
-            <td>
-                <span class="badge bg-success">Đã điểm danh</span>
-            </td>
-            <td>08:15 - 12/03/2025</td>
-        </tr>
-
-        <tr>
-            <td>Trần Thị B</td>
-            <td>Phụ xe</td>
-            <td>
-                <span class="badge bg-secondary">Chưa điểm danh</span>
-            </td>
-            <td>-</td>
-        </tr>
-
-        <!-- Bạn thêm các dòng khác ở đây -->
+        <?php if (!empty($rollcallEntries) && is_array($rollcallEntries)): ?>
+            <?php foreach ($rollcallEntries as $i => $rc): ?>
+                <tr>
+                    <td><?= $i + 1 ?></td>
+                    <td><?= htmlspecialchars($rc['customer_name'] ?? ($rc['customer_name'] ?? '-')) ?></td>
+                    <td><?= htmlspecialchars($rc['customer_phone'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($rc['quantity'] ?? '-') ?></td>
+                    <td><?= isset($rc['present']) ? (int)$rc['present'] : '-' ?></td>
+                    <td><?= isset($rc['absent']) ? (int)$rc['absent'] : '-' ?></td>
+                    <td><?= isset($rc['late']) ? (int)$rc['late'] : '-' ?></td>
+                    <td><?= htmlspecialchars($rc['note'] ?? '-') ?></td>
+                    <td><?= !empty($rc['checked_at']) ? date('d/m/Y H:i', strtotime($rc['checked_at'])) : '-' ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="9" class="text-center text-danger">Chưa có bản ghi điểm danh cho khởi hành này.</td>
+            </tr>
+        <?php endif; ?>
     </tbody>
 </table>
 
