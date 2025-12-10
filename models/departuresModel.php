@@ -95,14 +95,31 @@ class Departures {
     return $stmt->execute();
 }
 
-public function delete_DepartureAdmin($id_DepartureAdmin) {
-    $sql= 'DELETE FROM departures WHERE id=:id';
-    $stmt=$this->conn->prepare($sql);
-    $stmt->bindParam(':id',$id_DepartureAdmin);
-    return $stmt->execute();
-}
-//add form
-public function addDeparture($tour_id, $departure_date, $meeting_point, $max_participants, $note, $guide_id) {
+    public function deleteDepartureAdmin($id)
+    {
+        // Xóa assignments trước
+        $sql1 = "DELETE FROM assignments WHERE departure_id = :id";
+        $stmt1 = $this->conn->prepare($sql1);
+        $stmt1->bindParam(':id', $id);
+        $stmt1->execute();
+
+        // Xóa checklists
+        $sql2 = "DELETE FROM checklists WHERE departure_id = :id";
+        $stmt2 = $this->conn->prepare($sql2);
+        $stmt2->bindParam(':id', $id);
+        $stmt2->execute();
+
+        // Cuối cùng xóa departure
+        $sql3 = "DELETE FROM departures WHERE id = :id";
+        $stmt3 = $this->conn->prepare($sql3);
+        $stmt3->bindParam(':id', $id);
+        return $stmt3->execute();
+    }
+
+
+
+    //add form
+    public function addDeparture($tour_id, $departure_date, $meeting_point, $max_participants, $note, $guide_id) {
 
   $sql= "INSERT INTO departures (tour_id,departure_date,max_participants,meeting_point,note) VALUES (:tour_id,:departure_date,:max_participants,:meeting_point,:note)";
   $stmt = $this->conn->prepare($sql);

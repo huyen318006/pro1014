@@ -51,7 +51,7 @@ class DepartureController {
     {
         if ($_GET['id']) {
             $id_DepartureAdmin = $_GET['id'];
-            $delete_DepartureAdmin = $this->departures->delete_DepartureAdmin($id_DepartureAdmin);
+            $this->departures->deleteDepartureAdmin($id_DepartureAdmin);
             header("Location: ?act=DepartureAdmin");
         }
     }
