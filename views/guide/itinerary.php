@@ -80,10 +80,22 @@
         <?php if (!empty($itineraries)): ?>
             <div class="row">
                 <?php foreach ($itineraries as $index => $itinerary):
+                    // day_number có thể là ngày cụ thể (2025-12-10) hoặc số thứ tự (1, 2, 3...)
                     $dayNumber = $itinerary['day_number'];
-                    $isCurrent = ($dayNumber == $currentDayNumber);
-                    $isPast = ($dayNumber < $currentDayNumber);
-                    $isFuture = ($dayNumber > $currentDayNumber);
+                    
+                    // Nếu day_number là ngày cụ thể (định dạng YYYY-MM-DD)
+                    if (strtotime($dayNumber)) {
+                        $dayDate = date('Y-m-d', strtotime($dayNumber));
+                        $currentDateOnly = date('Y-m-d', strtotime($currentDate));
+                        $isCurrent = ($dayDate == $currentDateOnly);
+                        $isPast = (strtotime($dayDate) < strtotime($currentDateOnly));
+                        $isFuture = (strtotime($dayDate) > strtotime($currentDateOnly));
+                    } else {
+                        // Nếu day_number là số thứ tự
+                        $isCurrent = ($dayNumber == $currentDayNumber);
+                        $isPast = ($dayNumber < $currentDayNumber);
+                        $isFuture = ($dayNumber > $currentDayNumber);
+                    }
 
                     // Parse activities
                     $activities = array_filter(array_map('trim', explode("\n", $itinerary['activities'] ?? '')));
@@ -113,11 +125,11 @@
                                     <div>
                                         <span class="badge <?= $badgeClass ?> mb-2">
                                             <?php if ($isCurrent): ?>
-                                                <i class="fas fa-star"></i> Hôm nay - Ngày <?= $dayNumber ?>
+                                                <i class="fas fa-star"></i> Hôm nay - Ngày <?= date('d/m/Y', strtotime($dayNumber)) ?>
                                             <?php elseif ($isPast): ?>
-                                                <i class="fas fa-check-circle"></i> Đã qua - Ngày <?= $dayNumber ?>
+                                                <i class="fas fa-check-circle"></i> Đã qua - Ngày <?= date('d/m/Y', strtotime($dayNumber)) ?>
                                             <?php else: ?>
-                                                <i class="fas fa-clock"></i> Sắp tới - Ngày <?= $dayNumber ?>
+                                                <i class="fas fa-clock"></i> Sắp tới - Ngày <?= date('d/m/Y', strtotime($dayNumber)) ?>
                                             <?php endif; ?>
                                         </span>
                                         <h5 class="card-title"><?= htmlspecialchars($itinerary['title']) ?></h5>

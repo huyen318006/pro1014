@@ -38,6 +38,13 @@ class ItineraryController
             $activities = $_POST['activities'] ?? '';
             $notes = $_POST['notes'] ?? '';
 
+            // Kiểm tra tour có departure ở trạng thái READY không
+            if ($this->modelItinerary->hasReadyDeparture($tour_id)) {
+                $_SESSION['error'] = 'Tour đang có lịch khởi hành ở trạng thái READY, không thể thêm lịch trình mới.';
+                header('Location: ' . BASE_URL . '?act=addItineraryForm');
+                exit();
+            }
+
             // Kiểm tra trùng lặp ngày trong cùng tour
             if ($this->modelItinerary->checkDuplicateDay($tour_id, $title)) {
                 $_SESSION['error'] = "Lịch trình '{$title}' đã tồn tại trong tour này. Vui lòng chọn ngày khác.";
