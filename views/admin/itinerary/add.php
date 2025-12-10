@@ -82,12 +82,23 @@
                                 <label for="tour_id" class="form-label">Chọn Tour<span class="text-danger">*</span></label>
                                 <select class="form-select" id="tour_id" name="tour_id" required>
                                     <option value="">-- Chọn tour --</option>
-                                    <?php foreach ($tours as $tour): ?>
-                                        <option value="<?= $tour['id'] ?>" <?= (isset($tour_id) && $tour_id == $tour['id']) ? 'selected' : '' ?>>
+                                    <?php 
+                                    $modelItinerary = new ItineraryModel();
+                                    foreach ($tours as $tour): 
+                                        $hasReady = $modelItinerary->hasReadyDeparture($tour['id']);
+                                    ?>
+                                        <option value="<?= $tour['id'] ?>" 
+                                            <?= (isset($tour_id) && $tour_id == $tour['id']) ? 'selected' : '' ?>
+                                            <?= $hasReady ? 'disabled' : '' ?>>
                                             #<?= $tour['id'] ?> - <?= $tour['name'] ?> (<?= $tour['destination'] ?>)
+                                            <?= $hasReady ? ' - [Đã có tour READY]' : '' ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Tour có lịch khởi hành ở trạng thái READY sẽ bị khóa, không thể thêm lịch trình mới.
+                                </small>
                             </div>
 
                             <!-- Day number -->
