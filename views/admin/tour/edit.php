@@ -59,6 +59,15 @@
                         </div>
                     <?php endif; ?>
 
+                    <!-- Hiển thị lỗi từ session -->
+                    <?php if (!empty($_SESSION['error'])): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> <?= $_SESSION['error'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
+
                     <!-- Hiển thị lỗi validation -->
                     <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -172,34 +181,34 @@
                                 </div>
 
                                 <!-- Ảnh phụ hiện tại -->
-                                <?php 
+                                <?php
                                 $modelTour = new TourModel();
                                 $tourImages = $modelTour->getTourImages($tour['id']);
-                                if (!empty($tourImages)): 
+                                if (!empty($tourImages)):
                                 ?>
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Ảnh phụ hiện tại</label>
-                                    <div class="row g-2">
-                                        <?php foreach ($tourImages as $img): ?>
-                                            <div class="col-4 position-relative">
-                                                <img src="<?= BASE_URL . 'uploads/' . basename($img['image_path']) ?>"
-                                                    class="img-thumbnail"
-                                                    style="width: 100%; height: 100px; object-fit: cover;">
-                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
-                                                    onclick="deleteImage(<?= $img['id'] ?>)"
-                                                    style="padding: 2px 6px; font-size: 12px;">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        <?php endforeach; ?>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Ảnh phụ hiện tại</label>
+                                        <div class="row g-2">
+                                            <?php foreach ($tourImages as $img): ?>
+                                                <div class="col-4 position-relative">
+                                                    <img src="<?= BASE_URL . 'uploads/' . basename($img['image_path']) ?>"
+                                                        class="img-thumbnail"
+                                                        style="width: 100%; height: 100px; object-fit: cover;">
+                                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                        onclick="deleteImage(<?= $img['id'] ?>)"
+                                                        style="padding: 2px 6px; font-size: 12px;">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
                                     </div>
-                                </div>
                                 <?php endif; ?>
 
                                 <!-- Thêm ảnh phụ mới -->
                                 <div class="form-group mb-3">
                                     <label for="additional_images" class="form-label">Thêm ảnh phụ mới</label>
-                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]" 
+                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]"
                                         accept="image/*" multiple>
                                     <small class="form-text text-muted">Có thể chọn nhiều ảnh (giữ Ctrl/Cmd khi chọn)</small>
                                 </div>

@@ -48,9 +48,16 @@ class TourController
             $status = $_POST['status'];
             $price = $_POST['price'];
             $duration_days = $_POST['duration_days'];
-            
+
             $image = $_FILES['image'];
-            
+
+            // Kiểm tra mã tour đã tồn tại chưa
+            if ($this->modelTour->checkDuplicateTourCode($code)) {
+                $_SESSION['error'] = "Mã tour '{$code}' đã tồn tại. Vui lòng chọn mã khác.";
+                header('Location: ' . BASE_URL . '?act=addTourForm');
+                exit();
+            }
+
             // Upload file ảnh chính
             $from = $image['tmp_name'];
             $targetFolder = PATH_ROOT . 'uploads/';
@@ -59,44 +66,44 @@ class TourController
 
             // Lưu dữ liệu tour vào database
             $result = $this->modelTour->addTour($code, $name, $destination, $category_id, $status, $price, $duration_days, $to);
-            
+
             if ($result) {
                 // Lấy ID của tour vừa thêm
                 $tourId = $this->modelTour->conn->lastInsertId();
-                
+
                 // Cập nhật mô tả nếu có
                 if (!empty($description)) {
                     $this->modelTour->updateTourDescription($tourId, $description);
                 }
-                
+
                 // Upload ảnh phụ nếu có
                 if (!empty($_FILES['additional_images']['name'][0])) {
                     $additionalImages = $_FILES['additional_images'];
                     $totalImages = count($additionalImages['name']);
-                    
+
                     for ($i = 0; $i < $totalImages; $i++) {
                         if (!empty($additionalImages['name'][$i])) {
                             $from = $additionalImages['tmp_name'][$i];
                             $imageName = time() . '_' . $i . '_' . basename($additionalImages['name'][$i]);
                             $to = $targetFolder . $imageName;
-                            
+
                             if (move_uploaded_file($from, $to)) {
                                 $this->modelTour->addTourImage($tourId, $to, $i);
                             }
                         }
                     }
                 }
-                
+
                 $_SESSION['success'] = 'Thêm tour thành công';
                 header('Location: ' . BASE_URL . '?act=listTours');
-                exit();   
+                exit();
             } else {
                 $_SESSION['error'] = 'Thêm tour thất bại';
                 header('Location: ' . BASE_URL . '?act=addTourForm');
                 exit();
             }
         }
-        
+
         // Hiển thị form thêm tour
         $categories = $this->modelCategory->getCategories();
         require_once BASE_URL_VIEWS . 'admin/tour/add.php';
@@ -106,13 +113,13 @@ class TourController
     public function editTourForm($id)
     {
         if (isset($_GET['id']) && $_GET['id'] > 0) {
-            
+
             // Lấy id của tour đang muốn sửa
             $id = $_GET['id'];
             $categories = $this->modelCategory->getCategories();
             // Lấy dữ liệu của tour đang muốn sửa
             $tour = $this->modelTour->getTourById($id);
-            
+
             if (!$tour) {
                 $_SESSION['error'] = 'Tour không tồn tại';
                 header('Location: ' . BASE_URL . '?act=listTours');
@@ -139,7 +146,7 @@ class TourController
                 $status = $_POST['status'];
                 $price = $_POST['price'];
                 $duration_days = $_POST['duration_days'];
-                
+
                 // Xử lý hình ảnh - chỉ update nếu có file mới
                 $imagePath = $tour['image']; // Giữ nguyên hình ảnh cũ
                 if (!empty($_FILES['image']['name'])) {
@@ -150,32 +157,39 @@ class TourController
                     move_uploaded_file($from, $imagePath);
                 }
 
+                // Kiểm tra mã tour đã tồn tại chưa (loại trừ tour đang sửa)
+                if ($this->modelTour->checkDuplicateTourCode($code, $id)) {
+                    $_SESSION['error'] = "Mã tour '{$code}' đã tồn tại. Vui lòng chọn mã khác.";
+                    header('Location: ' . BASE_URL . '?act=editTourForm&id=' . $id);
+                    exit();
+                }
+
                 // Cập nhật tour
                 $result = $this->modelTour->updateTour($id, $code, $name, $destination, $category_id, $status, $price, $duration_days, $imagePath);
 
                 if ($result) {
                     // Cập nhật mô tả
                     $this->modelTour->updateTourDescription($id, $description);
-                    
+
                     // Upload ảnh phụ mới nếu có
                     if (!empty($_FILES['additional_images']['name'][0])) {
                         $additionalImages = $_FILES['additional_images'];
                         $totalImages = count($additionalImages['name']);
                         $targetFolder = PATH_ROOT . 'uploads/';
-                        
+
                         for ($i = 0; $i < $totalImages; $i++) {
                             if (!empty($additionalImages['name'][$i])) {
                                 $from = $additionalImages['tmp_name'][$i];
                                 $imageName = time() . '_' . $i . '_' . basename($additionalImages['name'][$i]);
                                 $to = $targetFolder . $imageName;
-                                
+
                                 if (move_uploaded_file($from, $to)) {
                                     $this->modelTour->addTourImage($id, $to, $i);
                                 }
                             }
                         }
                     }
-                    
+
                     $_SESSION['success'] = 'Cập nhật tour thành công';
                     header('Location: ' . BASE_URL . '?act=listTours');
                     exit();
@@ -185,7 +199,7 @@ class TourController
                     exit();
                 }
             }
-            
+
             // Hiển thị form
             $categories = $this->modelCategory->getCategories();
             require_once BASE_URL_VIEWS . 'admin/tour/edit.php';
@@ -210,7 +224,7 @@ class TourController
         if (isset($_GET['id']) && isset($_GET['tour_id'])) {
             $imageId = $_GET['id'];
             $tourId = $_GET['tour_id'];
-            
+
             // Lấy thông tin ảnh để xóa file
             $images = $this->modelTour->getTourImages($tourId);
             foreach ($images as $img) {
@@ -222,16 +236,16 @@ class TourController
                     break;
                 }
             }
-            
+
             // Xóa record trong database
             $result = $this->modelTour->deleteTourImage($imageId);
-            
+
             if ($result) {
                 $_SESSION['success'] = 'Xoá ảnh thành công';
             } else {
                 $_SESSION['error'] = 'Xoá ảnh thất bại';
             }
-            
+
             header('Location: ' . BASE_URL . '?act=editTourForm&id=' . $tourId);
             exit();
         }

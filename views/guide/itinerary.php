@@ -82,7 +82,7 @@
                 <?php foreach ($itineraries as $index => $itinerary):
                     // day_number có thể là ngày cụ thể (2025-12-10) hoặc số thứ tự (1, 2, 3...)
                     $dayNumber = $itinerary['day_number'];
-                    
+
                     // Nếu day_number là ngày cụ thể (định dạng YYYY-MM-DD)
                     if (strtotime($dayNumber)) {
                         $dayDate = date('Y-m-d', strtotime($dayNumber));
@@ -114,7 +114,7 @@
                     } else {
                         $cardClass .= $isCompleted ? 'border-success' : ($isCurrent ? 'border-warning' : 'border-info');
                     }
-                    
+
                     $badgeClass = $isCompleted ? 'bg-success' : ($isCurrent ? 'bg-warning text-dark' : ($isFuture ? 'bg-secondary' : 'bg-info'));
                 ?>
                     <div class="col-12 mb-3">
@@ -165,10 +165,10 @@
                                                             data-itinerary-id="<?= $itinerary['id'] ?>"
                                                             data-departure-id="<?= $departure_id ?>"
                                                             data-activity-index="<?= $realIndex ?>"
-                                                            <?= $isChecked ? 'checked' : '' ?>
+                                                            <?= $isChecked ? 'checked disabled' : '' ?>
                                                             <?= $isFuture ? 'disabled' : '' ?>
-                                                            style="width: 1.25rem; height: 1.25rem; <?= $isFuture ? 'cursor: not-allowed;' : 'cursor: pointer;' ?>">
-                                                        <label class="form-check-label flex-grow-1" for="activity_<?= $itinerary['id'] ?>_<?= $realIndex ?>" style="<?= $isFuture ? 'cursor: not-allowed; opacity: 0.6;' : 'cursor: pointer;' ?>">
+                                                            style="width: 1.25rem; height: 1.25rem; <?= ($isFuture || $isChecked) ? 'cursor: not-allowed;' : 'cursor: pointer;' ?>">
+                                                        <label class="form-check-label flex-grow-1" for="activity_<?= $itinerary['id'] ?>_<?= $realIndex ?>" style="<?= ($isFuture || $isChecked) ? 'cursor: not-allowed;' : 'cursor: pointer;' ?> <?= $isFuture ? 'opacity: 0.6;' : '' ?>">
                                                             <span class="<?= $isChecked ? 'text-decoration-line-through text-muted' : '' ?>">
                                                                 <i class="fas fa-chevron-right text-primary me-2"></i><?= htmlspecialchars($activity) ?>
                                                             </span>
@@ -191,77 +191,79 @@
                                     </div>
                                 <?php endif; ?>
 
-                                    <!-- ========================= -->
-                                    <!--      ĐIỂM DANH KHÁCH      -->
-                                    <!-- ========================= -->
+                                <!-- ========================= -->
+                                <!--      ĐIỂM DANH KHÁCH      -->
+                                <!-- ========================= -->
 
-                                    <h5 class="mt-4 mb-3">
-                                        <i class="fa-solid fa-users"></i> Điểm danh khách
-                                    </h5>
+                                <h5 class="mt-4 mb-3">
+                                    <i class="fa-solid fa-users"></i> Điểm danh khách
+                                </h5>
 
-                                    <?php
-                                    // Use controller-provided $getkhachhang when available; fall back to empty array
-                                    $attendanceList = isset($getkhachhang) && is_array($getkhachhang) ? $getkhachhang : [];
-                                    ?>
+                                <?php
+                                // Use controller-provided $getkhachhang when available; fall back to empty array
+                                $attendanceList = isset($getkhachhang) && is_array($getkhachhang) ? $getkhachhang : [];
+                                ?>
 
-                                    <form method="POST" action="<?= BASE_URL ?>?act=saveAttendance">
-                                        <input type="hidden" name="departure_id" value="<?= $departure_id ?>">
+                                <form method="POST" action="<?= BASE_URL ?>?act=saveAttendance">
+                                    <input type="hidden" name="departure_id" value="<?= $departure_id ?>">
 
-                                        <table class="table table-bordered align-middle">
-                                            <thead class="table-primary">
+                                    <table class="table table-bordered align-middle">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên khách</th>
+                                                <th>SĐT</th>
+                                                <th>Số lượng</th>
+                                                <th>Có mặt</th>
+                                                <th>Vắng</th>
+                                                <th>Trễ</th>
+                                                <th>Ghi chú</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php if (!empty($attendanceList)): ?>
+                                                <?php foreach ($attendanceList as $index => $kh): ?>
+                                                    <tr>
+                                                        <td><?= $index + 1 ?></td>
+                                                        <td><?= htmlspecialchars($kh['customer_name']) ?></td>
+                                                        <td><?= htmlspecialchars($kh['customer_phone']) ?></td>
+                                                        <td><?= $kh['quantity'] ?></td>
+
+                                                        <td>
+                                                            <input type="number" name="form_present[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người có mặt">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number" name="form_absent[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người vắng">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number" name="form_late[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người trễ">
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="text" name="form_note[]" placeholder="Ghi chú...">
+                                                        </td>
+                                                    </tr>
+
+                                                    <input type="hidden" name="form_departure_id[]" value="<?= $kh['departure_id'] ?>">
+                                                    <input type="hidden" name="form_booking_id[]" value="<?= $kh['id'] ?>">
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Tên khách</th>
-                                                    <th>SĐT</th>
-                                                    <th>Số lượng</th>
-                                                    <th>Có mặt</th>
-                                                    <th>Vắng</th>
-                                                    <th>Trễ</th>
-                                                    <th>Ghi chú</th>
+                                                    <td colspan="8" class="text-center text-danger">Không có dữ liệu khách hàng.</td>
                                                 </tr>
-                                            </thead>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
 
-                                            <tbody>
-                                                <?php if (!empty($attendanceList)): ?>
-                                                    <?php foreach ($attendanceList as $index => $kh): ?>
-                                                        <tr>
-                                                            <td><?= $index + 1 ?></td>
-                                                            <td><?= htmlspecialchars($kh['customer_name']) ?></td>
-                                                            <td><?= htmlspecialchars($kh['customer_phone']) ?></td>
-                                                            <td><?= $kh['quantity'] ?></td>
-
-                                                            <td>
-                                                                <input type="number" name="form_present[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người có mặt">
-                                                            </td>
-
-                                                            <td>
-                                                                <input type="number" name="form_absent[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người vắng">
-                                                            </td>
-
-                                                            <td>
-                                                                <input type="number" name="form_late[]" min="0" max="<?= $kh['quantity'] ?>" value="0" placeholder="Số người trễ">
-                                                            </td>
-
-                                                            <td>
-                                                                <input type="text" name="form_note[]" placeholder="Ghi chú...">
-                                                            </td>
-                                                        </tr>
-
-                                                        <input type="hidden" name="form_departure_id[]" value="<?= $kh['departure_id'] ?>">
-                                                        <input type="hidden" name="form_booking_id[]" value="<?= $kh['id'] ?>">
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <tr><td colspan="8" class="text-center text-danger">Không có dữ liệu khách hàng.</td></tr>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
-
-                                        <div class="text-end">
-                                            <button class="btn btn-success mt-3">
-                                                <i class="fa-solid fa-save"></i> Lưu điểm danh
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <div class="text-end">
+                                        <button class="btn btn-success mt-3">
+                                            <i class="fa-solid fa-save"></i> Lưu điểm danh
+                                        </button>
+                                    </div>
+                                </form>
 
                                 <!-- Notes -->
                                 <?php if (!empty($itinerary['notes'])): ?>
@@ -355,7 +357,11 @@
                             showAlert('Không thể kết nối đến server!', 'danger');
                         })
                         .finally(() => {
-                            checkboxElement.disabled = false;
+                            // Chỉ enable lại checkbox nếu CHƯA được tick (để có thể tick lại khi bị lỗi)
+                            // Nếu đã tick thành công thì giữ disabled
+                            if (!checkboxElement.checked) {
+                                checkboxElement.disabled = false;
+                            }
                         });
                 });
             });
@@ -432,4 +438,3 @@
 </body>
 
 </html>
-
