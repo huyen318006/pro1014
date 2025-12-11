@@ -168,11 +168,13 @@ class GuideController
             exit();
         }
 
-        // Thực hiện action
+        // Thực hiện action - Chỉ cho phép check, không cho phép uncheck
         if ($action === 'check') {
             $result = $this->itineraryModel->markCheckpoint($departure_id, $itinerary_id, $guide_id, $activity_index, $notes);
         } else {
-            $result = $this->itineraryModel->unmarkCheckpoint($departure_id, $itinerary_id, $guide_id, $activity_index);
+            // Không cho phép bỏ tick sau khi đã submit
+            echo json_encode(['success' => false, 'message' => 'Không thể bỏ đánh dấu sau khi đã hoàn thành!']);
+            exit();
         }
 
         echo json_encode($result);

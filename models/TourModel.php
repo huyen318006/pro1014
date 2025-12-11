@@ -1,6 +1,6 @@
-<?php 
+<?php
 // Có class chứa các function thực thi tương tác với cơ sở dữ liệu 
-class TourModel 
+class TourModel
 {
     public $conn;
     public function __construct()
@@ -17,7 +17,7 @@ class TourModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-   
+
     public function getTourById($id)
     {
         $sql = "SELECT tours.*, 
@@ -91,5 +91,24 @@ class TourModel
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':id', $tourId, PDO::PARAM_INT);
         return $stmt->execute();
+    }
+
+    // Kiểm tra mã tour đã tồn tại chưa
+    public function checkDuplicateTourCode($code, $excludeId = null)
+    {
+        if ($excludeId) {
+            // Khi sửa tour - loại trừ chính tour đang sửa
+            $sql = "SELECT COUNT(*) FROM `tours` WHERE code = :code AND id != :exclude_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+            $stmt->bindParam(':exclude_id', $excludeId, PDO::PARAM_INT);
+        } else {
+            // Khi thêm mới
+            $sql = "SELECT COUNT(*) FROM `tours` WHERE code = :code";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
     }
 }

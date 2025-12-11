@@ -53,6 +53,15 @@
                         <i class="bi bi-plus-circle"></i> Thêm Tour Mới
                     </h1>
 
+                    <!-- Hiển thị lỗi từ session -->
+                    <?php if (!empty($_SESSION['error'])): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> <?= $_SESSION['error'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
+
                     <!-- Hiển thị lỗi validation -->
                     <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -153,7 +162,7 @@
                                 <!-- Ảnh phụ -->
                                 <div class="form-group mb-3">
                                     <label for="additional_images" class="form-label">Ảnh phụ</label>
-                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]" 
+                                    <input type="file" class="form-control" id="additional_images" name="additional_images[]"
                                         accept="image/*" multiple>
                                     <small class="form-text text-muted">Có thể chọn nhiều ảnh (giữ Ctrl/Cmd khi chọn)</small>
                                 </div>
