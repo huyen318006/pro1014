@@ -22,6 +22,7 @@
     </div>
     <h4>ADMIN</h4>
     <a href="index.php?act=home" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="index.php?act=statistics"><i class="fas fa-chart-bar"></i> <span>Thống Kê</span></a>
     <a href="<?= BASE_URL . '?act=account' ?>"><i class="fas fa-users-cog"></i> <span>Quản lý tài khoản</span></a>
     <a href="index.php?act=listTours"><i class="fas fa-map-marked-alt"></i> <span>Quản lý Tour</span></a>
     <a href="index.php?act=listItinerary"><i class="fas fa-route"></i> <span>Quản lý Lịch Trình</span></a>
@@ -45,34 +46,6 @@
 
   <!-- Content -->
   <div class="content">
-
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng người dùng</h6>
-          <h3>1,248</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng Tour</h6>
-          <h3>68</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Đơn đặt hôm nay</h6>
-          <h3>42</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Doanh thu tháng</h6>
-          <h3>875tr</h3>
-        </div>
-      </div>
-    </div>
 
     <!-- Quản lý tài khoản -->
     <div class="table-card">

@@ -20,6 +20,7 @@ require_once './controllers/PolicyController.php';
 require_once './controllers/BookingController.php';
 require_once './controllers/JournalController.php';
 require_once './controllers/AdminJournalController.php';
+require_once './controllers/StatisticsController.php';
 
 
 // Require toàn bộ file Models
@@ -35,6 +36,7 @@ require_once './models/PolicyModel.php';
 require_once './models/BookingModel.php';
 require_once './models/RollcallModel.php';
 require_once './models/Journals.php';
+require_once './models/StatisticsModel.php';
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -194,6 +196,10 @@ match ($act) {
 // Journals - Admin
 'adminJournals'      => (new AdminJournalController())->index(),       // danh sách nhật ký admin
 'adminJournalsShow'  => (new AdminJournalController())->show($_GET['id'] ?? 0), // xem chi tiết nhật ký
+
+  // Thống kê
+  'statistics' => (new StatisticsController())->index(),
+  'statisticsTourDetail' => (new StatisticsController())->tourDetail(),
 
   // Mặc định: hiển thị trang login (tránh UnhandledMatchError)
   default => (new UsersController())->Login(),
