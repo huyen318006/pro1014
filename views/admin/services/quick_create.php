@@ -25,6 +25,7 @@
     <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
     <a href="<?= BASE_URL . '?act=booking' ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
     <a href="<?= BASE_URL.'?act=adminJournals' ?>" class="active"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
+    <a href="index.php?act=statistics"><i class="fas fa-chart-bar"></i> <span>Thống Kê</span></a>
     <a href="<?= BASE_URL . '?act=logout' ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
 
