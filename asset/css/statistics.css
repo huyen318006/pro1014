@@ -1,0 +1,357 @@
+/* ========================================================
+   ADMIN STATISTICS - DÀNH RIÊNG TRANG THỐNG KÊ
+   Hoàn toàn tương thích với sidebar xanh ngọc hiện tại của bạn
+   ======================================================== */
+
+:root {
+  --primary: #00CED1;
+  --primary-dark: #20B2AA;
+  --light: #f8f9fa;
+  --danger: #dc3545;
+  --success: #28a745;
+  --warning: #ffc107;
+  --info: #17a2b8;
+  --dark: #343a40;
+  --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Chỉ style phần nội dung, KHÔNG đụng vào sidebar & header */
+.main-content {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+  min-height: 100vh;
+  padding: 30px;
+}
+
+/* Tiêu đề trang thống kê */
+.main-content h2 {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 2.5rem;
+  font-size: 2.2rem;
+  text-shadow: 0 2px 10px rgba(0, 206, 209, 0.08);
+}
+
+/* 5 ô thống kê lớn - siêu đẹp */
+.stat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transition: all 0.4s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  color: white;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  z-index: 0;
+}
+
+.stat-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card h5 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card h2 {
+  font-size: 2.9rem;
+  font-weight: 800;
+  margin: 0;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Mỗi ô có màu gradient riêng */
+.stat-card:nth-child(1) { background: var(--gradient-1); }
+.stat-card:nth-child(2) { background: var(--gradient-2); }
+.stat-card:nth-child(3) { background: var(--gradient-3); }
+.stat-card:nth-child(4) { background: var(--gradient-4); }
+.stat-card:nth-child(5) { background: var(--gradient-5); }
+
+.stat-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* Card biểu đồ & bảng */
+.chart-card, .table-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e6ed;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover, .table-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 206, 209, 0.2);
+}
+
+/* Header của card biểu đồ */
+.chart-card .card-header,
+.table-card .card-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 18px 28px;
+  border: none;
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.chart-card .card-header i,
+.table-card .card-header i {
+  margin-right: 10px;
+}
+
+/* Biểu đồ tròn đặc biệt */
+#tourPieChart {
+  max-height: 460px;
+  padding: 20px 0;
+}
+
+/* Bảng top tour */
+.table {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.table thead th {
+  background: #f1f5f9;
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  padding: 15px 12px;
+}
+
+.table td {
+  padding: 16px 12px;
+  vertical-align: middle;
+}
+
+.table tr:hover {
+  background-color: rgba(0, 206, 209, 0.08);
+}
+
+/* Nút Chi tiết */
+.btn-outline-primary {
+  border-width: 2px;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 6px 16px;
+  transition: all 0.3s;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 206, 209, 0.3);
+}
+
+/* Animation khi load trang */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animate only rows inside the main content to avoid affecting other parts */
+.main-content .row > div {
+  animation: fadeInUp 0.7s ease-out forwards;
+  opacity: 0;
+}
+
+.main-content .row > div:nth-child(1) { animation-delay: 0.08s; }
+.main-content .row > div:nth-child(2) { animation-delay: 0.16s; }
+.main-content .row > div:nth-child(3) { animation-delay: 0.24s; }
+.main-content .row > div:nth-child(4) { animation-delay: 0.32s; }
+.main-content .row > div:nth-child(5) { animation-delay: 0.40s; }
+.main-content .row > div:nth-child(6) { animation-delay: 0.48s; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stat-card h2 { font-size: 2.4rem; }
+}
+
+@media (max-width: 992px) {
+  .stat-card h2 { font-size: 2.1rem; }
+  .content { padding: 20px; }
+}
+
+@media (max-width: 768px) {
+  .main-content { padding: 15px; }
+  .stat-card h2 { font-size: 1.9rem; }
+}
+
+/* Ensure charts fit nicely and are responsive */
+.card .card-body canvas {
+  width: 100% !important;
+  max-height: 420px !important;
+  height: auto !important;
+}
+
+/* Prevent stat-card gradients from being too aggressive on small screens */
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 18px 12px;
+    border-radius: 12px;
+  }
+  .stat-card h2 { font-size: 1.6rem; }
+}
+
+/* Compact layout for stat cards: reduce width and padding to avoid overflow */
+@media (min-width: 1200px) {
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 18%;
+    max-width: 18%;
+  }
+  .main-content .stat-row > .col-md-6.col-xl .stat-card {
+    padding: 14px 12px;
+    border-radius: 12px;
+  }
+  .main-content .stat-row > .col-md-6.col-xl .stat-card h5 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  .main-content .stat-row > .col-md-6.col-xl .stat-card h2 {
+    font-size: 1.6rem;
+    margin-top: 4px;
+  }
+}
+
+/* Stat card row: use flex layout with calculated widths to avoid overflow */
+.main-content .stat-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
+
+/* 5 cards per row with gutters accounted for (4 gaps of 12px = 48px) */
+.main-content .stat-row > .col-md-6.col-xl {
+  box-sizing: border-box;
+  flex: 0 0 calc((100% - 48px) / 5);
+  max-width: calc((100% - 48px) / 5);
+  padding-left: 0.5rem; /* keep some spacing from bootstrap column padding */
+  padding-right: 0.5rem;
+}
+
+/* Slightly fewer cards as the screen narrows */
+@media (max-width: 1400px) {
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 calc((100% - 36px) / 4);
+    max-width: calc((100% - 36px) / 4);
+  }
+}
+
+@media (max-width: 1100px) {
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 calc((100% - 24px) / 3);
+    max-width: calc((100% - 24px) / 3);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 48%;
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Reduce padding inside stat cards for compactness */
+.main-content .stat-row .stat-card { padding: 12px 10px; }
+.main-content .stat-row .stat-card h5 { font-size: 0.85rem; margin-bottom: 6px; }
+.main-content .stat-row .stat-card h2 { font-size: 1.4rem; }
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* slightly larger but still compact on medium-large screens */
+  .main-content .stat-row > .col-md-6.col-xl {
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
+}
+
+/* Sidebar & Header (match admin trangchu) ------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  background: var(--gradient-1);
+  color: white;
+  padding-top: 30px;
+  box-shadow: 5px 0 20px rgba(0, 206, 209, 0.2);
+  z-index: 1000;
+}
+
+.sidebar .logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.sidebar .logo i { font-size: 2.2rem; color: white; }
+
+.sidebar h4 {
+  text-align: center;
+  margin: 8px 0 28px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+}
+
+.sidebar a { display:block; color:#fff; padding:12px 22px; text-decoration:none; transition:all .25s; font-weight:500; border-left:4px solid transparent; }
+.sidebar a i { width:24px; text-align:center; margin-right:12px; font-size:1.05rem; }
+.sidebar a:hover, .sidebar a.active { background-color: rgba(255,255,255,0.12); border-left-color:#fff; border-radius:0 26px 26px 0; transform:translateX(4px); }
+
+.header {
+  margin-left: 260px;
+  background-color: #fff;
+  padding: 16px 30px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:900;
+}
+
+.header h5 { margin:0; color:var(--primary-dark); font-weight:700; font-size:1.2rem; }
+.user-info { display:flex; align-items:center; gap:10px; color:var(--primary); font-weight:600; }
+.user-info i { font-size:1.7rem; color:var(--primary); }
+
+/* Align main content with sidebar width */
+.main-content { margin-left: 260px; }
+
+/* End sidebar/header ----------------------------------------------------------------------- */

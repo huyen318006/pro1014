@@ -32,6 +32,7 @@
     <a href="<?= BASE_URL . '?act=DepartureAdmin' ?>"><i class="fas fa-plane-departure"></i> <span>Lịch khởi hành</span></a>
     <a href="<?= BASE_URL . '?act=booking'  ?>"><i class="fas fa-receipt"></i><span>Quản lý Booking</span></a>
     <a href="<?= BASE_URL.'?act=adminJournals' ?>"><i class="fas fa-book"></i> <span>Nhật ký tour</span></a>
+    <a href="index.php?act=statistics"><i class="fas fa-chart-bar"></i> <span>Thống Kê</span></a>
     <a href="<?= BASE_URL . '?act=logout'  ?>"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a>
   </div>
   <!-- Header -->
@@ -45,34 +46,6 @@
 
   <!-- Content -->
   <div class="content">
-
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng người dùng</h6>
-          <h3>1,248</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Tổng Tour</h6>
-          <h3>68</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Đơn đặt hôm nay</h6>
-          <h3>42</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card">
-          <h6>Doanh thu tháng</h6>
-          <h3>875tr</h3>
-        </div>
-      </div>
-    </div>
 
     <!-- Quản lý tài khoản -->
     <div class="table-card">
